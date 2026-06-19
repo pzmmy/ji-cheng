@@ -522,6 +522,7 @@
 	"aiSettings.ollamaCspNote": "To connect to your Ollama endpoint, <b>allow-list it in the app's CSP settings</b>.",
 	"aiSettings.ollamaDocsLink": "See the <Link href=\"https://docs.nousresearch.com/troubleshooting/custom-csp\">docs for details</Link>",
 	"aiSettings.configuringLMStudio": "Configuring LM Studio",
+	"aiSettings.apiKeyPlaceholder": "Enter API key",
 	"aiSettings.lmStudioIntro": "Connecting to your LM Studio endpoint requires that you do two things:",
 	"aiSettings.lmStudioCsp": "1. <span class=\"text-bold\">Allow-list it in the CSP settings for the application</span>. You can find more details on how to do that in the <Link href=\"https://docs.nousresearch.com/troubleshooting/custom-csp\">Ji-Cheng docs</Link>.",
 	"aiSettings.lmStudioCors": "2. <span class=\"text-bold\">Enable CORS support in LM Studio</span>. You can find more details on how to do that in the <Link href=\"https://lmstudio.ai/docs/cli/server-start#enable-cors-support\">LM Studio docs</Link>.",

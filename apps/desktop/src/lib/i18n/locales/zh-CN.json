@@ -522,6 +522,7 @@
 	"aiSettings.ollamaCspNote": "要连接到 Ollama 端点，请<b>在应用的 CSP 设置中将其加入白名单</b>。",
 	"aiSettings.ollamaDocsLink": "请参阅<Link href=\"https://docs.nousresearch.com/troubleshooting/custom-csp\">文档了解详情</Link>",
 	"aiSettings.configuringLMStudio": "配置 LM Studio",
+	"aiSettings.apiKeyPlaceholder": "输入API密钥",
 	"aiSettings.lmStudioIntro": "连接到 LM Studio 端点需要完成以下两件事：",
 	"aiSettings.lmStudioCsp": "1. <span class=\"text-bold\">在应用的 CSP 设置中将其加入白名单</span>。更多详情请查阅<Link href=\"https://docs.nousresearch.com/troubleshooting/custom-csp\">纪程文档</Link>。",
 	"aiSettings.lmStudioCors": "2. <span class=\"text-bold\">在 LM Studio 中启用 CORS 支持</span>。更多详情请查阅<Link href=\"https://lmstudio.ai/docs/cli/server-start#enable-cors-support\">LM Studio 文档</Link>。",

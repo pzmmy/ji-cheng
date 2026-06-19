@@ -537,7 +537,7 @@
 					type="password"
 					bind:value={deepSeekKey}
 					required
-					placeholder="sk-..."
+					placeholder={t('aiSettings.apiKeyPlaceholder')}
 				/>
 
 				<Textbox label={t("settings.model")} bind:value={deepSeekModel} placeholder="deepseek-chat" />
@@ -559,7 +559,7 @@
 					type="password"
 					bind:value={tongyiQwenKey}
 					required
-					placeholder="sk-..."
+					placeholder={t('aiSettings.apiKeyPlaceholder')}
 				/>
 
 				<Select
@@ -631,7 +631,7 @@
 					type="password"
 					bind:value={kimiKey}
 					required
-					placeholder="sk-..."
+					placeholder={t('aiSettings.apiKeyPlaceholder')}
 				/>
 
 				<Select
@@ -667,7 +667,7 @@
 					type="password"
 					bind:value={doubaoKey}
 					required
-					placeholder="sk-..."
+					placeholder={t('aiSettings.apiKeyPlaceholder')}
 				/>
 
 				<Select
