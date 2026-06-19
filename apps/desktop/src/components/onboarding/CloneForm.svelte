@@ -15,6 +15,7 @@
 
 	import * as Sentry from "@sentry/sveltekit";
 	import { onMount } from "svelte";
+	import { t } from "$lib/i18n/index.svelte";
 
 	const projectsService = inject(PROJECTS_SERVICE);
 	const gitService = inject(GIT_SERVICE);
@@ -40,7 +41,7 @@
 		const selectedPath = await backend.filePicker({
 			directory: true,
 			recursive: true,
-			title: "Target Clone Directory",
+			title: t("onboarding.clone.targetDir"),
 		});
 		if (!selectedPath || !selectedPath[0]) return;
 
@@ -64,7 +65,7 @@
 
 		if (!repositoryUrl || !targetDirPath) {
 			errors.push({
-				label: "You must add both a repository URL and target directory.",
+				label: t("onboarding.clone.validationError"),
 			});
 			loading = false;
 			return;
@@ -112,31 +113,31 @@
 	}
 </script>
 
-<h1 class="clone-title text-serif-42">Clone a <i>repository</i></h1>
+<h1 class="clone-title text-serif-42">{@html t('onboarding.clone.title')}</h1>
 <SettingsSection>
-	<Textbox label="Clone URL" bind:value={repositoryUrl} />
+	<Textbox label={t('onboarding.clone.urlLabel')} bind:value={repositoryUrl} />
 
 	<div class="clone__field repositoryTargetPath">
 		<Textbox
-			label="Where to clone"
+			label={t('onboarding.clone.targetDirLabel')}
 			bind:value={targetDirPath}
 			placeholder="/Users/tipsy/Documents"
 		/>
-		<Button kind="outline" disabled={loading} onclick={handleCloneTargetSelect}>Choose..</Button>
+		<Button kind="outline" disabled={loading} onclick={handleCloneTargetSelect}>{t('onboarding.clone.chooseDir')}</Button>
 	</div>
 </SettingsSection>
 
 <Spacer dotted margin={24} />
 
 {#if completed}
-	{@render Notification({ title: "Success", style: "success" })}
+	{@render Notification({ title: t('common.success'), style: "success" })}
 {/if}
 {#if errors.length}
-	{@render Notification({ title: "Error", items: errors, style: "danger" })}
+	{@render Notification({ title: t('common.error'), items: errors, style: "danger" })}
 {/if}
 
 <div class="clone__actions">
-	<Button kind="outline" disabled={loading} onclick={handleCancel}>Cancel</Button>
+	<Button kind="outline" disabled={loading} onclick={handleCancel}>{t('common.cancel')}</Button>
 	<Button
 		style="pop"
 		icon={errors.length > 0 ? "refresh" : "chevron-right"}
@@ -145,11 +146,11 @@
 		onclick={cloneRepository}
 	>
 		{#if loading}
-			Cloning..
+			{t('onboarding.clone.cloning')}
 		{:else if errors.length > 0}
-			Retry clone
+			{t('onboarding.clone.retry')}
 		{:else}
-			Clone
+			{t('onboarding.clone.cloneButton')}
 		{/if}
 	</Button>
 </div>

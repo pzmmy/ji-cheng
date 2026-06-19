@@ -4,6 +4,7 @@
 	import { Button, ModalHeader, ModalFooter, SkeletonBone } from "@gitbutler/ui";
 	import { gravatarUrlFromEmail } from "@gitbutler/ui/components/avatar/gravatar";
 	import type { LoginConfirmationModalState } from "$lib/state/uiState.svelte";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		data: LoginConfirmationModalState;
@@ -46,7 +47,7 @@
 	const avatarSize = "3.25rem";
 </script>
 
-<ModalHeader type="info">Confirm login attempt for {incomingUserName}</ModalHeader>
+<ModalHeader type="info">{t('onboarding.login.confirmLogin', { name: incomingUserName })}</ModalHeader>
 <div class="modal-content">
 	{#await getUserAvatarURL()}
 		<SkeletonBone width={avatarSize} height={avatarSize} radius="100%" />
@@ -55,14 +56,14 @@
 	{/await}
 
 	<p class="text-13 text-body clr-text-2">
-		A new login attempt has been detected for the user with email
-		<span class="text-bold clr-text-1">{incomingUserEmail ?? "-unknown-"}</span>. Would you like to
-		accept this login?
+		{t('onboarding.login.detectedAttempt1')}
+		<span class="text-bold clr-text-1">{incomingUserEmail ?? "-unknown-"}</span>
+		{t('onboarding.login.detectedAttempt2')}
 	</p>
 </div>
 <ModalFooter>
-	<Button kind="outline" onclick={rejectLogin}>Reject</Button>
-	<Button style="pop" onclick={acceptLogin}>Accept login</Button>
+	<Button kind="outline" onclick={rejectLogin}>{t('onboarding.login.reject')}</Button>
+	<Button style="pop" onclick={acceptLogin}>{t('onboarding.login.acceptLogin')}</Button>
 </ModalFooter>
 
 <style lang="postcss">

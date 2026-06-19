@@ -8,6 +8,7 @@
 	import { PROJECTS_SERVICE } from "$lib/project/projectsService";
 	import { inject } from "@gitbutler/core/context";
 	import { Button, InfoMessage, type MessageStyle, Spacer, TestId } from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 
 	interface Props {
 		projectId: string;
@@ -46,8 +47,8 @@
 
 	function getDeletionStatus(repoName: string, deleteSucceeded: boolean): DeletionStatus {
 		return deleteSucceeded
-			? { message: `Project "${repoName}" successfully deleted`, style: "success" }
-			: { message: `Failed to delete "${repoName}" project`, style: "danger" };
+			? { message: t('onboarding.projectNotFound.deleteSuccess', { repo: repoName }), style: "success" }
+			: { message: t('onboarding.projectNotFound.deleteFailed', { repo: repoName }), style: "danger" };
 	}
 </script>
 
@@ -58,25 +59,25 @@
 				{#if deleteSucceeded === undefined}
 					<div class="text-content">
 						<h2 class="title-text text-18 text-body text-bold">
-							Can’t find "{project.title}"
+							{t('onboarding.projectNotFound.cantFind', { project: project.title })}
 						</h2>
 
 						<p class="description-text text-13 text-body">
-							Sorry, we can't find the project you're looking for.
+							{t('onboarding.projectNotFound.description')}
 							<br />
-							It might have been removed or doesn't exist.
+							{t('onboarding.projectNotFound.mightBeRemoved')}
 							<button type="button" class="check-again-btn" onclick={() => location.reload()}
-								>Click here</button
+								>{t('onboarding.projectNotFound.clickHere')}</button
 							>
-							to check again.
+							{t('onboarding.projectNotFound.toCheckAgain')}
 							<br />
-							The current project path: <span class="code-string">{project.path}</span>
+							{t('onboarding.projectNotFound.currentPath')} <span class="code-string">{project.path}</span>
 						</p>
 					</div>
 
 					<div class="button-container">
 						<Button type="button" style="pop" onclick={async () => await locate(projectId)}
-							>Locate project…</Button
+							>{t('onboarding.projectNotFound.locateProject')}</Button
 						>
 						<RemoveProjectButton
 							noModal

@@ -5,6 +5,7 @@
 	import { OnboardingEvent, POSTHOG_WRAPPER } from "$lib/telemetry/posthog";
 	import { inject } from "@gitbutler/core/context";
 	import { AsyncButton, TestId } from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 
 	const settingsService = inject(SETTINGS_SERVICE);
 	const appSettings = $derived(settingsService.appSettings);
@@ -12,7 +13,7 @@
 </script>
 
 <div class="analytics-confirmation">
-	<h1 class="title text-serif-42">Before we begin</h1>
+	<h1 class="title text-serif-42">{t('onboarding.analytics.beforeWeBegin')}</h1>
 	<AnalyticsSettings />
 
 	{#if $appSettings !== undefined}
@@ -29,7 +30,7 @@
 					});
 				}}
 			>
-				Continue
+				{t('onboarding.analytics.continue')}
 			</AsyncButton>
 		</div>
 	{/if}

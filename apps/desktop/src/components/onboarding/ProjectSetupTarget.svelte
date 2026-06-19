@@ -12,6 +12,7 @@
 	import { Button, CardGroup, Icon, Link, Select, SelectItem, TestId, Toggle } from "@gitbutler/ui";
 	import { slide } from "svelte/transition";
 	import type { RemoteBranchInfo } from "$lib/baseBranch/baseBranch";
+	import { t } from "$lib/i18n/index.svelte";
 
 	interface Props {
 		projectId: string;
@@ -67,7 +68,7 @@
 <div class="project-setup">
 	<div class="stack-v gap-4">
 		<ProjectNameLabel {projectName} />
-		<h1 class="text-serif-42">Configure your <i>workspace</i></h1>
+		<h1 class="text-serif-42">{@html t('onboarding.projectSetup.configureWorkspace')}</h1>
 	</div>
 
 	<div class="project-setup__fields">
@@ -79,7 +80,7 @@
 				onselect={(value) => {
 					selectedBranch = { name: value };
 				}}
-				label="Target branch"
+				label={t('onboarding.projectSetup.targetBranch')}
 				searchable
 			>
 				{#snippet itemSnippet({ item, highlighted })}
@@ -90,10 +91,9 @@
 			</Select>
 
 			<p class="text-12 text-body project-setup__field-caption">
-				Your main "production" branch, typically <code class="code-string">origin/master</code> or
-				<code class="code-string">upstream/main</code>.
+				{@html t('onboarding.projectSetup.targetBranchCaption')}
 				<br />
-				<Link href="https://docs.gitbutler.com/overview#target-branch">Learn more</Link>
+				<Link href="https://docs.gitbutler.com/overview#target-branch">{t('onboarding.projectSetup.learnMore')}</Link>
 			</p>
 		</div>
 
@@ -115,8 +115,7 @@
 				</Select>
 
 				<p class="text-12 text-body clr-text-2">
-					You have branches from multiple remotes. If you want to specify a remote for creating
-					branches that is different from the remote that your target branch is on, change it here.
+					{t('onboarding.projectSetup.multipleRemotes')}
 				</p>
 			</div>
 		{/if}
@@ -136,14 +135,10 @@
 							{@html gerritLogoSvg}
 						{/snippet}
 						{#snippet title()}
-							Enable Gerrit project
+							{t('onboarding.projectSetup.enableGerrit')}
 						{/snippet}
 						{#snippet caption()}
-							It looks like this project might be a Gerrit project.
-							<br />
-							Do you want to enable Gerrit mode?
-							<br />
-							You can adjust this later in the project settings if needed.
+							{@html t('onboarding.projectSetup.gerritCaption')}
 						{/snippet}
 						{#snippet actions()}
 							<Toggle
@@ -192,19 +187,15 @@
 				</svg>
 
 				<h3 class="text-13 text-body text-semibold">
-					GitButler switches your active branch to <span class="text-bold">gitbutler/workspace</span
-					>
+					{@html t('onboarding.projectSetup.switchesBranch')}
 				</h3>
 			</div>
 
 			{#if showMoreInfo}
 				<p class="text-12 text-body" transition:slide={{ duration: 200 }}>
-					In order to support working on multiple branches simultaneously, GitButler creates and
-					automatically manages a special branch <span class="text-bold">gitbutler/workspace</span>.
-					You can always switch back and forth as needed between normal git branches and the
-					Gitbutler workspace.
+					{@html t('onboarding.projectSetup.moreInfo')}
 					<Link href="https://docs.gitbutler.com/features/branch-management/integration-branch"
-						>Learn more</Link
+						>{t('onboarding.projectSetup.learnMore')}</Link
 					>
 				</p>
 			{/if}
@@ -212,7 +203,7 @@
 	</div>
 
 	<div class="action-buttons">
-		<Button kind="outline" onclick={deleteProjectAndGoBack}>Cancel</Button>
+		<Button kind="outline" onclick={deleteProjectAndGoBack}>{t('common.cancel')}</Button>
 		<Button
 			style="pop"
 			{loading}
@@ -221,7 +212,7 @@
 			testId={TestId.ProjectSetupPageTargetContinueButton}
 			id="set-base-branch"
 		>
-			Let's go
+			{t('onboarding.projectSetup.letsGo')}
 		</Button>
 	</div>
 </div>
