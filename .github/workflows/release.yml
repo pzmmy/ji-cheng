@@ -64,11 +64,11 @@ jobs:
       - name: 安装前端依赖
         run: pnpm install
 
-      - name: 构建前端
-        run: |
-          cd apps/desktop
-          pnpm exec svelte-kit sync
-          pnpm exec vite build
+      - name: SvelteKit 同步
+        run: pnpm --filter @gitbutler/desktop exec svelte-kit sync
+
+      - name: Vite 构建
+        run: pnpm --filter @gitbutler/desktop exec vite build
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
@@ -120,11 +120,11 @@ jobs:
       - name: 安装前端依赖
         run: pnpm install
 
-      - name: 构建前端
-        run: |
-          cd apps/desktop
-          pnpm exec svelte-kit sync
-          pnpm exec vite build
+      - name: SvelteKit 同步
+        run: pnpm --filter @gitbutler/desktop exec svelte-kit sync
+
+      - name: Vite 构建
+        run: pnpm --filter @gitbutler/desktop exec vite build
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
