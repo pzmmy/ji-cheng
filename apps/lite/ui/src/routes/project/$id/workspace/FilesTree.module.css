@@ -1,0 +1,59 @@
+.section {
+	padding: 6px;
+	border-radius: var(--radius-l);
+	background-color: var(--bg-2);
+}
+
+.tree {
+	display: flex;
+	flex-direction: column;
+
+	&:focus {
+		/* The focus state is displayed on the item row instead. */
+		outline: none;
+	}
+}
+
+.fileStatusIcon {
+	align-self: center;
+	&[data-char="A"] {
+		color: #64d5a6;
+	}
+
+	&[data-char="D"] {
+		color: #f08a8a;
+	}
+
+	&[data-char="M"] {
+		color: #95c9f0;
+	}
+
+	&[data-char="R"] {
+		color: #a855f7;
+	}
+}
+
+.fileIconWithCheckbox {
+	display: grid;
+	align-self: center;
+	justify-items: center;
+
+	& > * {
+		grid-area: 1 / 1;
+	}
+}
+
+.fileCheckbox {
+	margin-block-start: 1px;
+	opacity: 0;
+
+	&[data-checked],
+	.fileRow:hover &,
+	&:focus {
+		opacity: 1;
+	}
+
+	&[data-disabled] {
+		display: none;
+	}
+}

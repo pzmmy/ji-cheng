@@ -1,0 +1,126 @@
+.button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: var(--button-border);
+	border-radius: 8px;
+	background-color: var(--button-bg);
+	color: var(--button-fg);
+	line-height: 1;
+	white-space: nowrap;
+
+	&:not(.disableTransition) {
+		transition:
+			background-color 0.08s ease,
+			color 0.08s ease;
+	}
+
+	&:disabled,
+	&[data-disabled] {
+		opacity: 0.5;
+	}
+
+	& [data-icon] {
+		flex-shrink: 0;
+		opacity: var(--button-icon-opacity);
+
+		svg {
+			display: block;
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	&:not(:disabled, [data-disabled]):hover {
+		background-color: var(--button-hover-bg);
+
+		& [data-icon] {
+			opacity: var(--button-hover-icon-opacity);
+		}
+	}
+
+	& > svg {
+		display: block;
+		flex-shrink: 0;
+		width: var(--icon-size);
+		height: var(--icon-size);
+	}
+}
+
+.small {
+	column-gap: 4px;
+	height: 20px;
+	padding-inline: 6px;
+	--icon-size: 14px;
+
+	&.iconOnly {
+		width: 22px;
+		padding-inline: 3px;
+	}
+}
+
+.regular {
+	column-gap: 6px;
+	height: 28px;
+	padding-inline: 10px;
+	--icon-size: 16px;
+
+	&.iconOnly {
+		width: 28px;
+		padding-inline: 8px;
+	}
+}
+
+.pop {
+	--button-border: none;
+	--button-bg: color-mix(in srgb, var(--scale-pop-60) 50%, transparent);
+	--button-fg: var(--text-1);
+	--button-icon-opacity: 0.7;
+	--button-hover-bg: color-mix(in srgb, var(--scale-pop-60) 70%, transparent);
+	--button-hover-icon-opacity: 0.9;
+}
+
+.gray {
+	--button-border: none;
+	--button-bg: var(--fill-gray-bg);
+	--button-fg: var(--fill-gray-fg);
+	--button-icon-opacity: 0.7;
+	--button-hover-bg: color-mix(in srgb, var(--fill-gray-bg) 45%, var(--scale-gray-0));
+	--button-hover-icon-opacity: 0.9;
+}
+
+.inverted {
+	--button-border: none;
+	--button-bg: transparent;
+	--button-fg: var(--text-1-invert);
+	--button-icon-opacity: 0.7;
+	--button-hover-bg: color-mix(in srgb, var(--scale-gray-100) 5%, transparent);
+	--button-hover-icon-opacity: 0.9;
+}
+
+.outline {
+	--button-border: 1px solid color-mix(in srgb, var(--fill-gray-bg) 30%, transparent);
+	--button-bg: transparent;
+	--button-fg: var(--text-1);
+	--button-icon-opacity: 0.6;
+	--button-hover-bg: color-mix(in srgb, var(--scale-gray-0) 5%, transparent);
+	--button-hover-icon-opacity: 0.8;
+}
+
+.danger {
+	--button-border: none;
+	--button-bg: color-mix(in srgb, var(--scale-danger-50) 14%, transparent);
+	--button-fg: var(--text-danger);
+	--button-icon-opacity: 0.7;
+	--button-hover-bg: color-mix(in srgb, var(--scale-danger-50) 20%, transparent);
+	--button-hover-icon-opacity: 0.9;
+}
+
+.ghost {
+	--button-border: none;
+	--button-bg: transparent;
+	--button-fg: var(--text-1);
+	--button-icon-opacity: 0.6;
+	--button-hover-bg: color-mix(in srgb, var(--scale-gray-0) 5%, transparent);
+	--button-hover-icon-opacity: 0.8;
+}

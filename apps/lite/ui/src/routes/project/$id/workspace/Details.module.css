@@ -1,0 +1,171 @@
+:root {
+	--diffs-font-size: 12px;
+}
+
+.container {
+	display: grid;
+	grid-template-rows: auto minmax(0, 1fr);
+	row-gap: 12px;
+}
+
+.headerWrap {
+	display: flex;
+	row-gap: 12px;
+	flex-direction: column;
+	padding-inline: var(--panel-padding);
+	padding-top: var(--panel-padding);
+}
+
+.header {
+	display: flex;
+	gap: 8px;
+}
+
+.actions {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.loadingDiff {
+	padding-inline-start: var(--panel-padding);
+	padding-block-end: var(--panel-padding);
+}
+
+.diff {
+	display: grid;
+	grid-template-rows: minmax(0, 1fr);
+	grid-template-columns: 1fr;
+	column-gap: 12px;
+	padding-inline: var(--panel-padding);
+}
+
+.diffWithFiles {
+	grid-template-columns: 300px minmax(300px, 1fr);
+}
+
+.diffFiles {
+	padding-bottom: var(--panel-padding);
+}
+
+.diffContentsContainer {
+	display: grid;
+}
+
+.diffContents {
+	--diffs-bg-selection-number-override: color-mix(var(--fill-gray-bg) 60%, transparent);
+	--diffs-bg-selection-override: transparent;
+
+	overflow: auto;
+	user-select: text;
+
+	[data-selection-scope]:focus-within & {
+		--diffs-bg-selection-number-override: var(--fill-gray-bg);
+	}
+}
+
+.avatar {
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background-color: lightgray;
+}
+
+.toggleAvatar {
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background-color: lightgray;
+}
+
+.author,
+.commitMeta {
+	color: var(--text-3);
+}
+
+.heading {
+	margin-block-end: 14px;
+}
+
+.pr {
+	margin-block-end: 18px;
+	color: var(--text-2);
+}
+
+.commitHeader {
+	display: flex;
+	gap: 6px;
+}
+
+.commitMessageBody {
+	max-height: 10lh;
+	overflow: auto;
+	font-size: 13px;
+	/* text pre */
+	white-space: pre-line;
+	user-select: text;
+}
+
+.fileHeader {
+	display: grid;
+	grid-template-columns: 1fr auto auto auto;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px;
+	gap: 12px;
+	border: 1px solid var(--border-3);
+	border-radius: 10px 10px 0 0;
+	white-space: nowrap;
+
+	&.lone {
+		border-radius: 10px;
+	}
+}
+
+.filePath {
+	overflow: hidden;
+	color: var(--text-3);
+
+	/* Overflow ellipsis on the left, pioritising filename. */
+	direction: rtl;
+	text-align: left;
+	text-overflow: ellipsis;
+}
+
+.fileDiffAdded {
+	color: var(--text-safe);
+}
+
+.fileDiffDeleted {
+	color: #d34832;
+}
+
+.pathLast {
+	color: var(--text-1);
+}
+
+.hunkHeaderRow {
+	display: flex;
+	column-gap: 4px;
+	align-items: center;
+	margin: 8px;
+
+	svg {
+		display: block;
+	}
+}
+
+.hunkHeader {
+	flex-grow: 1;
+}
+
+.emptyFileHunks {
+	margin: 8px;
+}
+
+.commitDetailsMeta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}

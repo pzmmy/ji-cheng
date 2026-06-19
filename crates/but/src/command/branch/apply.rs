@@ -1,0 +1,57 @@
+use but_ctx::Context;
+use gix::reference::Category;
+
+use crate::utils::OutputChannel;
+
+/// Apply a branch to the workspace, and return the full ref name to it.
+pub fn apply(mut ctx: Context, branch_name: &str, out: &mut OutputChannel) -> anyhow::Result<()> {
+    let mut guard = ctx.exclusive_worktree_access();
+    let reference = {
+        let repo = ctx.repo.get()?;
+        repo.find_reference(branch_name)?.detach()
+    };
+    let mut outcome = but_api::branch::apply_with_perm(
+        &mut ctx,
+        reference.name.as_ref(),
+        guard.write_permission(),
+    )?;
+
+    if !outcome.conflicting_stacks.is_empty() {
+        let short_name = reference.name.shorten();
+        let conflicting_stack_names = outcome
+            .conflicting_stacks
+            .iter()
+            .map(|stack| stack.ref_name.shorten().to_string())
+            .collect::<Vec<_>>()
+            .join(", ");
+        anyhow::bail!(
+            "'{short_name}' conflicts with existing stack in the workspace: {conflicting_stack_names}"
+        );
+    }
+
+    if let Some(out) = out.for_human() {
+        // Since `applied_branches` is the actual applied branches, turning remotes into local branches,
+        // hack it into submission while the legacy version exists that it has to match.
+        let special_case_remove_me_once_there_is_no_legacy_apply =
+            outcome.applied_branches.len() == 1;
+        if special_case_remove_me_once_there_is_no_legacy_apply {
+            outcome.applied_branches = vec![reference.name.clone()];
+        }
+        for name in outcome.applied_branches {
+            let short_name = name.shorten();
+            let is_remote_reference = name.category().is_some_and(|c| c == Category::RemoteBranch);
+            if is_remote_reference {
+                writeln!(out, "Applied remote branch '{short_name}' to workspace")
+            } else {
+                writeln!(out, "Applied branch '{short_name}' to workspace")
+            }?;
+        }
+    } else if let Some(out) = out.for_shell() {
+        writeln!(out, "{reference}", reference = reference.name)?;
+    }
+
+    if let Some(out) = out.for_json() {
+        out.write_value(but_api::json::Reference::from(reference))?;
+    }
+    Ok(())
+}
