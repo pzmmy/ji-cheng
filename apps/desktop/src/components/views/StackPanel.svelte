@@ -9,6 +9,7 @@
 	```
 -->
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import NewCommitView from "$components/commit/NewCommitView.svelte";
 	import WorktreeChanges from "$components/files/WorktreeChanges.svelte";
 	import IrcRow from "$components/irc/IrcRow.svelte";
@@ -156,7 +157,7 @@
 				class:dropzone-hovered={dropzoneHovered && changes.current.length === 0}
 			>
 				<WorktreeChanges
-					title="Staged"
+					title={t("views.staged")}
 					projectId={controller.projectId}
 					stackId={controller.stackId}
 					mode="assigned"
@@ -210,7 +211,7 @@
 						type="button"
 						wide
 						disabled={controller.isReadOnly || !topBranchName || !!controller.exclusiveAction}
-						tooltip={controller.isReadOnly ? "Read-only mode" : undefined}
+						tooltip={controller.isReadOnly ? t("views.readOnlyMode") : undefined}
 						onclick={() => {
 							if (topBranchName) startCommit(topBranchName);
 						}}

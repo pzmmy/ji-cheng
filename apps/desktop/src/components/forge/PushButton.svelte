@@ -1,3 +1,15 @@
+<script lang="ts" module>
+	export type GerritPushModalProps = {
+		projectId: string;
+		stackId?: string;
+		branchName: string;
+		multipleBranches: boolean;
+		isLastBranchInStack?: boolean;
+		isFirstBranchInStack?: boolean;
+		onPush: (gerritFlags: import("$lib/stacks/stack").GerritPushFlag[]) => void;
+	};
+</script>
+
 <script lang="ts">
 	import GerritPushModal from "$components/forge/GerritPushModal.svelte";
 	import { CLIPBOARD_SERVICE } from "$lib/backend/clipboard";
@@ -12,6 +24,7 @@
 	import { STACK_SERVICE } from "$lib/stacks/stackService.svelte";
 	import { UI_STATE } from "$lib/state/uiState.svelte";
 	import { inject } from "@gitbutler/core/context";
+	import { t } from "$lib/i18n/index.svelte";
 	import { persisted } from "@gitbutler/shared/persisted";
 	import {
 		Button,
@@ -123,9 +136,9 @@
 			// Show success notification
 			const branchText =
 				multipleBranches && !isLastBranchInStack
-					? `${branchName} and all branches below it`
+					? `${branchName} ${t('forge.pushButton.andAllBranchesBelow')}`
 					: branchName;
-			chipToasts.success(`Pushed ${branchText} successfully`);
+			chipToasts.success(t('forge.pushButton.pushedSuccess', { branchText }));
 		} catch (error: any) {
 			if (error?.code === "GitForcePushProtection") {
 				forcePushProtectionModal?.show();
@@ -144,30 +157,30 @@
 		remoteTrackingBranch: string | null,
 	): string | undefined {
 		if (isReadOnly) {
-			return "Read-only mode";
+			return t('forge.pushButton.readOnlyMode');
 		}
 
 		if (!hasThingsToPush) {
-			return "No commits to push";
+			return t('forge.pushButton.noCommitsToPush');
 		}
 
 		if (hasConflicts) {
-			return "In order to push, please resolve any conflicted commits.";
+			return t('forge.pushButton.resolveConflicts');
 		}
 
 		if (multipleBranches && !isLastBranchInStack) {
-			return "Push this and all branches below";
+			return t('forge.pushButton.pushThisAndBelow');
 		}
 
 		if (withForce) {
 			return remoteTrackingBranch
-				? "Force push this branch"
-				: `Force push this branch to ${remoteTrackingBranch}`;
+				? t('forge.pushButton.forcePushToRemote', { remoteTrackingBranch })
+				: t('forge.pushButton.forcePush');
 		}
 
 		return remoteTrackingBranch
-			? `Push this branch to ${remoteTrackingBranch}`
-			: "Push this branch";
+			? t('forge.pushButton.pushToRemote', { remoteTrackingBranch })
+			: t('forge.pushButton.pushThisBranch');
 	}
 
 	const doNotShowPushBelowWarning = persisted<boolean>(false, "doNotShowPushBelowWarning");
@@ -188,11 +201,11 @@
 	onclick={() => handleClick({ withForce, skipForcePushProtection: false, gerritFlags: [] })}
 	icon={multipleBranches && !isLastBranchInStack ? "push-all" : "push"}
 >
-	{isGerritMode ? "Push" : withForce ? "Force push" : "Push"}
+	{isGerritMode ? t('forge.pushButton.push') : withForce ? t('forge.pushButton.forcePush') : t('forge.pushButton.push')}
 </Button>
 
 <Modal
-	title="Push with dependencies"
+	title={t('forge.pushButton.pushWithDeps')}
 	width="small"
 	bind:this={confirmationModal}
 	onSubmit={async (close) => {
@@ -206,8 +219,7 @@
 	}}
 >
 	<p>
-		You're about to push <span class="text-bold">{branchName}</span>. To maintain the correct
-		history, GitButler will also push all branches below this branch in the stack.
+		{t('forge.pushButton.confirmPushMessage', { branchName })}
 	</p>
 
 	{#snippet controls(close)}
@@ -215,7 +227,7 @@
 			<div class="flex flex-1">
 				<label for="dont-show-again" class="modal-footer__checkbox">
 					<Checkbox name="dont-show-again" small bind:checked={$doNotShowPushBelowWarning} />
-					<span class="text-12"> Don’t show again</span>
+					<span class="text-12">{t('forge.pushButton.dontShowAgain')}</span>
 				</label>
 			</div>
 			<Button
@@ -225,17 +237,17 @@
 					close();
 				}}
 			>
-				Cancel
+				{t('common.cancel')}
 			</Button>
 			<Button testId={TestId.StackConfirmPushModalButton} style="pop" type="submit" width={90}>
-				Push
+				{t('forge.pushButton.push')}
 			</Button>
 		</div>
 	{/snippet}
 </Modal>
 
 <Modal
-	title="Protected force push"
+	title={t('forge.pushButton.protectedForcePush')}
 	width={480}
 	type="warning"
 	bind:this={forcePushProtectionModal}
@@ -250,12 +262,7 @@
 	}}
 >
 	<p class="description">
-		Your force push was blocked because the remote branch contains <span
-			class="text-bold text-nowrap"
-			>{upstreamCommits?.length === 1 ? "1 commit" : `${upstreamCommits?.length} commits`}</span
-		>
-		your local branch doesn’t include. To prevent overwriting history,
-		<span class="text-bold">cancel and pull & integrate</span> the changes.
+		{t('forge.pushButton.forcePushWarning', { commitCount: upstreamCommits?.length ?? 0 })}
 	</p>
 	{#if upstreamCommits}
 		<div class="scroll-wrap">
@@ -269,7 +276,7 @@
 						author={commit.author.name}
 						{url}
 						onOpen={(url) => urlService.openExternalUrl(url)}
-						onCopy={() => clipboardService.write(commit.id, { message: "Commit hash copied" })}
+						onCopy={() => clipboardService.write(commit.id, { message: t('forge.pushButton.commitHashCopied') })}
 					/>
 				{/each}
 			</ScrollableContainer>
@@ -278,8 +285,8 @@
 
 	{#snippet controls(close)}
 		<div class="controls">
-			<Button kind="outline" type="submit">Force push anyway</Button>
-			<Button wide style="pop" onclick={close}>Cancel</Button>
+			<Button kind="outline" type="submit">{t('forge.pushButton.forcePushAnyway')}</Button>
+			<Button wide style="pop" onclick={close}>{t('common.cancel')}</Button>
 		</div>
 	{/snippet}
 </Modal>

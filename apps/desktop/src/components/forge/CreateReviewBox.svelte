@@ -7,6 +7,7 @@
 	import { PR_SERVICE } from "$lib/forge/prService.svelte";
 	import { UI_STATE } from "$lib/state/uiState.svelte";
 	import { inject } from "@gitbutler/core/context";
+	import { t } from "$lib/i18n/index.svelte";
 	import { reactive } from "@gitbutler/shared/reactiveUtils.svelte";
 	import { TestId } from "@gitbutler/ui";
 	import type { Segment } from "@gitbutler/but-sdk";
@@ -91,7 +92,7 @@
 		onExitFloatingModeClick={() => {
 			uiState.global.useFloatingBox.set(false);
 		}}
-		title={pr ? `Edit ${reviewUnit} #${pr.number}` : `Create ${reviewUnit}`}
+		title={pr ? t('forge.createReviewBox.editReview', { reviewUnit, number: pr.number }) : t('forge.createReviewBox.createReview', { reviewUnit })}
 	>
 		{@render editor()}
 	</FloatingCommitBox>

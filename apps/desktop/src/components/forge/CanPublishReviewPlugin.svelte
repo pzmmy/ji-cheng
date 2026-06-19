@@ -3,6 +3,7 @@
 	import { FORGE_INFO_SERVICE } from "$lib/forge/forgeInfo.svelte";
 	import { PR_SERVICE } from "$lib/forge/prService.svelte";
 	import { inject } from "@gitbutler/core/context";
+	import { t } from "$lib/i18n/index.svelte";
 	import { reactive } from "@gitbutler/shared/reactiveUtils.svelte";
 	import type { Commit } from "@gitbutler/but-sdk";
 
@@ -29,7 +30,7 @@
 
 	const canPublishPR = $derived(auth.authenticated.current && !pr);
 
-	const ctaLabel = $derived(`Create ${reviewUnitName}…`);
+	const ctaLabel = $derived(t('forge.canPublishReviewPlugin.createReview', { reviewUnitName }));
 
 	export const imports = {
 		get allowedToPublishPR() {

@@ -9,6 +9,7 @@
 	import { PR_SERVICE } from "$lib/forge/prService.svelte";
 	import { REPO_SERVICE } from "$lib/forge/repoService.svelte";
 	import { inject } from "@gitbutler/core/context";
+	import { t } from "$lib/i18n/index.svelte";
 	import {
 		Button,
 		ContextMenu,
@@ -105,27 +106,25 @@
 
 	const mergeStatus = $derived.by(() => {
 		let disabled = true;
-		let tooltip = undefined;
+		let tooltip: string | undefined;
 		if (isPushed && hasParent && !parentIsPushed) {
-			tooltip = "Remote parent branch seems to have been deleted";
+			tooltip = t('forge.pullRequestCard.remoteParentDeleted');
 		} else if (!baseIsTargetBranch) {
-			tooltip = name + " is not next in stack";
+			tooltip = t('forge.pullRequestCard.notNextInStack', { name });
 		} else if (repoInfoEnabled && !repoInfo?.canMerge) {
-			// Forges without a repoService (e.g. Bitbucket, Azure) rely
-			// on the server-side merge button to refuse.
-			tooltip = name + " requires push permissions";
+			tooltip = t('forge.pullRequestCard.requiresPushPermissions', { name });
 		} else if (pr?.draft) {
-			tooltip = name + " is a draft";
+			tooltip = t('forge.pullRequestCard.isDraft', { name });
 		} else if (prMergeStatus?.mergeableState === "blocked") {
-			tooltip = name + " needs approval";
+			tooltip = t('forge.pullRequestCard.needsApproval', { name });
 		} else if (prMergeStatus?.mergeableState === "unknown") {
-			tooltip = name + " mergeability is unknown";
+			tooltip = t('forge.pullRequestCard.mergeabilityUnknown', { name });
 		} else if (prMergeStatus?.mergeableState === "behind") {
-			tooltip = name + " base is too far behind";
+			tooltip = t('forge.pullRequestCard.baseTooFarBehind', { name });
 		} else if (prMergeStatus?.mergeableState === "dirty") {
-			tooltip = name + " has conflicts";
+			tooltip = t('forge.pullRequestCard.hasConflicts', { name });
 		} else if (!prMergeStatus?.isMergeable) {
-			tooltip = name + " is not mergeable";
+			tooltip = t('forge.pullRequestCard.notMergeable', { name });
 		} else {
 			disabled = false;
 		}
@@ -134,9 +133,9 @@
 
 	const reopenStatus = $derived.by(() => {
 		let disabled = true;
-		let tooltip = undefined;
+		let tooltip: string | undefined;
 		if (isPushed && hasParent && !parentIsPushed) {
-			tooltip = "Remote parent branch seems to have been deleted";
+			tooltip = t('forge.pullRequestCard.remoteParentDeleted');
 		} else {
 			disabled = false;
 		}
@@ -159,21 +158,21 @@
 			>
 				<ContextMenuSection>
 					<ContextMenuItem
-						label="Open in browser"
+						label={t('forge.pullRequestCard.openInBrowser')}
 						onclick={() => {
 							contextMenuOpen = false;
 							urlService.openExternalUrl(pr.htmlUrl);
 						}}
 					/>
 					<ContextMenuItem
-						label="Copy link"
+						label={t('forge.pullRequestCard.copyLink')}
 						onclick={() => {
 							contextMenuOpen = false;
-							clipboardService.write(pr.htmlUrl, { message: `${abbr} link copied` });
+							clipboardService.write(pr.htmlUrl, { message: t('forge.pullRequestCard.linkCopied', { abbr }) });
 						}}
 					/>
 					<ContextMenuItem
-						label="Refetch status"
+						label={t('forge.pullRequestCard.refetchStatus')}
 						onclick={() => {
 							contextMenuOpen = false;
 							prService.fetch(projectId, pr.number, { forceRefetch: true });
@@ -184,7 +183,7 @@
 					/>
 					{#if !pr.closedAt && !pr.mergedAt}
 						<ContextMenuItem
-							label={pr.draft ? "Ready for review" : "Convert to draft"}
+							label={pr.draft ? t('forge.pullRequestCard.readyForReview') : t('forge.pullRequestCard.convertToDraft')}
 							disabled={draftToggling}
 							onclick={async () => {
 								contextMenuOpen = false;
@@ -196,17 +195,17 @@
 				{#if hasChecks}
 					<ContextMenuSection>
 						<ContextMenuItem
-							label="Open checks"
+							label={t('forge.pullRequestCard.openChecks')}
 							onclick={() => {
 								contextMenuOpen = false;
 								urlService.openExternalUrl(`${pr.htmlUrl}/checks`);
 							}}
 						/>
 						<ContextMenuItem
-							label="Copy checks"
+							label={t('forge.pullRequestCard.copyChecks')}
 							onclick={() => {
 								contextMenuOpen = false;
-								clipboardService.write(`${pr.htmlUrl}/checks`, { message: "Checks link copied" });
+								clipboardService.write(`${pr.htmlUrl}/checks`, { message: t('forge.pullRequestCard.checksLinkCopied') });
 							}}
 						/>
 					</ContextMenuSection>
@@ -231,16 +230,16 @@
 					kind="outline"
 					size="tag"
 					icon="copy"
-					tooltip="Copy {abbr} link"
+					tooltip={t('forge.pullRequestCard.copyLinkTooltip', { abbr })}
 					onclick={() => {
-						clipboardService.write(pr.htmlUrl, { message: `${abbr} link copied` });
+						clipboardService.write(pr.htmlUrl, { message: t('forge.pullRequestCard.linkCopied', { abbr }) });
 					}}
 				/>
 				<Button
 					kind="outline"
 					size="tag"
 					icon="arrow-up-righ"
-					tooltip="Open {abbr} in browser"
+					tooltip={t('forge.pullRequestCard.openInBrowserTooltip', { abbr })}
 					onclick={() => {
 						urlService.openExternalUrl(pr.htmlUrl);
 					}}
@@ -258,7 +257,7 @@
 			<div class="text-12 pr-row">
 				<div class="factoid">
 					{#if pr.reviewers.length > 0}
-						<span class="label">Reviewers:</span>
+						<span class="label">{t('forge.pullRequestCard.reviewers')}</span>
 						<div class="avatar-group-container">
 							<AvatarGroup
 								avatars={pr.reviewers.map((r) => ({
@@ -268,7 +267,7 @@
 							/>
 						</div>
 					{:else}
-						<span class="label italic">No reviewers</span>
+						<span class="label italic">{t('forge.pullRequestCard.noReviewers')}</span>
 					{/if}
 				</div>
 				<span class="separator">•</span>

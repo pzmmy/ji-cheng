@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import WorktreeChanges from "$components/files/WorktreeChanges.svelte";
 	import UnassignedViewForgeIntegrationBanner from "$components/forge/ForgeIntegrationBanner.svelte";
 	import RulesList from "$components/rules/RulesList.svelte";
@@ -105,7 +106,7 @@
 		<div class="unassigned-wrap">
 			<div role="presentation" class="unassigned-files-wrapper" onclick={unselectFiles}>
 				<WorktreeChanges
-					title="Unstaged"
+					title={t('views.unstaged')}
 					{projectId}
 					stackId={undefined}
 					mode="unassigned"
@@ -117,8 +118,8 @@
 						<div class="unassigned-empty">
 							{@html noChanges}
 							<p class="text-13 text-body unassigned-empty-text">
-								You're all caught up!<br />
-								No files need committing
+								{t('views.allCaughtUp')}<br />
+								{t('views.noFilesNeedCommitting')}
 							</p>
 						</div>
 					{/snippet}
@@ -148,9 +149,9 @@
 						kind="outline"
 					>
 						{#if isCommitting}
-							Committing…
+							{t('views.committing')}
 						{:else}
-							Commit to new branch
+							{t('views.commitToNewBranch')}
 						{/if}
 					</Button>
 				</div>
@@ -176,7 +177,7 @@
 			<span
 				bind:clientWidth={foldedContentWidth}
 				style="height: {foldedContentWidth}px;"
-				class="unassigned-folded-text text-14 text-semibold">Unstaged</span
+				class="unassigned-folded-text text-14 text-semibold">{t('views.unstaged')}</span
 			>
 		</div>
 	</div>

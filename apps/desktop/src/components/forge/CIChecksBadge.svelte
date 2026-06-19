@@ -4,6 +4,7 @@
 	import { getPollingInterval } from "$lib/forge/shared/progressivePolling";
 	import { UI_STATE } from "$lib/state/uiState.svelte";
 	import { inject } from "@gitbutler/core/context";
+	import { t } from "$lib/i18n/index.svelte";
 
 	import { Badge, TestId, type MessageStyle, type IconName } from "@gitbutler/ui";
 	import type { ComponentColorType } from "@gitbutler/ui/utils/colorTypes";
@@ -74,9 +75,9 @@
 			return {
 				style: "gray",
 				icon: undefined,
-				text: "No PR checks",
-				reducedText: "No checks",
-				tooltip: "Checks for forked repos only available on the web.",
+				text: t('forge.ciChecksBadge.noPrChecks'),
+				reducedText: t('forge.ciChecksBadge.noChecks'),
+				tooltip: t('forge.ciChecksBadge.forkTooltip'),
 			};
 		}
 
@@ -84,9 +85,9 @@
 			return {
 				style: "danger",
 				icon: "warning",
-				text: "Failed to load checks",
-				reducedText: "Error",
-				tooltip: "Failed to load checks. Click to retry.",
+				text: t('forge.ciChecksBadge.failedToLoad'),
+				reducedText: t('common.error'),
+				tooltip: t('forge.ciChecksBadge.failedToLoadTooltip'),
 			};
 		}
 
@@ -97,9 +98,9 @@
 				return {
 					style: "warning",
 					icon: "eye",
-					text: "Needs review",
-					reducedText: "Needs review",
-					tooltip: "Checks passed but the PR still needs approval.",
+					text: t('forge.ciChecksBadge.needsReview'),
+					reducedText: t('forge.ciChecksBadge.needsReview'),
+					tooltip: t('forge.ciChecksBadge.needsReviewTooltip'),
 				};
 			}
 
@@ -108,9 +109,9 @@
 				return {
 					style: "danger",
 					icon: "warning",
-					text: "Has conflicts",
-					reducedText: "Conflicts",
-					tooltip: "The PR has merge conflicts that need to be resolved.",
+					text: t('forge.ciChecksBadge.hasConflicts'),
+					reducedText: t('forge.ciChecksBadge.conflicts'),
+					tooltip: t('forge.ciChecksBadge.conflictsTooltip'),
 				};
 			}
 
@@ -119,104 +120,35 @@
 			const icon = checks.completed ? (checks.success ? "tick" : "danger") : "spinner";
 			const text = checks.completed
 				? checks.success
-					? "Checks passed"
-					: "Checks failed"
-				: "Checks running";
+					? t('forge.ciChecksBadge.checksPassed')
+					: t('forge.ciChecksBadge.checksFailed')
+				: t('forge.ciChecksBadge.checksRunning');
 
 			const tooltip =
 				checks.completed && !checks.success
-					? `Checks failed: ${checks.failedChecks.join(", ")}`
+					? t('forge.ciChecksBadge.checksFailedDetail', { failedChecks: checks.failedChecks.join(", ") })
 					: undefined;
 
-			const reducedText = checks.completed ? (checks.success ? "Passed" : "Failed") : "Running";
+			const reducedText = checks.completed ? (checks.success ? t('forge.ciChecksBadge.passed') : t('common.failed')) : t('forge.ciChecksBadge.running');
 			return { style, icon, text, reducedText, tooltip };
 		}
 		if (loading) {
 			return {
 				style: "gray",
 				icon: "spinner",
-				text: "Loading checks",
-				reducedText: "Checks",
-				tooltip: "Waiting for checks to start…",
+				text: t('forge.ciChecksBadge.loadingChecks'),
+				reducedText: t('forge.ciChecksBadge.checks'),
+				tooltip: t('forge.ciChecksBadge.waitingForChecks'),
 			};
 		}
 
 		return {
 			style: "gray",
 			icon: undefined,
-			text: "No checks configured",
-			reducedText: "No checks",
-			tooltip: "No CI checks are configured.",
+			text: t('forge.ciChecksBadge.noChecksConfigured'),
+			reducedText: t('forge.ciChecksBadge.noChecks'),
+			tooltip: t('forge.ciChecksBadge.noChecksTooltip'),
 		};
-	});
-
-	// Track previous state to detect transitions.
-	// This should **not** be a derived, since we want to track the previous state, not the current one.
-	let prevIsDone = $state(false);
-	let prevChecksStartedAt = $state<string>();
-	let prevPrUpdatedAt = $state<string>();
-
-	// After a PR update (e.g. push), GitHub may still return old completed checks
-	// before creating the new check runs. We prevent polling from stopping for a
-	// grace period after prUpdatedAt changes, to give GitHub time to catch up.
-	const STALE_GRACE_PERIOD_MS = 60_000;
-	let prUpdatedAtChangedTime = $state<number>();
-
-	// Checks have reached a terminal state or there are no checks to monitor.
-	// Note: shouldStop is computed in the $effect below since the grace period
-	// depends on wall-clock time (Date.now()) which isn't reactive.
-	let shouldStop = $state(false);
-
-	$effect(() => {
-		// If polling was previously done but now should restart (e.g., after a force push)
-		if (prevIsDone && !isDone) {
-			loadedOnce = false;
-			elapsedMs = 0;
-			prevChecksStartedAt = undefined;
-		}
-
-		const result = checksQuery?.result;
-		const checks = result?.data;
-
-		// Mark as loaded once we start loading again
-		if (loading) {
-			loadedOnce = true;
-		}
-
-		// Compute shouldStop fresh each time the effect runs, since the grace
-		// period depends on wall-clock time.
-		const withinGracePeriod =
-			prUpdatedAtChangedTime !== undefined &&
-			Date.now() - prUpdatedAtChangedTime < STALE_GRACE_PERIOD_MS;
-		const checksCompleted = checksQuery?.response?.completed || checksQuery?.response === null;
-		shouldStop = !withinGracePeriod && checksCompleted;
-
-		if (!isDone && loadedOnce && !loading && shouldStop) {
-			projectState.branchesToPoll.remove(branchName);
-		}
-
-		// Reset polling frequency when the PR is updated (e.g. after a push).
-		if (prUpdatedAt && prUpdatedAt !== prevPrUpdatedAt) {
-			const parsed = Date.parse(prUpdatedAt);
-			if (!Number.isNaN(parsed)) {
-				elapsedMs = Date.now() - parsed;
-				prUpdatedAtChangedTime = Date.now();
-			}
-			prevPrUpdatedAt = prUpdatedAt;
-		}
-
-		// Update elapsed time and hasChecks if checks have started
-		if (checks?.startedAt && checks.startedAt !== prevChecksStartedAt) {
-			const parsed = Date.parse(checks.startedAt);
-			if (!Number.isNaN(parsed)) {
-				elapsedMs = Date.now() - parsed;
-			}
-			hasChecks = true;
-			prevChecksStartedAt = checks.startedAt;
-		}
-
-		// Store previous state for next effect run
-		prevIsDone = isDone;
 	});
 </script>
 

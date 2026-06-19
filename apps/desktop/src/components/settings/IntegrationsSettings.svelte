@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import GithubIntegration from "$components/settings/GithubIntegration.svelte";
 	import GitlabIntegration from "$components/settings/GitlabIntegration.svelte";
 	import { SETTINGS_SERVICE } from "$lib/settings/appSettings";
@@ -21,10 +22,10 @@
 <CardGroup>
 	<CardGroup.Item labelFor="autoFillPrDescription">
 		{#snippet title()}
-			Auto-fill PR/MR descriptions from commit
+			{t("settings.autoFillPrDesc")}
 		{/snippet}
 		{#snippet caption()}
-			Set the title and description from the commit for single-commit branches.
+			{t("settings.autoFillPrDescCaption")}
 		{/snippet}
 		{#snippet actions()}
 			<Toggle

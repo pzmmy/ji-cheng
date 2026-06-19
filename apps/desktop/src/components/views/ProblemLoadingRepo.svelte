@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { goto } from "$app/navigation";
 	import RemoveProjectButton from "$components/projectSettings/RemoveProjectButton.svelte";
 	import IllustrationSplitLayout from "$components/shared/IllustrationSplitLayout.svelte";
@@ -33,7 +34,7 @@
 		try {
 			deleteConfirmationModal?.close();
 			await projectsService.deleteProject(projectId);
-			chipToasts.success("Project deleted");
+			chipToasts.success(t('views.projectDeleted'));
 			goto("/");
 		} finally {
 			loading = false;
@@ -52,13 +53,13 @@
 				<ProjectNameLabel projectName={projectTitle} />
 			</div>
 			<h2 class="problem__title text-18 text-body text-bold">
-				There was a problem loading this repo
+				{t('views.problemLoadingRepo')}
 			</h2>
 
 			<div class="problem__error text-12 text-body">
 				<Icon name="danger" color="var(--fill-danger-bg)" />
 				{#if !isDefined(error)}
-					'An unknown error occured'
+					{t('views.unknownErrorOccurred')}
 				{:else if error instanceof Object && "message" in error}
 					{error.message}
 				{:else}

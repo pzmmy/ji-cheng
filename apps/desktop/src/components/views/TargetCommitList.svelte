@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import BranchCard from "$components/branch/BranchCard.svelte";
 	import CommitListItem from "$components/commit/CommitListItem.svelte";
 	import ChangedFilesPanel from "$components/files/ChangedFilesPanel.svelte";
@@ -124,7 +125,7 @@
 									<ReduxResult {projectId} result={changesQuery.result}>
 										{#snippet children(changesResult)}
 											<ChangedFilesPanel
-												title="Changed files"
+												title={t('views.targetChangedFiles')}
 												{projectId}
 												draggableFiles
 												selectionId={createCommitSelection({ commitId: commit.id })}

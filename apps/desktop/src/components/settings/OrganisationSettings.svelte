@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { inject } from "@gitbutler/core/context";
 	import RegisterInterest from "@gitbutler/shared/interest/RegisterInterest.svelte";
 	import Loading from "@gitbutler/shared/network/Loading.svelte";
@@ -29,7 +30,7 @@
 <CreateOrganizationModal bind:this={createOrganizationModal} />
 
 <JoinOrganizationModal />
-<Button onclick={() => createOrganizationModal?.show()}>Create an Organizaton</Button>
+<Button onclick={() => createOrganizationModal?.show()}>{t("settings.createOrganization")}</Button>
 
 <CardGroup>
 	{#each organizations as loadableOrganization}

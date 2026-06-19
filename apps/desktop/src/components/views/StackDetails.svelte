@@ -182,8 +182,8 @@
 					{@const label =
 						handler instanceof AmendCommitWithChangeDzHandler ||
 						handler instanceof AmendCommitWithHunkDzHandler
-							? "Amend"
-							: "Squash"}
+							? t("views.amend")
+							: t("views.squash")}
 					<DropzoneOverlay {hovered} {activated} {label} />
 				{/snippet}
 				<div class="details-view__inner">

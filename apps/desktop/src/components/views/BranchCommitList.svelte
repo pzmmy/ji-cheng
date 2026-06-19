@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import CommitContextMenu from "$components/commit/CommitContextMenu.svelte";
 	import CommitDropIndicator from "$components/commit/CommitDropIndicator.svelte";
 	import CommitListItem from "$components/commit/CommitListItem.svelte";
@@ -369,8 +370,8 @@
 						{@const label =
 							handler instanceof AmendCommitWithChangeDzHandler ||
 							handler instanceof AmendCommitWithHunkDzHandler
-								? "Amend"
-								: "Squash"}
+								? t('views.amend')
+								: t('views.squash')}
 						<DropzoneOverlay {hovered} {activated} {label} />
 					{/snippet}
 					<div
@@ -463,7 +464,7 @@
 										{@const firstConflictedCommitId = findEarliestConflict(commits)?.id}
 
 										<ChangedFilesPanel
-											title="Changed files"
+											title={t("views.changedFiles")}
 											{projectId}
 											{stackId}
 											visibleRange={controller.visibleRange}

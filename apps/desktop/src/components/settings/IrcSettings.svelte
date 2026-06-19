@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { IRC_API_SERVICE } from "$lib/irc/ircApiService";
 	import { SETTINGS_SERVICE } from "$lib/settings/appSettings";
 	import { USER_SERVICE } from "$lib/user/userService.svelte";
@@ -22,18 +23,18 @@
 	} {
 		switch (state) {
 			case "ready":
-				return { style: "safe", icon: "tick-circle", label: "Connected" };
+				return { style: "safe", icon: "tick-circle", label: t("settings.connected") };
 			case "connecting":
-				return { style: "warning", icon: "spinner", label: "Connecting" };
+				return { style: "warning", icon: "spinner", label: t("settings.connecting") };
 			case "negotiating":
-				return { style: "warning", icon: "spinner", label: "Negotiating" };
+				return { style: "warning", icon: "spinner", label: t("settings.negotiating") };
 			case "reconnecting":
-				return { style: "warning", icon: "spinner", label: "Reconnecting" };
+				return { style: "warning", icon: "spinner", label: t("settings.reconnecting") };
 			case "error":
-				return { style: "danger", icon: "danger", label: "Error" };
+				return { style: "danger", icon: "danger", label: t("common.error") };
 			case "disconnected":
 			default:
-				return { style: "gray", icon: undefined, label: "Disconnected" };
+				return { style: "gray", icon: undefined, label: t("settings.disconnected") };
 		}
 	}
 
@@ -52,7 +53,7 @@
 
 {#if irc}
 	<p class="text-12 text-body irc-settings__text">
-		Configure IRC integration for remote collaboration on Claude Code sessions.
+		{t("settings.ircDesc")}
 	</p>
 
 	<CardGroup>
@@ -61,7 +62,7 @@
 				<Textbox
 					value={irc.server.host}
 					size="large"
-					label="Server Host"
+					label={t("settings.serverHost")}
 					placeholder="irc.gitbutler.com"
 					onchange={(value) => settingsService.updateIrc({ server: { host: value } })}
 				/>
@@ -70,10 +71,10 @@
 
 		<CardGroup.Item labelFor="auto-share">
 			{#snippet title()}
-				Auto-share new sessions
+				{t("settings.autoShareSessions")}
 			{/snippet}
 			{#snippet caption()}
-				Automatically share new Claude Code sessions to IRC when connected.
+				{t("settings.autoShareSessionsDesc")}
 			{/snippet}
 			{#snippet actions()}
 				<Toggle
@@ -89,13 +90,13 @@
 		<CardGroup.Item labelFor="irc-enabled">
 			{#snippet title()}
 				<span class="enable-row">
-					Connect
+					{t("settings.connect")}
 					{#if irc.connection.enabled}
 						<Badge style={status.style} kind="soft" size="tag" icon={status.icon}>
 							{status.label}
 						</Badge>
 						{#if connected}
-							<Button size="tag" kind="outline" onclick={disconnect}>Disconnect</Button>
+							<Button size="tag" kind="outline" onclick={disconnect}>{t("settings.disconnect")}</Button>
 						{/if}
 					{/if}
 				</span>
@@ -116,7 +117,7 @@
 			<Textbox
 				value={irc.connection.nickname ?? ""}
 				size="large"
-				label="Nickname"
+				label={t("settings.nickname")}
 				placeholder={userService.user?.login ?? "your-nickname"}
 				onchange={(value) => settingsService.updateIrc({ connection: { nickname: value || null } })}
 			/>
@@ -127,7 +128,7 @@
 				value={irc.connection.serverPassword ?? ""}
 				size="large"
 				type="password"
-				label="Server Password"
+				label={t("settings.serverPassword")}
 				placeholder="Shared connection password"
 				onchange={(value) =>
 					settingsService.updateIrc({ connection: { serverPassword: value || null } })}
@@ -142,7 +143,7 @@
 				value={irc.connection.saslPassword ?? ""}
 				size="large"
 				type="password"
-				label="Account Password"
+				label={t("settings.accountPassword")}
 				placeholder="Your account password"
 				onchange={(value) =>
 					settingsService.updateIrc({ connection: { saslPassword: value || null } })}
@@ -157,7 +158,7 @@
 			<Textbox
 				value={irc.connection.realname ?? ""}
 				size="large"
-				label="Real Name"
+				label={t("settings.realName")}
 				placeholder={userService.user?.name ?? userService.user?.login ?? "Your Name"}
 				onchange={(value) => settingsService.updateIrc({ connection: { realname: value || null } })}
 			/>
@@ -167,7 +168,7 @@
 			<Textbox
 				value={irc.projectChannel ?? ""}
 				size="large"
-				label="Project channel"
+				label={t("settings.projectChannel")}
 				placeholder="#<project-name> (auto)"
 				onchange={(value) => settingsService.updateIrc({ projectChannel: value || null })}
 			/>

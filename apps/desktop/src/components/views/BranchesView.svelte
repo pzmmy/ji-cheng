@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { goto } from "$app/navigation";
 	import BranchExplorer from "$components/branchesPage/BranchExplorer.svelte";
 	import BranchListCard from "$components/branchesPage/BranchListCard.svelte";
@@ -155,7 +156,7 @@
 <Modal
 	testId={TestId.DeleteLocalBranchConfirmationModal}
 	bind:this={deleteLocalBranchModal}
-	title="Delete local branch"
+	title={t('views.deleteLocalBranch')}
 	width="small"
 	defaultItem={selection.type === "branch" ? selection.branchName : undefined}
 	onSubmit={async (close, branchName: string | undefined) => {
@@ -166,7 +167,7 @@
 	}}
 >
 	{#snippet children(branchName)}
-		<p>Are you sure you want to delete the local changes inside the branch {branchName}?</p>
+		<p>{t('views.deleteLocalBranchConfirm', { branchName })}</p>
 	{/snippet}
 
 	{#snippet controls(close)}
@@ -174,13 +175,13 @@
 			testId={TestId.DeleteLocalBranchConfirmationModal_Cancel}
 			kind="outline"
 			type="reset"
-			onclick={close}>Cancel</Button
+			onclick={close}>{t('common.cancel')}</Button
 		>
 		<Button
 			testId={TestId.DeleteLocalBranchConfirmationModal_Delete}
 			style="danger"
 			type="submit"
-			icon="bin">Delete</Button
+			icon="bin">{t('common.delete')}</Button
 		>
 	{/snippet}
 </Modal>
@@ -196,7 +197,7 @@
 				<ReduxResult {projectId} result={baseBranchQuery.result}>
 					{#snippet children(baseBranch)}
 						{@const lastCommit = baseBranch.recentCommits.at(0)}
-						<BranchesListGroup title="Current workspace target">
+						<BranchesListGroup title={t('views.currentWorkspaceTarget')}>
 							<!-- TODO: We need an API for `commitsCount`! -->
 							<CurrentOriginCard
 								originName={baseBranch.branchName}
@@ -332,7 +333,7 @@
 														await checkoutBranch({ remote, branchName, hasLocal, prNumber });
 													}}
 												>
-													Apply to workspace
+													{t('views.applyToWorkspace')}
 												</AsyncButton>
 												<Button
 													testId={TestId.BranchesViewDeleteLocalBranchButton}
@@ -344,9 +345,9 @@
 														}
 													}}
 													disabled={!hasLocal || !branchName}
-													tooltip={listing.hasLocal ? undefined : "No local branch to delete"}
+													tooltip={listing.hasLocal ? undefined : t('views.noLocalBranchToDelete')}
 												>
-													Delete local
+													{t('views.deleteLocal')}
 												</Button>
 											</div>
 										{/if}
@@ -396,7 +397,7 @@
 										icon="workbench"
 										onclick={applyFromFork}
 									>
-										Apply {reviewUnitAbbr} to workspace
+										{t('views.applyPrToWorkspace', { abbr: reviewUnitAbbr })}
 									</Button>
 								</div>
 								<BranchesViewPr bind:this={prBranch} {projectId} {prNumber} {onerror} />
@@ -443,18 +444,18 @@
 							<UnappliedCommitView {projectId} {commitId} />
 							<ReduxResult {projectId} result={changesQuery.result}>
 								{#snippet children(result, { projectId })}
-									<MultiDiffView
-										bind:this={multiDiffView}
-										selectionId={{
-											type: "commit",
-											commitId: commitId,
-										}}
-										changes={result.changes}
-										{projectId}
-										draggable={true}
-										selectable={false}
-									/>
-								{/snippet}
+										<MultiDiffView
+											bind:this={multiDiffView}
+											selectionId={{
+												type: "commit",
+												commitId: commitId,
+											}}
+											changes={result.changes}
+											{projectId}
+											draggable={true}
+											selectable={false}
+										/>
+									{/snippet}
 							</ReduxResult>
 						{/if}
 					{/if}
@@ -498,29 +499,5 @@
 		position: relative;
 		flex: 1;
 		flex-direction: column;
-		max-height: 100%;
-		padding: 12px;
-	}
-
-	.commit-column {
-		display: flex;
-		position: relative;
-		flex: 1;
-		flex-direction: column;
-		max-height: 100%;
-		padding: 12px;
-		padding-left: 0;
-		overflow: hidden;
-		gap: 12px;
-	}
-
-	.branch-actions {
-		display: flex;
-		margin-bottom: 12px;
-		padding: 12px;
-		gap: 6px;
-		border: 1px solid var(--border-2);
-		border-radius: var(--radius-ml);
-		background-color: var(--bg-1);
 	}
 </style>

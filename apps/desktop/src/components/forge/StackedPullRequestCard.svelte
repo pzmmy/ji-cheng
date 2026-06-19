@@ -7,6 +7,7 @@
 	import { REPO_SERVICE } from "$lib/forge/repoService.svelte";
 	import { pullRequestTargetsBaseBranch } from "$lib/forge/shared/pullRequestTargets";
 	import { inject } from "@gitbutler/core/context";
+	import { t } from "$lib/i18n/index.svelte";
 	import { AsyncButton, TestId } from "@gitbutler/ui";
 
 	import type { MergeMethod } from "$lib/forge/interface/types";
@@ -106,7 +107,7 @@
 		{#if !pr.closedAt && !pr.mergedAt}
 			{#if pr.draft}
 				<AsyncButton wide kind="outline" action={() => setDraft(false)}
-					>Ready for review</AsyncButton
+					>{t('forge.stackedPullRequestCard.readyForReview')}</AsyncButton
 				>
 			{:else}
 				<MergeButton
@@ -126,7 +127,7 @@
 				tooltip={reopenStatus.tooltip}
 				action={handleReopen}
 			>
-				{`Reopen ${prUnit}`}
+				{t('forge.stackedPullRequestCard.reopen', { prUnit })}
 			</AsyncButton>
 		{/if}
 	{/snippet}

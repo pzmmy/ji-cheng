@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { persisted } from "@gitbutler/shared/persisted";
+	import { t } from "$lib/i18n/index.svelte";
 
 	import {
 		Button,
@@ -41,7 +42,7 @@
 		kind="outline"
 		disabled={isFormBusy || isCreatingPR}
 		width={120}
-		onclick={onCancel}>Cancel</Button
+		onclick={onCancel}>{t('common.cancel')}</Button
 	>
 
 	<DropdownButton
@@ -57,12 +58,12 @@
 		disabled={submitDisabled || isFormBusy}
 		hotkey="⌘↵"
 	>
-		{$createDraft ? `Create ${unit} draft` : `Create ${unit}`}
+		{$createDraft ? t('forge.reviewCreationControls.createDraft', { unit }) : t('forge.reviewCreationControls.create', { unit })}
 
 		{#snippet contextMenuSlot()}
 			<ContextMenuSection>
 				<ContextMenuItem
-					label="Create {unit} draft"
+					label={t('forge.reviewCreationControls.createDraft', { unit })}
 					onclick={() => {
 						$createDraft = true;
 						commitButton?.close();
@@ -71,7 +72,7 @@
 				/>
 
 				<ContextMenuItem
-					label="Create {unit}"
+					label={t('forge.reviewCreationControls.create', { unit })}
 					onclick={() => {
 						$createDraft = false;
 						commitButton?.close();

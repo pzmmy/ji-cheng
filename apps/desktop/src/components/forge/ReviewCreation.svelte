@@ -33,6 +33,7 @@
 	import { UI_STATE } from "$lib/state/uiState.svelte";
 	import { sleep } from "$lib/utils/sleep";
 	import { inject } from "@gitbutler/core/context";
+	import { t } from "$lib/i18n/index.svelte";
 	import { persisted } from "@gitbutler/shared/persisted";
 	import { chipToasts, TestId } from "@gitbutler/ui";
 	import { IME_COMPOSITION_HANDLER } from "@gitbutler/ui/utils/imeHandling";
@@ -400,7 +401,7 @@
 					onClose();
 				}
 			})}
-			placeholder="{reviewUnitAbbr} title"
+			placeholder={t('forge.reviewCreation.titlePlaceholder', { reviewUnitAbbr })}
 			showCount={false}
 			oninput={imeHandler.handleInput((e: Event) => {
 				const target = e.target as HTMLInputElement;
@@ -416,7 +417,7 @@
 			initialValue={$prBody}
 			enableFileUpload
 			enableSmiles
-			placeholder="{reviewUnitAbbr} Description"
+			placeholder={t('forge.reviewCreation.descriptionPlaceholder', { reviewUnitAbbr })}
 			messageType="pr"
 			{reviewUnitAbbr}
 			{onAiButtonClick}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import {
 		fModeEnabled,
 		newIntegrateUpstreamModalFeature,
@@ -16,18 +17,18 @@
 </script>
 
 <p class="text-12 text-body experimental-settings__text">
-	Flags for features in development or beta. Features may not work fully.
+	{t("settings.experimentalDesc")} Features may not work fully.
 	<br />
-	Use at your own risk.
+	{t("settings.experimentalRisk")}
 </p>
 
 <CardGroup>
 	<CardGroup.Item labelFor="f-mode">
 		{#snippet title()}
-			F Mode Navigation
+			{t("settings.fMode")}
 		{/snippet}
 		{#snippet caption()}
-			Enable F mode for quick keyboard navigation to buttons using two-letter shortcuts.
+			{t("settings.fModeDesc")}
 		{/snippet}
 		{#snippet actions()}
 			<Toggle
@@ -41,10 +42,10 @@
 	{#if userService.user?.role === "admin"}
 		<CardGroup.Item labelFor="single-branch">
 			{#snippet title()}
-				Single-branch mode
+				{t("settings.singleBranch")}
 			{/snippet}
 			{#snippet caption()}
-				Stay in the workspace view when leaving the gitbutler/workspace branch.
+				{t("settings.singleBranchDesc")}
 			{/snippet}
 			{#snippet actions()}
 				<Toggle
@@ -61,10 +62,10 @@
 
 	<CardGroup.Item labelFor="new-push">
 		{#snippet title()}
-			New push
+			{t("settings.newPush")}
 		{/snippet}
 		{#snippet caption()}
-			Use the workspace-based push implementation.
+			{t("settings.newPushDesc")}
 		{/snippet}
 		{#snippet actions()}
 			<Toggle
@@ -77,10 +78,10 @@
 
 	<CardGroup.Item labelFor="new-integrate-upstream-modal">
 		{#snippet title()}
-			New integrate upstream modal
+			{t("settings.newIntegrateUpstream")}
 		{/snippet}
 		{#snippet caption()}
-			Use the newer upstream integration flow. Disable to use the deprecated modal.
+			{t("settings.newIntegrateUpstreamDesc")}
 		{/snippet}
 		{#snippet actions()}
 			<Toggle
@@ -93,10 +94,10 @@
 
 	<CardGroup.Item labelFor="irc">
 		{#snippet title()}
-			IRC integration
+			{t("settings.ircIntegration")}
 		{/snippet}
 		{#snippet caption()}
-			Enable IRC for remote collaboration and automated Claude Code session sharing.
+			{t("settings.ircDesc")}
 		{/snippet}
 		{#snippet actions()}
 			<Toggle

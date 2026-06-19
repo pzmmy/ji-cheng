@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { GIT_CONFIG_SERVICE } from "$lib/config/gitConfigService";
 	import { SETTINGS_SERVICE } from "$lib/settings/appSettings";
 	import { inject } from "@gitbutler/core/context";
@@ -13,11 +14,11 @@
 	let fetchFrequency = $state<number>(-1);
 
 	const fetchFrequencyOptions = [
-		{ label: "1 minute", value: "1", minutes: 1 },
-		{ label: "5 minutes", value: "5", minutes: 5 },
-		{ label: "10 minutes", value: "10", minutes: 10 },
-		{ label: "15 minutes", value: "15", minutes: 15 },
-		{ label: "None", value: "none", minutes: -1 },
+		{ label: t("settings.oneMinute"), value: "1", minutes: 1 },
+		{ label: t("settings.fiveMinutes"), value: "5", minutes: 5 },
+		{ label: t("settings.tenMinutes"), value: "10", minutes: 10 },
+		{ label: t("settings.fifteenMinutes"), value: "15", minutes: 15 },
+		{ label: t("common.none"), value: "none", minutes: -1 },
 	] as const;
 
 	function toggleCommitterSigning() {
@@ -50,7 +51,7 @@
 
 <CardGroup.Item standalone labelFor="committerSigning">
 	{#snippet title()}
-		Credit GitButler as the committer
+		{t("settings.creditCommitter")}
 	{/snippet}
 	{#snippet caption()}
 		By default, everything in the GitButler client is free to use. You can opt in to crediting us as
@@ -58,7 +59,7 @@
 		<Link
 			href="https://github.com/gitbutlerapp/gitbutler-docs/blob/d81a23779302c55f8b20c75bf7842082815b4702/content/docs/features/virtual-branches/committer-mark.mdx"
 		>
-			Learn more
+			{t("common.learnMore")}
 		</Link>
 	{/snippet}
 	{#snippet actions()}
@@ -68,7 +69,7 @@
 
 <CardGroup.Item standalone labelFor="fetchFrequency" alignment="center">
 	{#snippet title()}
-		Auto-fetch frequency
+		{t("settings.autoFetchFrequency")}
 	{/snippet}
 	{#snippet actions()}
 		<Select

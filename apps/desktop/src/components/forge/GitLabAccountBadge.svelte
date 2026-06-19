@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Badge } from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 	import type { GitlabAccountIdentifier } from "@gitbutler/but-sdk";
 
 	type Props = {
@@ -21,9 +22,9 @@
 	export function tooltipText(account: GitlabAccountIdentifier): string {
 		switch (account.type) {
 			case "patUsername":
-				return "Personal Access Token";
+				return t('forge.gitlabAccountBadge.pat');
 			case "selfHosted":
-				return "Self-Hosted GitLab";
+				return t('forge.gitlabAccountBadge.selfHosted');
 		}
 	}
 </script>

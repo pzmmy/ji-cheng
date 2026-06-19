@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import AIPromptEdit from "$components/settings/AIPromptEdit.svelte";
 	import AiCredentialCheck from "$components/settings/AiCredentialCheck.svelte";
 	import AuthorizationBanner from "$components/settings/AuthorizationBanner.svelte";
@@ -87,11 +88,11 @@
 
 	const keyOptions = [
 		{
-			label: "Use GitButler API",
+			label: t("settings.useGitButlerAPI"),
 			value: KeyOption.ButlerAPI,
 		},
 		{
-			label: "Your own key",
+			label: t("settings.yourOwnKey"),
 			value: KeyOption.BringYourOwn,
 		},
 	];
@@ -106,14 +107,14 @@
 			value: OpenAIModelName.GPT54Mini,
 		},
 		{
-			label: "GPT 5.4 Nano (recommended)",
+			label: "GPT 5.4 Nano",
 			value: OpenAIModelName.GPT54Nano,
 		},
 	];
 
 	const anthropicModelOptions = [
 		{
-			label: "Haiku (recommended)",
+			label: "Haiku",
 			value: AnthropicModelName.Haiku,
 		},
 		{
@@ -210,7 +211,7 @@
 					value={openAIKeyOption}
 					options={keyOptions}
 					wide
-					label="Do you want to provide your own key?"
+					label={t("settings.provideOwnKey")}
 					onselect={(value) => {
 						openAIKeyOption = value as KeyOption;
 					}}
@@ -232,7 +233,7 @@
 
 				{#if openAIKeyOption === KeyOption.BringYourOwn}
 					<Textbox
-						label="API key"
+						label={t("settings.apiKey")}
 						type="password"
 						bind:value={openAIKey}
 						required
@@ -242,7 +243,7 @@
 					<Select
 						value={openAIModelName}
 						options={openAIModelOptions}
-						label="Model version"
+						label={t("settings.modelVersion")}
 						wide
 						onselect={(value) => {
 							openAIModelName = value as OpenAIModelName;
@@ -256,7 +257,7 @@
 					</Select>
 
 					<Textbox
-						label="Custom endpoint"
+						label={t("settings.customEndpoint")}
 						bind:value={openAICustomEndpoint}
 						placeholder="https://api.openai.com/v1"
 					/>
@@ -278,7 +279,7 @@
 					value={anthropicKeyOption}
 					options={keyOptions}
 					wide
-					label="Do you want to provide your own key?"
+					label={t("settings.provideOwnKey")}
 					onselect={(value) => {
 						anthropicKeyOption = value as KeyOption;
 					}}
@@ -302,7 +303,7 @@
 
 				{#if anthropicKeyOption === KeyOption.BringYourOwn}
 					<Textbox
-						label="API key"
+						label={t("settings.apiKey")}
 						type="password"
 						bind:value={anthropicKey}
 						required
@@ -312,7 +313,7 @@
 					<Select
 						value={anthropicModelName}
 						options={anthropicModelOptions}
-						label="Model version"
+						label={t("settings.modelVersion")}
 						onselect={(value) => {
 							anthropicModelName = value as AnthropicModelName;
 						}}
@@ -338,11 +339,11 @@
 		{#if modelKind === ModelKind.Ollama}
 			<CardGroup.Item>
 				<Textbox
-					label="Endpoint"
+					label={t("settings.endpoint")}
 					bind:value={ollamaEndpoint}
 					placeholder="http://127.0.0.1:11434"
 				/>
-				<Textbox label="Model" bind:value={ollamaModel} placeholder="llama3" />
+				<Textbox label={t("settings.model")} bind:value={ollamaModel} placeholder="llama3" />
 				<InfoMessage filled outlined={false}>
 					{#snippet title()}
 						Configuring Ollama
@@ -369,11 +370,11 @@
 		{#if modelKind === ModelKind.LMStudio}
 			<CardGroup.Item>
 				<Textbox
-					label="Endpoint"
+					label={t("settings.endpoint")}
 					bind:value={lmStudioEndpoint}
 					placeholder="http://127.0.0.1:1234"
 				/>
-				<Textbox label="Model" bind:value={lmStudioModel} placeholder="default" />
+				<Textbox label={t("settings.model")} bind:value={lmStudioModel} placeholder="default" />
 				<InfoMessage filled outlined={false}>
 					{#snippet title()}
 						Configuring LM Studio
@@ -414,14 +415,14 @@
 		{#if modelKind === ModelKind.OpenRouter}
 			<CardGroup.Item>
 				<Textbox
-					label="API key"
+					label={t("settings.apiKey")}
 					type="password"
 					bind:value={openRouterKey}
 					required
 					placeholder="sk-or-..."
 				/>
 
-				<Textbox label="Model" bind:value={openRouterModel} placeholder="openai/gpt-4.1-mini" />
+				<Textbox label={t("settings.model")} bind:value={openRouterModel} placeholder="openai/gpt-4.1-mini" />
 			</CardGroup.Item>
 		{/if}
 
@@ -435,7 +436,7 @@
 
 <CardGroup.Item standalone>
 	{#snippet title()}
-		Amount of provided context
+		{t("settings.diffLengthLimit")}
 	{/snippet}
 	{#snippet caption()}
 		How many characters of your git diff should be provided to AI

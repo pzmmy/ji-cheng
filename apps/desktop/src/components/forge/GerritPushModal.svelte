@@ -12,6 +12,7 @@
 
 <script lang="ts">
 	import { Button, Modal, Select, SelectItem, Textbox, TagInput, Toggle } from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 	import { untrack } from "svelte";
 	import type { GerritPushFlag } from "$lib/stacks/stack";
 
@@ -96,15 +97,15 @@
 	}
 </script>
 
-<Modal bind:this={modal} title="Gerrit push options" width={400} onSubmit={() => handlePush()}>
+<Modal bind:this={modal} title={t('forge.gerritPushModal.title')} width={400} onSubmit={() => handlePush()}>
 	<div class="push-options">
 		<!-- Status Section -->
 		<Select
-			label="Status"
+			label={t('forge.gerritPushModal.status')}
 			value={status}
 			options={[
-				{ label: "Ready for review", value: "ready" },
-				{ label: "Work in progress", value: "wip" },
+				{ label: t('forge.gerritPushModal.readyForReview'), value: "ready" },
+				{ label: t('forge.gerritPushModal.workInProgress'), value: "wip" },
 			]}
 			onselect={(value) => {
 				status = value as "ready" | "wip";
@@ -119,19 +120,19 @@
 
 		<!-- Topic Section -->
 		<Textbox
-			label="Topic"
+			label={t('forge.gerritPushModal.topic')}
 			bind:value={topicValue}
 			oninput={handleTopicInput}
-			placeholder="Enter topic name"
+			placeholder={t('forge.gerritPushModal.topicPlaceholder')}
 			wide
 		/>
 
 		<!-- Tags Section -->
 		<TagInput
-			label="Tags"
+			label={t('forge.gerritPushModal.tags')}
 			bind:tags
 			bind:value={tagInputValue}
-			helperText="Add tags separated by spaces or commas"
+			helperText={t('forge.gerritPushModal.tagsHelper')}
 			wide
 		/>
 	</div>
@@ -139,11 +140,11 @@
 	{#snippet controls(close)}
 		<label class="toggle-wrapper">
 			<Toggle id="private-toggle" bind:checked={isPrivate} />
-			<span class="text-13 text-body clr-text-2">Mark as private 🔒</span>
+			<span class="text-13 text-body clr-text-2">{t('forge.gerritPushModal.markPrivate')}</span>
 		</label>
 		<div class="flex-1 flex justify-end gap-8">
-			<Button kind="outline" onclick={close}>Cancel</Button>
-			<Button style="pop" type="submit" disabled={!canPush}>Push</Button>
+			<Button kind="outline" onclick={close}>{t('common.cancel')}</Button>
+			<Button style="pop" type="submit" disabled={!canPush}>{t('forge.gerritPushModal.push')}</Button>
 		</div>
 	{/snippet}
 </Modal>

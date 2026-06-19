@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { goto } from "$app/navigation";
 	import CliSymlinkSetup from "$components/settings/CliSymlinkSetup.svelte";
 	import AccessTokenSignIn from "$components/shared/AccessTokenSignIn.svelte";
@@ -164,16 +165,16 @@
 			<ProfilePictureUpload
 				bind:picture={userPicture}
 				onFileSelect={onPictureChange}
-				onInvalidFileType={() => chipToasts.error("Please use a valid image file")}
+				onInvalidFileType={() => chipToasts.error(t("settings.invalidImageFile"))}
 			/>
 
 			<div id="contact-info" class="contact-info">
 				<div class="contact-info__fields">
-					<Textbox label="Full name" bind:value={newName} required />
-					<Textbox label="Email" value={userService.user?.email} readonly />
+					<Textbox label={t("settings.fullName")} bind:value={newName} required />
+					<Textbox label={t("settings.email")} value={userService.user?.email} readonly />
 				</div>
 
-				<Button type="submit" style="pop" loading={saving}>Update profile</Button>
+				<Button type="submit" style="pop" loading={saving}>{t("settings.updateProfile")}</Button>
 			</div>
 		</form>
 	</CardGroup>
@@ -181,10 +182,10 @@
 	<CardGroup>
 		<CardGroup.Item>
 			{#snippet title()}
-				Forget credentials and log out
+				{t("settings.forgetCredentialsTitle")}
 			{/snippet}
 			{#snippet caption()}
-				Click here to clear your credentials and unwind.
+				{t("settings.forgetCredentialsDesc")}
 			{/snippet}
 			{#snippet actions()}
 				<Button
@@ -192,7 +193,7 @@
 					icon="logout"
 					onclick={async () => {
 						await userService.forgetUserCredentials();
-					}}>Forget credentials</Button
+					}}>{t("settings.forgetCredentials")}</Button
 				>
 			{/snippet}
 		</CardGroup.Item>
@@ -206,7 +207,7 @@
 <CardGroup>
 	<CardGroup.Item alignment="center">
 		{#snippet title()}
-			Default code editor
+			{t("settings.defaultCodeEditor")}
 		{/snippet}
 		{#snippet actions()}
 			<Select
@@ -233,7 +234,7 @@
 	{#if platformName !== "web"}
 		<CardGroup.Item alignment="center">
 			{#snippet title()}
-				Default terminal
+				{t("settings.defaultTerminal")}
 			{/snippet}
 			{#snippet actions()}
 				<Select
@@ -260,11 +261,11 @@
 <CardGroup>
 	<CardGroup.Item labelFor="disable-auto-checks">
 		{#snippet title()}
-			Automatically check for updates
+			{t("settings.autoCheckUpdates")}
 		{/snippet}
 
 		{#snippet caption()}
-			Automatically check for updates. You can still check manually when needed.
+			{t("settings.autoCheckUpdates")}. You can still check manually when needed.
 		{/snippet}
 
 		{#snippet actions()}
@@ -349,12 +350,12 @@
 <CardGroup>
 	<CardGroup.Item>
 		{#snippet title()}
-			Remove all projects
+			{t("settings.removeAllProjectsTitle")}
 		{/snippet}
 		{#snippet caption()}
-			You can delete all projects from the GitButler app.
+			{t("settings.removeProjectsDesc")}
 			<br />
-			Your code remains safe. it only clears the configuration.
+			{t("settings.removeProjectsSafe")}
 		{/snippet}
 
 		{#snippet actions()}
@@ -368,14 +369,14 @@
 <Modal
 	bind:this={deleteConfirmationModal}
 	width="small"
-	title="Remove all projects"
+	title={t("settings.removeAllProjects")}
 	onSubmit={onDeleteClicked}
 >
-	<p>Are you sure you want to remove all GitButler projects?</p>
+	<p>{t("settings.removeAllProjectsConfirm")}</p>
 
 	{#snippet controls(close)}
-		<Button style="danger" kind="outline" loading={isDeleting} type="submit">Remove</Button>
-		<Button style="pop" onclick={close}>Cancel</Button>
+		<Button style="danger" kind="outline" loading={isDeleting} type="submit">{t("common.delete")}</Button>
+		<Button style="pop" onclick={close}>{t("common.cancel")}</Button>
 	{/snippet}
 </Modal>
 

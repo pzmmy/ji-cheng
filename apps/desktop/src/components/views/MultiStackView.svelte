@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import CreateBranchModal from "$components/branch/CreateBranchModal.svelte";
 	import FoldedStack from "$components/branch/FoldedStack.svelte";
 	import ErrorBoundary from "$components/shared/ErrorBoundary.svelte";
@@ -267,7 +268,7 @@
 							onUnfold={() => unfoldStack(stack.id)}
 						/>
 					{:else}
-						<ErrorBoundary title="Something went wrong in this stack">
+						<ErrorBoundary title={t('views.somethingWentWrongInStack')}>
 							<StackView
 								{projectId}
 								{stack}
@@ -297,35 +298,35 @@
 			>
 				{#snippet title()}
 					{#if stacks.length === 0}
-						No branches in Workspace
+						{t('views.noBranchesInWorkspace')}
 					{/if}
 				{/snippet}
 				{#snippet description()}
 					{#if stacks.length === 0}
-						Drop files to start a branch,
+						{t('views.dropFilesToStartBranch')}
 						<br />
-						apply from the
+						{t('views.applyFromBranchesView')}
 						<a
 							class="pointer-events underline-dotted clr-text-2 link-hover-2"
-							aria-label="Branches view"
-							href={branchesPath(projectId)}>branches view</a
+							aria-label={t('views.branchesView')}
+							href={branchesPath(projectId)}>{t('views.branchesView')}</a
 						>
 						↗
 						<br />
-						or
+						{t('views.or')}
 						<button
 							type="button"
 							class="underline-dotted pointer-events clr-text-2 link-hover-2"
-							onclick={() => createBranchModal?.show()}>create a new branch</button
+							onclick={() => createBranchModal?.show()}>{t('views.createANewBranch')}</button
 						> +
 					{:else}
-						Drop files to start a branch,
+						{t('views.dropFilesToStartBranch')}
 						<br />
-						or
+						{t('views.or')}
 						<button
 							type="button"
 							class="underline-dotted pointer-events clr-text-2 link-hover-2"
-							onclick={() => createBranchModal?.show()}>create a new branch</button
+							onclick={() => createBranchModal?.show()}>{t('views.createANewBranch')}</button
 						> +
 					{/if}
 				{/snippet}

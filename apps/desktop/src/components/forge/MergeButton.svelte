@@ -2,6 +2,7 @@
 	import { FORGE_INFO_SERVICE } from "$lib/forge/forgeInfo.svelte";
 	import { MergeMethod } from "$lib/forge/interface/types";
 	import { inject } from "@gitbutler/core/context";
+	import { t } from "$lib/i18n/index.svelte";
 	import { persisted, type Persisted } from "@gitbutler/shared/persisted";
 
 	import { ContextMenuItem, ContextMenuSection, DropdownButton, TestId } from "@gitbutler/ui";
@@ -61,9 +62,9 @@
 	);
 
 	const labels = $derived({
-		[MergeMethod.Merge]: "Merge",
-		[MergeMethod.Rebase]: "Rebase and merge",
-		[MergeMethod.Squash]: "Squash and merge",
+		[MergeMethod.Merge]: t('forge.mergeButton.merge'),
+		[MergeMethod.Rebase]: t('forge.mergeButton.rebaseAndMerge'),
+		[MergeMethod.Squash]: t('forge.mergeButton.squashAndMerge'),
 	});
 </script>
 
@@ -101,7 +102,7 @@
 		{#if onSetDraft}
 			<ContextMenuSection>
 				<ContextMenuItem
-					label={isDraft ? "Ready for review" : "Convert to draft"}
+					label={isDraft ? t('forge.mergeButton.readyForReview') : t('forge.mergeButton.convertToDraft')}
 					onclick={async () => {
 						dropDown?.close();
 						loading = true;

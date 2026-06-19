@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import AddDependentBranchModal, {
 		type AddDependentBranchModalProps,
 	} from "$components/branch/AddDependentBranchModal.svelte";
@@ -99,7 +100,7 @@
 	{#each segments as segment, i}
 		{@const ctx = segmentContext(segments, i, stackPrecomputed)}
 		{@const branchName = segment.refName?.displayName}
-		{@const branchLabel = branchName ?? "Unnamed segment"}
+		{@const branchLabel = branchName ?? t('views.unnamedSegment')}
 		{@const remoteTrackingBranch = segment.remoteTrackingRefName
 			? new TextDecoder().decode(new Uint8Array(segment.remoteTrackingRefName.fullNameBytes))
 			: undefined}
@@ -159,7 +160,7 @@
 				<ReduxResult {projectId} {stackId} result={changesQuery.result}>
 					{#snippet children(result, { projectId, stackId })}
 						<ChangedFilesPanel
-							title="All Changes"
+							title={t('views.allChanges')}
 							{projectId}
 							{stackId}
 							draggableFiles
@@ -198,7 +199,7 @@
 					icon="stack-plus"
 					size="tag"
 					kind="outline"
-					tooltip={controller.isReadOnly ? "Read-only mode" : "Create new branch"}
+					tooltip={controller.isReadOnly ? t('views.readOnlyMode') : t('views.createNewBranch')}
 					onclick={async () => {
 						addDependentBranchModalContext = {
 							projectId,
@@ -230,7 +231,7 @@
 						disabled={!!controller.exclusiveAction}
 						icon="pr-plus"
 					>
-						{`Create ${forgeInfo?.unit.abbr ?? "PR"}`}
+						{t('views.createPr', { abbr: forgeInfo?.unit.abbr ?? "PR" })}
 					</Button>
 				{:else}
 					{@const externalPrUrl = forgeInfo ? prUrl(forgeInfo, prNumber) : undefined}
@@ -246,7 +247,7 @@
 						}}
 						icon="arrow-up-righ"
 					>
-						{`View ${forgeInfo?.unit.abbr ?? "PR"}`}
+						{t('views.viewPr', { abbr: forgeInfo?.unit.abbr ?? "PR" })}
 					</Button>
 				{/if}
 			{/if}
