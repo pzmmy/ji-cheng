@@ -614,7 +614,7 @@
 
 	"forgeAccountConfig.configure": "Configure {displayName} integration",
 	"forgeAccountConfig.connect": "Connect your {displayName} account",
-	"forgeAccountConfig.caption": "Enable {requestType} creation. Read more in the <Link href={docsUrl}>docs</Link>",
+	"forgeAccountConfig.caption": "Enable {requestType} creation. Read more in the",
 	"forgeAccountConfig.setupGeneral": "Set up in General Settings",
 	"forgeAccountConfig.accountLabel": "{displayName} account for this project",
 
@@ -629,5 +629,11 @@
 	"settings.customEndpoint": "Custom endpoint",
 	"settings.endpoint": "Endpoint",
 	"settings.model": "Model",
-	"settings.diffLengthLimit": "Diff length limit"
+	"settings.diffLengthLimit": "Diff length limit",
+
+	"common.readMore": "Read more",
+	"common.learnMore": "Learn more",
+	"settings.customizePrompts": "Customize prompts",
+	"forge.setupInGeneral": "Set up in General Settings",
+	"forge.readMoreInDocs": "Read more in the docs"
 }

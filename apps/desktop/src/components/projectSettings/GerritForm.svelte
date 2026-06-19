@@ -2,6 +2,7 @@
 	import ReduxResult from "$components/shared/ReduxResult.svelte";
 	import { GIT_CONFIG_SERVICE } from "$lib/config/gitConfigService";
 	import { PROJECTS_SERVICE } from "$lib/project/projectsService";
+	import { t } from "$lib/i18n/index.svelte";
 	import { inject } from "@gitbutler/core/context";
 	import { CardGroup, Link, Toggle } from "@gitbutler/ui";
 
@@ -27,7 +28,7 @@
 
 				{#snippet caption()}
 					Enable or disable Gerrit mode for this project.
-					<Link href="https://docs.gitbutler.com/features/gerrit-mode">Learn more</Link>
+					<Link href="https://docs.gitbutler.com/features/gerrit-mode">{t('common.learnMore')}</Link>
 				{/snippet}
 
 				{#snippet actions()}

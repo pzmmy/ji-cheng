@@ -614,7 +614,7 @@
 
 	"forgeAccountConfig.configure": "配置 {displayName} 集成",
 	"forgeAccountConfig.connect": "连接您的 {displayName} 帐户",
-	"forgeAccountConfig.caption": "启用 {requestType} 创建。在<Link href={docsUrl}>文档</Link>中了解更多",
+	"forgeAccountConfig.caption": "启用 {requestType} 创建。在",
 	"forgeAccountConfig.setupGeneral": "在通用设置中设置",
 	"forgeAccountConfig.accountLabel": "此项目的 {displayName} 帐户",
 
@@ -629,5 +629,11 @@
 	"settings.customEndpoint": "自定义端点",
 	"settings.endpoint": "端点",
 	"settings.model": "模型",
-	"settings.diffLengthLimit": "差异长度限制"
+	"settings.diffLengthLimit": "差异长度限制",
+
+	"common.readMore": "了解更多",
+	"common.learnMore": "了解更多",
+	"settings.customizePrompts": "自定义提示",
+	"forge.setupInGeneral": "在通用设置中设置",
+	"forge.readMoreInDocs": "在文档中了解更多"
 }

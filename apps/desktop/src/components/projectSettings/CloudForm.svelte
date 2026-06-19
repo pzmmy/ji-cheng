@@ -5,6 +5,7 @@
 	import { projectAiExperimentalFeaturesEnabled, projectAiGenEnabled } from "$lib/config/config";
 	import { useSettingsModal } from "$lib/settings/settingsModal.svelte";
 	import { USER_SERVICE } from "$lib/user/userService.svelte";
+	import { t } from "$lib/i18n/index.svelte";
 	import { inject } from "@gitbutler/core/context";
 	import { Button, CardGroup, Spacer, Toggle } from "@gitbutler/ui";
 
@@ -91,7 +92,7 @@
 				prompts, but you can create your own prompts in the general settings.
 			</p>
 			<Button kind="outline" icon="edit" onclick={() => openGeneralSettings("ai")}
-				>Customize prompts</Button
+				>{t('cloudForm.customizePrompts')}</Button
 			>
 		</CardGroup.Item>
 	</CardGroup>

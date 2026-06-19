@@ -1,5 +1,6 @@
 <script lang="ts" generics="TAccount">
 	import { useSettingsModal } from "$lib/settings/settingsModal.svelte";
+	import { t } from "$lib/i18n/index.svelte";
 	import { Button, CardGroup, Link, Select, SelectItem } from "@gitbutler/ui";
 	import type { Component } from "svelte";
 
@@ -51,13 +52,13 @@
 	{/snippet}
 
 	{#snippet caption()}
-		Enable {requestType} creation. Read more in the <Link href={docsUrl}>docs</Link>
+		{t('forgeAccountConfig.caption', { requestType })} <Link href={docsUrl}>{t('common.readMore')}</Link>
 	{/snippet}
 
 	{#if !hasAccounts}
 		<div class="flex">
 			<Button onclick={() => openGeneralSettings("integrations")} style="pop" icon="link"
-				>Set up in General Settings</Button
+				>{t('forgeAccountConfig.setupGeneral')}</Button
 			>
 		</div>
 	{:else}

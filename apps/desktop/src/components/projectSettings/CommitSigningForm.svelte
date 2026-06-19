@@ -3,6 +3,7 @@
 	import SettingsSection from "$components/shared/SettingsSection.svelte";
 	import { GIT_CONFIG_SERVICE } from "$lib/config/gitConfigService";
 	import { GIT_SERVICE } from "$lib/git/gitService";
+	import { t } from "$lib/i18n/index.svelte";
 	import { inject } from "@gitbutler/core/context";
 	import {
 		Button,
@@ -156,9 +157,9 @@
 					>
 						{#snippet title()}
 							{#if loading}
-								<p>Checking signing</p>
+								<p>{t('commitSigning.checking')}</p>
 							{:else if signCheckResult}
-								<p>Signing is working correctly</p>
+								<p>{t('commitSigning.working')}</p>
 							{:else}
 								<p>Signing is not working correctly</p>
 							{/if}
@@ -177,7 +178,7 @@
 					Signing commits can allow other people to verify your commits if you publish the public
 					version of your signing key.
 					<Link href="https://docs.gitbutler.com/features/virtual-branches/signing-commits"
-						>Read more</Link
+							>{t('common.readMore')}</Link
 					> about commit signing and verification.
 				</SectionCardDisclaimer>
 			</CardGroup.Item>

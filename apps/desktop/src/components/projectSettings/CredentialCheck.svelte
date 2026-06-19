@@ -3,6 +3,7 @@
 	import { GIT_CONFIG_SERVICE } from "$lib/config/gitConfigService";
 	import { parseError } from "$lib/error/parser";
 	import { OnboardingEvent, POSTHOG_WRAPPER } from "$lib/telemetry/posthog";
+	import { t } from "$lib/i18n/index.svelte";
 	import { inject } from "@gitbutler/core/context";
 	import { Button, Icon, InfoMessage, Link } from "@gitbutler/ui";
 	import { slide } from "svelte/transition";
@@ -120,7 +121,7 @@
 	</Button>
 	<SectionCardDisclaimer>
 		To test the push command, we create an empty branch and promptly remove it after the check. <Link
-			href="https://docs.gitbutler.com/troubleshooting/fetch-push">Read more</Link
+			href="https://docs.gitbutler.com/troubleshooting/fetch-push">{t('common.readMore')}</Link
 		> about authentication methods.
 	</SectionCardDisclaimer>
 </div>
