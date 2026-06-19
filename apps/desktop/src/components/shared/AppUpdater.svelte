@@ -119,7 +119,7 @@
 
 		<div class="buttons">
 			{#if releaseNotes}
-				<Button kind="outline" onclick={handleOpenModal}>Release notes</Button>
+				<Button kind="outline" onclick={handleOpenModal}>{t('common.releaseNotes')}</Button>
 			{/if}
 			{#if !inFlatpak}
 				<div class="status-section">

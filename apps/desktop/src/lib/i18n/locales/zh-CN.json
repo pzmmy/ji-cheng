@@ -1,7 +1,6 @@
 {
 	"app.name": "纪程",
 	"app.tagline": "Git，但更顺手",
-
 	"common.loading": "加载中...",
 	"common.save": "保存",
 	"common.cancel": "取消",
@@ -28,7 +27,6 @@
 	"common.none": "无",
 	"common.enabled": "已启用",
 	"common.disabled": "已禁用",
-
 	"onboarding.welcome.title": "欢迎使用纪程",
 	"onboarding.welcome.subtitle": "现代化的 Git 版本控制体验",
 	"onboarding.welcome.getStarted": "开始使用",
@@ -95,7 +93,6 @@
 	"onboarding.login.detected": "检测到用户 {email} 的新登录尝试。是否接受此次登录？",
 	"onboarding.login.reject": "拒绝",
 	"onboarding.login.accept": "接受登录",
-
 	"workspace.title": "工作区",
 	"workspace.unassigned": "未分配变更",
 	"workspace.noChanges": "没有变更",
@@ -118,7 +115,6 @@
 	"workspace.branch.newBranch": "新分支",
 	"workspace.branch.branchName": "分支名称",
 	"workspace.branch.createFrom": "基于",
-
 	"branch.name": "分支",
 	"branch.integrate": "合并到上游",
 	"branch.upstream": "上游",
@@ -129,7 +125,6 @@
 	"branch.review": "代码审核",
 	"branch.createPR": "创建 Pull Request",
 	"branch.openPR": "打开 Pull Request",
-
 	"branch.card.moveHere": "移动到此处",
 	"branch.card.reorderHere": "重新排序到此",
 	"branch.card.startCommit": "开始提交",
@@ -138,14 +133,11 @@
 	"branch.card.clickForDetails": "点击查看详情。",
 	"branch.card.createOrDragDrop": "创建或拖放提交到此处。",
 	"branch.card.noCommitsYet": "该分支上暂无提交。",
-
 	"branch.details.contribs": "贡献者",
 	"branch.details.conflictedCommits": "冲突的提交",
 	"branch.details.conflictDescription": "纪程会先打开最早的提交，因为后续提交依赖于它。",
 	"branch.details.startResolving": "开始解决",
-
 	"branch.header.conflicts": "冲突",
-
 	"branch.contextMenu.openInBrowser": "在浏览器中打开",
 	"branch.contextMenu.copyBranchName": "复制分支名称",
 	"branch.contextMenu.branchNameCopied": "分支名称已复制",
@@ -163,33 +155,25 @@
 	"branch.contextMenu.openUnitInBrowser": "在浏览器中打开 {unit}",
 	"branch.contextMenu.copyUnitLink": "复制 {unit} 链接",
 	"branch.contextMenu.linkCopied": "链接已复制",
-
 	"branch.addDependentBranch.title": "添加依赖分支",
 	"branch.addDependentBranch.placeholder": "分支名称",
 	"branch.addDependentBranch.addBranch": "添加分支",
-
 	"branch.renameModal.title": "重命名分支",
 	"branch.renameModal.titlePushed": "分支已推送",
 	"branch.renameModal.placeholder": "新名称",
 	"branch.renameModal.pushedWarning": "重命名已推送的分支将在远程创建一个新分支。旧分支将保持不动，但将与当前分支解除关联。",
 	"branch.renameModal.rename": "重命名",
-
 	"branch.nameTextbox.willBeCreated": "将被创建为 '{normalized}'",
 	"branch.nameTextbox.invalidName": "无效的分支名称",
-
 	"branch.deleteModal.title": "删除分支",
 	"branch.deleteModal.confirm": "确定要删除 {branchName} 吗？",
-
 	"branch.collapseStack.expand": "展开栈",
 	"branch.collapseStack.collapse": "折叠栈",
-
 	"branch.draftHeader.description": "将为你的 {mode} 创建一个新分支。",
 	"branch.draftHeader.commit": "提交",
 	"branch.draftHeader.aiSession": "AI 会话",
 	"branch.draftHeader.clickToRename": "点击名称可立即或稍后重命名。",
-
 	"branch.foldedStack.defaultName": "已折叠栈",
-
 	"branch.createModal.newBranch": "新分支",
 	"branch.createModal.branchTypeSelection": "分支类型选择",
 	"branch.createModal.independentBranch": "独立分支",
@@ -208,14 +192,12 @@
 	"branch.createModal.seeMore": "查看更多",
 	"branch.createModal.stackedVsIndependent": "栈式 vs 独立",
 	"branch.createModal.createBranch": "创建分支",
-
 	"branch.integrationGraph.conflict": "冲突",
 	"branch.integrationGraph.hide": "隐藏",
 	"branch.integrationGraph.show": "显示",
 	"branch.integrationGraph.integrated": "已整合",
 	"branch.integrationGraph.commit": "个提交",
 	"branch.integrationGraph.commits": "个提交",
-
 	"branch.integrationModal.title": "更新 {branchName}",
 	"branch.integrationModal.divergedDescription1": "本地分支与其远程对应项已分化。",
 	"branch.integrationModal.divergedDescription2": "你可以查看它们之间的差异，决定是否以及如何将更改整合到你的本地分支中，预览并应用更改。",
@@ -238,7 +220,6 @@
 	"branch.integrationModal.desc.smartSquash": "尝试将匹配的远程工作折叠到相关的本地提交中。通过匹配 Change ID 完成，否则回退到拉取变基排序。",
 	"branch.integrationModal.desc.merge": "保留本地历史，并将远程分支合并到其中。",
 	"branch.integrationModal.desc.pickRemote": "重建分支，仅选取远程上的提交。",
-
 	"branch.integrationSteps.clearSteps": "清除步骤",
 	"branch.integrationSteps.addStep": "添加步骤",
 	"branch.integrationSteps.noSteps": "暂无整合步骤。添加步骤来构建计划。",
@@ -254,7 +235,6 @@
 	"branch.integrationSteps.groupLocal": "本地",
 	"branch.integrationSteps.groupUpstream": "上游",
 	"branch.integrationSteps.groupShared": "共享",
-
 	"commit.title": "提交",
 	"commit.list": "提交历史",
 	"commit.author": "作者",
@@ -270,16 +250,13 @@
 	"commit.reword": "修改信息",
 	"commit.discard": "丢弃提交",
 	"commit.cherryPick": "拣选提交",
-
 	"commit.details.author": "作者",
 	"commit.details.copySha": "复制提交 SHA",
 	"commit.details.shaCopied": "提交 SHA 已复制",
 	"commit.details.less": "收起",
 	"commit.details.more": "更多",
-
 	"commit.title.empty": "空提交",
 	"commit.title.emptyDrag": "空提交，将更改拖放到此处",
-
 	"commit.contextMenu.squashCommits": "压缩 {count} 个提交",
 	"commit.contextMenu.uncommitCommits": "取消提交 {count} 个提交",
 	"commit.contextMenu.uncommit": "取消提交",
@@ -301,32 +278,25 @@
 	"commit.contextMenu.addBranchBelow": "在下方添加分支",
 	"commit.contextMenu.showOriginalWrapping": "显示原始换行",
 	"commit.contextMenu.rewrapMessage": "重新换行",
-
 	"commit.listItem.commitRow": "提交行",
 	"commit.listItem.openGerritReview": "打开 Gerrit 审核 #{reviewId}",
-
 	"commit.messageEditor.createCommit": "创建提交",
 	"commit.messageEditor.titlePlaceholder": "提交标题（必填）",
 	"commit.messageEditor.descriptionPlaceholder": "提交信息",
 	"commit.messageEditor.titleRequiredTooltip": "提交标题为必填项",
-
 	"commit.positionIndicator.yourCommitGoesHere": "你的提交在此处",
 	"commit.positionIndicator.commitHere": "提交到这里",
-
 	"commit.timelineNode.diverged": "已分化",
-
 	"commit.view.popOutDiff": "弹出差异视图",
 	"commit.view.saveChanges": "保存更改",
 	"commit.view.reword": "修改提交信息",
 	"commit.view.rewordCommit": "修改提交信息",
 	"commit.view.readOnlyMode": "只读模式",
 	"commit.view.commitMessageRequired": "提交信息为必填项",
-
 	"commit.autoCommitModal.header": "自动提交更改",
 	"commit.autoCommitModal.noCommitMessage": "无提交信息",
 	"commit.autoCommitModal.hashCopied": "提交哈希已复制",
 	"commit.autoCommitModal.generatingMessage": "正在生成提交信息...",
-
 	"commit.cherryApplyModal.title": "拣选提交",
 	"commit.cherryApplyModal.applicableToAnyStack": "此提交可应用到任何栈。请在下方选择一个栈。",
 	"commit.cherryApplyModal.lockedToStack": "此提交应用到所选栈时会产生冲突，因此必须应用到所选栈以避免工作区冲突。",
@@ -335,7 +305,6 @@
 	"commit.cherryApplyModal.branch": "个分支",
 	"commit.cherryApplyModal.branches": "个分支",
 	"commit.cherryApplyModal.applyCommit": "应用提交",
-
 	"commit.failedFileEntry.show": "显示",
 	"commit.failedFileEntry.hide": "隐藏",
 	"commit.failedFileEntry.dependsOn": "依赖",
@@ -343,7 +312,6 @@
 	"commit.failedFileEntry.unknownStack": "未知栈",
 	"commit.failedFileEntry.noCommitMessage": "未提供提交信息",
 	"commit.failedFileEntry.inCommit": "在提交中",
-
 	"commit.failedModal.someChangesNotCommitted": "部分更改未提交",
 	"commit.failedModal.failedToCreateCommit": "创建提交失败",
 	"commit.failedModal.commitCreated": "提交",
@@ -351,18 +319,14 @@
 	"commit.failedModal.noCommitTitle": "未提供提交标题",
 	"commit.failedModal.couldNotCreateCommit": "由于以下原因，无法创建提交：",
 	"commit.failedModal.cause": "原因",
-
 	"commit.editPatchConfirmModal.title": "解决冲突以预览",
 	"commit.editPatchConfirmModal.description": "文件 {fileName} 存在未解决的合并冲突，需要先解决才能预览。",
 	"commit.editPatchConfirmModal.resolveConflicts": "解决冲突",
-
 	"commit.floatingCommitBox.exitFloatingMode": "退出浮动模式",
-
 	"commit.newCommitView.createCommit": "创建提交",
 	"commit.newCommitView.alreadyInProgress": "提交正在进行中",
 	"commit.newCommitView.messageRequired": "提交信息为必填项",
 	"commit.newCommitView.hookFailed": "提交信息钩子失败",
-
 	"diff.title": "差异对比",
 	"diff.added": "新增",
 	"diff.removed": "删除",
@@ -373,7 +337,6 @@
 	"diff.noChanges": "无差异内容",
 	"diff.viewUnified": "统一视图",
 	"diff.viewSplit": "分栏视图",
-
 	"settings.title": "设置",
 	"settings.general": "通用",
 	"settings.appearance": "外观",
@@ -399,7 +362,6 @@
 	"settings.about": "关于纪程",
 	"settings.version": "版本",
 	"settings.checkUpdate": "检查更新",
-
 	"file.added": "新增",
 	"file.modified": "修改",
 	"file.deleted": "删除",
@@ -414,7 +376,6 @@
 	"file.stage": "暂存",
 	"file.unstage": "取消暂存",
 	"file.selectAll": "全选",
-
 	"conflict.title": "冲突解决",
 	"conflict.current": "当前变更",
 	"conflict.incoming": "传入变更",
@@ -423,7 +384,6 @@
 	"conflict.markResolved": "标记为已解决",
 	"conflict.useOurs": "使用我们的",
 	"conflict.useTheirs": "使用对方的",
-
 	"forge.pr.title": "Pull Request",
 	"forge.pr.create": "创建 PR",
 	"forge.pr.open": "打开 PR",
@@ -443,20 +403,17 @@
 	"forge.review.approve": "批准",
 	"forge.review.comment": "评论",
 	"forge.review.requestChanges": "请求变更",
-
 	"history.title": "历史记录",
 	"history.snapshot": "快照",
 	"history.timeline": "时间线",
 	"history.undo": "撤销操作",
 	"history.redo": "重做操作",
 	"history.operations": "操作记录",
-
 	"editor.placeholder": "输入消息...",
 	"editor.send": "发送",
 	"editor.emoji": "表情",
 	"editor.attach": "附件",
 	"editor.markdown": "Markdown",
-
 	"error.repoNotFound": "未找到仓库",
 	"error.repoNotFoundDesc": "请确认仓库路径是否正确",
 	"error.loadFailed": "加载失败",
@@ -467,7 +424,6 @@
 	"error.networkErrorDesc": "网络连接失败，请检查网络设置",
 	"error.unknown": "未知错误",
 	"error.unknownDesc": "发生未知错误，请重试或联系支持",
-
 	"rules.editRule": "编辑规则",
 	"rules.deleteRule": "删除规则",
 	"rules.deleteConfirm": "确定要删除此规则吗？此操作无法撤销。",
@@ -479,11 +435,9 @@
 	"rules.leftmostLane": "最左侧通道",
 	"rules.rightmost": "最右侧",
 	"rules.rightmostStack": "最右侧栈",
-
 	"prompt.gitNeedsInput": "Git 需要输入",
 	"prompt.cancel": "取消",
 	"prompt.submit": "提交",
-
 	"share.title": "向纪程团队分享调试数据以供审核",
 	"share.description": "如果您遇到问题，请向纪程团队分享您的项目和日志。我们将为您审核并帮助确定如何解决问题。",
 	"share.emailPlaceholder": "提供邮箱以便我们回复您",
@@ -500,13 +454,11 @@
 	"share.uploadingData": "正在上传数据...",
 	"share.success": "反馈已成功发送",
 	"share.error": "反馈发送失败",
-
 	"aiPrompt.user": "用户",
 	"aiPrompt.system": "系统",
 	"aiPrompt.assistant": "助手",
 	"aiPrompt.removeExample": "移除示例",
 	"aiPrompt.addNewExample": "添加新示例",
-
 	"absorb.title": "将变更吸收到提交中",
 	"absorb.description": "以下变更将被吸收到各自的提交中：",
 	"absorb.noCommitsFound": "未找到适合吸收变更的提交。",
@@ -515,11 +467,9 @@
 	"absorb.absorbing": "正在吸收变更",
 	"absorb.success": "变更已成功吸收",
 	"absorb.failed": "吸收变更失败",
-
 	"lineLocks.dependsOnStacks": "此行依赖于以下栈中的变更",
 	"lineLocks.dependsOnStack": "此行依赖于",
 	"lineLocks.dependsOnUnknown": "此行依赖于一个无法识别的栈中的变更",
-
 	"integrateUpstream.incomingChange": "传入变更",
 	"integrateUpstream.incomingChanges": "传入变更",
 	"integrateUpstream.targetDivergence": "目标分支差异",
@@ -532,7 +482,6 @@
 	"integrateUpstream.mayConflict": "可能冲突",
 	"integrateUpstream.cancel": "取消",
 	"integrateUpstream.updateWorkspace": "更新工作区",
-
 	"integrateUpstreamDeprecated.incomingChange": "传入变更",
 	"integrateUpstreamDeprecated.incomingChanges": "传入变更",
 	"integrateUpstreamDeprecated.deprecated": "已弃用：",
@@ -545,9 +494,7 @@
 	"integrateUpstreamDeprecated.toBeUpdated": "待更新：",
 	"integrateUpstreamDeprecated.cancel": "取消",
 	"integrateUpstreamDeprecated.updateWorkspace": "更新工作区",
-
 	"prListCard.noRemote": "无远程仓库",
-
 	"branchesViewPR.applyTitle": "应用 {reviewUnitName}",
 	"branchesViewPR.description": "要从复刻应用分支，纪程必须先添加复刻作为远程仓库。",
 	"branchesViewPR.descriptionBold": "选择远程名称：",
@@ -556,9 +503,7 @@
 	"branchesViewPR.confirmAndApply": "确认并应用",
 	"branchesViewPR.cannotCreateRemote": "无法创建远程仓库",
 	"branchesViewPR.provideRemoteName": "请提供远程名称。",
-
 	"branchesViewStack.notFound": "未找到栈。",
-
 	"aiSettings.aboutText": "纪程支持多种 AI 提供商：OpenAI 和 Anthropic（通过 API 或自有密钥）、OpenRouter（可访问数百个模型），以及通过 Ollama 和 LM Studio 使用本地模型。",
 	"aiSettings.openai": "Open AI",
 	"aiSettings.anthropic": "Anthropic",
@@ -579,7 +524,6 @@
 	"aiSettings.customPrompts": "自定义 AI 提示",
 	"aiSettings.customPromptsDesc": "纪程的 AI 助手生成提交信息和分支名称。使用默认提示或创建自己的提示。在项目设置中分配提示。",
 	"aiSettings.diffLengthCaption": "应提供给 AI 的 git diff 字符数",
-
 	"credentialCheck.checking": "正在检查 Git 凭据…",
 	"credentialCheck.problem": "您的凭据存在问题",
 	"credentialCheck.allPassed": "所有检查已通过",
@@ -588,7 +532,6 @@
 	"credentialCheck.testCredentials": "测试凭据",
 	"credentialCheck.retestCredentials": "重新测试凭据",
 	"credentialCheck.disclaimer": "为测试推送命令，我们会创建一个空分支并在检查后立即删除。<Link href=\"https://docs.gitbutler.com/troubleshooting/fetch-push\">了解更多</Link>关于认证方法的信息。",
-
 	"commitSigning.signCommits": "签名提交",
 	"commitSigning.caption": "使用 GPG 或 SSH 对提交进行签名，以便验证其真实性。",
 	"commitSigning.gitButlerNote": "纪程将根据您的 git 配置签署提交，但会优先评估",
@@ -602,7 +545,6 @@
 	"commitSigning.testSigning": "测试签名",
 	"commitSigning.retestSigning": "重新测试签名",
 	"commitSigning.disclaimer": "如果您发布签名密钥的公钥，签署提交可以让其他人验证您的提交。<Link href=\"https://docs.gitbutler.com/features/virtual-branches/signing-commits\">了解更多</Link>关于提交签名和验证的信息。",
-
 	"cloudForm.description": "纪程支持使用 OpenAI 和 Anthropic 来生成提交信息和分支名称。这可以通过纪程 API 或自带密钥的方式工作，并可在主偏好设置屏幕中配置。",
 	"cloudForm.enableBranchGen": "启用分支和提交信息生成",
 	"cloudForm.enableBranchGenCaption": "启用后，点击\"生成信息\"和\"生成分支名称\"按钮时，差异内容将被发送到 OpenAI 或 Anthropic 的服务器。",
@@ -611,16 +553,13 @@
 	"cloudForm.customPrompts": "自定义提示",
 	"cloudForm.customPromptsDesc": "您可以为项目应用自己的自定义提示。默认情况下，项目使用纪程提示，但您可以在通用设置中创建自己的提示。",
 	"cloudForm.customizePrompts": "自定义提示",
-
 	"forgeAccountConfig.configure": "配置 {displayName} 集成",
 	"forgeAccountConfig.connect": "连接您的 {displayName} 帐户",
 	"forgeAccountConfig.caption": "启用 {requestType} 创建。在",
 	"forgeAccountConfig.setupGeneral": "在通用设置中设置",
 	"forgeAccountConfig.accountLabel": "此项目的 {displayName} 帐户",
-
 	"gerritForm.title": "Gerrit 配置",
 	"gerritForm.caption": "为此项目启用或禁用 Gerrit 模式。<Link href=\"https://docs.gitbutler.com/features/gerrit-mode\">了解更多</Link>",
-
 	"settings.useGitButlerAPI": "使用 GitButler API",
 	"settings.yourOwnKey": "使用自有密钥",
 	"settings.provideOwnKey": "提供自有密钥",
@@ -630,10 +569,11 @@
 	"settings.endpoint": "端点",
 	"settings.model": "模型",
 	"settings.diffLengthLimit": "差异长度限制",
-
 	"common.readMore": "了解更多",
 	"common.learnMore": "了解更多",
 	"settings.customizePrompts": "自定义提示",
 	"forge.setupInGeneral": "在通用设置中设置",
-	"forge.readMoreInDocs": "在文档中了解更多"
+	"forge.readMoreInDocs": "在文档中了解更多",
+	"common.releaseNotes": "发布说明",
+	"settings.showCommand": "显示命令"
 }

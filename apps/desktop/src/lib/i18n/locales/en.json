@@ -1,7 +1,6 @@
 {
 	"app.name": "Ji-Cheng",
 	"app.tagline": "Git, but better.",
-
 	"common.loading": "Loading...",
 	"common.save": "Save",
 	"common.cancel": "Cancel",
@@ -28,7 +27,6 @@
 	"common.none": "None",
 	"common.enabled": "Enabled",
 	"common.disabled": "Disabled",
-
 	"onboarding.welcome.title": "Welcome to Ji-Cheng",
 	"onboarding.welcome.subtitle": "A modern Git version control experience",
 	"onboarding.welcome.getStarted": "Get Started",
@@ -79,7 +77,7 @@
 	"onboarding.projectNotFound.clickHere": "Click here",
 	"onboarding.projectNotFound.checkAgain": "to check again.",
 	"onboarding.projectNotFound.currentPath": "The current project path:",
-	"onboarding.projectNotFound.locateProject": "Locate project\u2026",
+	"onboarding.projectNotFound.locateProject": "Locate project…",
 	"onboarding.projectNotFound.deleteSuccess": "Project \"{repoName}\" successfully deleted",
 	"onboarding.projectNotFound.deleteFailed": "Failed to delete \"{repoName}\" project",
 	"onboarding.analytics.beforeWeBegin": "Before we begin",
@@ -95,7 +93,6 @@
 	"onboarding.login.detected": "A new login attempt has been detected for the user with email {email}. Would you like to accept this login?",
 	"onboarding.login.reject": "Reject",
 	"onboarding.login.accept": "Accept login",
-
 	"workspace.title": "Workspace",
 	"workspace.unassigned": "Unassigned Changes",
 	"workspace.noChanges": "No changes",
@@ -118,7 +115,6 @@
 	"workspace.branch.newBranch": "New Branch",
 	"workspace.branch.branchName": "Branch Name",
 	"workspace.branch.createFrom": "Based on",
-
 	"branch.name": "Branch",
 	"branch.integrate": "Integrate Upstream",
 	"branch.upstream": "Upstream",
@@ -129,7 +125,6 @@
 	"branch.review": "Review",
 	"branch.createPR": "Create Pull Request",
 	"branch.openPR": "Open Pull Request",
-
 	"branch.card.moveHere": "Move here",
 	"branch.card.reorderHere": "Reorder here",
 	"branch.card.startCommit": "Start commit",
@@ -138,14 +133,11 @@
 	"branch.card.clickForDetails": "Click for details.",
 	"branch.card.createOrDragDrop": "Create or drag & drop commits here.",
 	"branch.card.noCommitsYet": "There are no commits yet on this branch.",
-
 	"branch.details.contribs": "Contribs",
 	"branch.details.conflictedCommits": "Conflicted commits",
 	"branch.details.conflictDescription": "GitButler opens the earliest commit first, since later commits depend on it.",
 	"branch.details.startResolving": "Start resolving",
-
 	"branch.header.conflicts": "Conflicts",
-
 	"branch.contextMenu.openInBrowser": "Open in browser",
 	"branch.contextMenu.copyBranchName": "Copy branch name",
 	"branch.contextMenu.branchNameCopied": "Branch name copied",
@@ -163,33 +155,25 @@
 	"branch.contextMenu.openUnitInBrowser": "Open {unit} in browser",
 	"branch.contextMenu.copyUnitLink": "Copy {unit} link",
 	"branch.contextMenu.linkCopied": "link copied",
-
 	"branch.addDependentBranch.title": "Add dependent branch",
 	"branch.addDependentBranch.placeholder": "Branch name",
 	"branch.addDependentBranch.addBranch": "Add branch",
-
 	"branch.renameModal.title": "Rename branch",
 	"branch.renameModal.titlePushed": "Branch has already been pushed",
 	"branch.renameModal.placeholder": "New name",
 	"branch.renameModal.pushedWarning": "Renaming a branch that has already been pushed will create a new branch at the remote. The old one will remain untouched but will be disassociated from this branch.",
 	"branch.renameModal.rename": "Rename",
-
 	"branch.nameTextbox.willBeCreated": "Will be created as '{normalized}'",
 	"branch.nameTextbox.invalidName": "Invalid branch name",
-
 	"branch.deleteModal.title": "Delete branch",
 	"branch.deleteModal.confirm": "Are you sure you want to delete {branchName}?",
-
 	"branch.collapseStack.expand": "Expand stack",
 	"branch.collapseStack.collapse": "Collapse stack",
-
 	"branch.draftHeader.description": "A new branch will be created for your {mode}.",
 	"branch.draftHeader.commit": "commit",
 	"branch.draftHeader.aiSession": "AI session",
 	"branch.draftHeader.clickToRename": "Click the name to rename it now or later.",
-
 	"branch.foldedStack.defaultName": "Folded Stack",
-
 	"branch.createModal.newBranch": "New branch",
 	"branch.createModal.branchTypeSelection": "Branch type selection",
 	"branch.createModal.independentBranch": "Independent branch",
@@ -201,21 +185,19 @@
 	"branch.createModal.selectStackPlaceholder": "Select a stack...",
 	"branch.createModal.stackInfo": "The new branch will be applied in parallel with other stacks in the workspace.",
 	"branch.createModal.adjustPlacement": "Adjust branch placement and preferences in",
-	"branch.createModal.settingsLanes": "Settings \u2192 Lanes & branches",
+	"branch.createModal.settingsLanes": "Settings → Lanes & branches",
 	"branch.createModal.dependentInfo": "Creates a branch that depends on a selected stack.",
 	"branch.createModal.stackTopBranches": "A stack's top branches also have a",
 	"branch.createModal.createDependentIcon": "icon to create dependent branches.",
 	"branch.createModal.seeMore": "See more",
 	"branch.createModal.stackedVsIndependent": "Stacked vs. Independent",
 	"branch.createModal.createBranch": "Create branch",
-
 	"branch.integrationGraph.conflict": "conflict",
 	"branch.integrationGraph.hide": "Hide",
 	"branch.integrationGraph.show": "Show",
 	"branch.integrationGraph.integrated": "integrated",
 	"branch.integrationGraph.commit": "commit",
 	"branch.integrationGraph.commits": "commits",
-
 	"branch.integrationModal.title": "Update {branchName}",
 	"branch.integrationModal.divergedDescription1": "The local branch and its remote counterpart have diverged.",
 	"branch.integrationModal.divergedDescription2": "You can review the divergence between them, decide if and how to integrate the changes into your local branch, preview and apply the changes.",
@@ -238,7 +220,6 @@
 	"branch.integrationModal.desc.smartSquash": "Tries to fold matching remote work into related local commits. This is done through matching Change IDs, and falling back to pull-rebase ordering otherwise.",
 	"branch.integrationModal.desc.merge": "Keeps your local history and merges the remote tip into it.",
 	"branch.integrationModal.desc.pickRemote": "Rebuilds the branch picking only the commits on the remote.",
-
 	"branch.integrationSteps.clearSteps": "Clear steps",
 	"branch.integrationSteps.addStep": "Add step",
 	"branch.integrationSteps.noSteps": "No integration steps yet. Add a step to build the plan.",
@@ -254,7 +235,6 @@
 	"branch.integrationSteps.groupLocal": "Local",
 	"branch.integrationSteps.groupUpstream": "Upstream",
 	"branch.integrationSteps.groupShared": "Shared",
-
 	"commit.title": "Commits",
 	"commit.list": "Commit History",
 	"commit.author": "Author",
@@ -270,16 +250,13 @@
 	"commit.reword": "Reword",
 	"commit.discard": "Discard Commit",
 	"commit.cherryPick": "Cherry-pick",
-
 	"commit.details.author": "Author",
 	"commit.details.copySha": "Copy commit SHA",
 	"commit.details.shaCopied": "Commit SHA copied",
 	"commit.details.less": "less",
 	"commit.details.more": "more",
-
 	"commit.title.empty": "Empty commit",
 	"commit.title.emptyDrag": "Empty commit. Drag changes here",
-
 	"commit.contextMenu.squashCommits": "Squash {count} commits",
 	"commit.contextMenu.uncommitCommits": "Uncommit {count} commits",
 	"commit.contextMenu.uncommit": "Uncommit",
@@ -301,32 +278,25 @@
 	"commit.contextMenu.addBranchBelow": "Add branch below",
 	"commit.contextMenu.showOriginalWrapping": "Show original wrapping",
 	"commit.contextMenu.rewrapMessage": "Rewrap message",
-
 	"commit.listItem.commitRow": "Commit row",
 	"commit.listItem.openGerritReview": "Open Gerrit review #{reviewId}",
-
 	"commit.messageEditor.createCommit": "Create commit",
 	"commit.messageEditor.titlePlaceholder": "Commit title (required)",
 	"commit.messageEditor.descriptionPlaceholder": "Commit message",
 	"commit.messageEditor.titleRequiredTooltip": "Commit title is required",
-
 	"commit.positionIndicator.yourCommitGoesHere": "Your commit goes here",
 	"commit.positionIndicator.commitHere": "Commit here",
-
 	"commit.timelineNode.diverged": "Diverged",
-
 	"commit.view.popOutDiff": "Pop out diff view",
 	"commit.view.saveChanges": "Save changes",
 	"commit.view.reword": "Reword commit",
 	"commit.view.rewordCommit": "Reword commit",
 	"commit.view.readOnlyMode": "Read-only mode",
 	"commit.view.commitMessageRequired": "Commit message is required",
-
 	"commit.autoCommitModal.header": "Auto commit changes",
 	"commit.autoCommitModal.noCommitMessage": "No commit message",
 	"commit.autoCommitModal.hashCopied": "Commit hash copied",
 	"commit.autoCommitModal.generatingMessage": "Generating commit message...",
-
 	"commit.cherryApplyModal.title": "Cherry-pick commit",
 	"commit.cherryApplyModal.applicableToAnyStack": "This commit can be applied to any stack. Select a stack below.",
 	"commit.cherryApplyModal.lockedToStack": "This commit conflicts when applied to the selected stack, as such it must be applied to the selected stack to avoid a workspace conflict.",
@@ -335,7 +305,6 @@
 	"commit.cherryApplyModal.branch": "branch",
 	"commit.cherryApplyModal.branches": "branches",
 	"commit.cherryApplyModal.applyCommit": "Apply commit",
-
 	"commit.failedFileEntry.show": "Show",
 	"commit.failedFileEntry.hide": "Hide",
 	"commit.failedFileEntry.dependsOn": "Depends on",
@@ -343,7 +312,6 @@
 	"commit.failedFileEntry.unknownStack": "Unknown stack",
 	"commit.failedFileEntry.noCommitMessage": "No commit message provided",
 	"commit.failedFileEntry.inCommit": "in commit",
-
 	"commit.failedModal.someChangesNotCommitted": "Some changes were not committed",
 	"commit.failedModal.failedToCreateCommit": "Failed to create commit",
 	"commit.failedModal.commitCreated": "Commit",
@@ -351,18 +319,14 @@
 	"commit.failedModal.noCommitTitle": "No commit title provided",
 	"commit.failedModal.couldNotCreateCommit": "Commit could not be created because of the following reasons:",
 	"commit.failedModal.cause": "Cause",
-
 	"commit.editPatchConfirmModal.title": "Resolve conflicts to preview",
 	"commit.editPatchConfirmModal.description": "The file {fileName} has unresolved merge conflicts that need to be addressed before it can be previewed.",
 	"commit.editPatchConfirmModal.resolveConflicts": "Resolve Conflicts",
-
 	"commit.floatingCommitBox.exitFloatingMode": "Exit floating mode",
-
 	"commit.newCommitView.createCommit": "Create commit",
 	"commit.newCommitView.alreadyInProgress": "Commit is already in progress",
 	"commit.newCommitView.messageRequired": "Commit message is required",
 	"commit.newCommitView.hookFailed": "Commit message hook failed",
-
 	"diff.title": "Diff",
 	"diff.added": "Added",
 	"diff.removed": "Removed",
@@ -373,7 +337,6 @@
 	"diff.noChanges": "No changes",
 	"diff.viewUnified": "Unified View",
 	"diff.viewSplit": "Split View",
-
 	"settings.title": "Settings",
 	"settings.general": "General",
 	"settings.appearance": "Appearance",
@@ -399,7 +362,6 @@
 	"settings.about": "About",
 	"settings.version": "Version",
 	"settings.checkUpdate": "Check for Updates",
-
 	"file.added": "Added",
 	"file.modified": "Modified",
 	"file.deleted": "Deleted",
@@ -414,7 +376,6 @@
 	"file.stage": "Stage",
 	"file.unstage": "Unstage",
 	"file.selectAll": "Select All",
-
 	"conflict.title": "Conflict Resolution",
 	"conflict.current": "Current Change",
 	"conflict.incoming": "Incoming Change",
@@ -423,7 +384,6 @@
 	"conflict.markResolved": "Mark as Resolved",
 	"conflict.useOurs": "Use Ours",
 	"conflict.useTheirs": "Use Theirs",
-
 	"forge.pr.title": "Pull Request",
 	"forge.pr.create": "Create PR",
 	"forge.pr.open": "Open PR",
@@ -443,20 +403,17 @@
 	"forge.review.approve": "Approve",
 	"forge.review.comment": "Comment",
 	"forge.review.requestChanges": "Request Changes",
-
 	"history.title": "History",
 	"history.snapshot": "Snapshot",
 	"history.timeline": "Timeline",
 	"history.undo": "Undo Operation",
 	"history.redo": "Redo Operation",
 	"history.operations": "Operations",
-
 	"editor.placeholder": "Type a message...",
 	"editor.send": "Send",
 	"editor.emoji": "Emoji",
 	"editor.attach": "Attach",
 	"editor.markdown": "Markdown",
-
 	"error.repoNotFound": "Repository Not Found",
 	"error.repoNotFoundDesc": "Please verify the repository path",
 	"error.loadFailed": "Load Failed",
@@ -467,7 +424,6 @@
 	"error.networkErrorDesc": "Network connection failed. Check your network settings",
 	"error.unknown": "Unknown Error",
 	"error.unknownDesc": "An unknown error occurred. Please try again",
-
 	"rules.editRule": "Edit rule",
 	"rules.deleteRule": "Delete rule",
 	"rules.deleteConfirm": "Are you sure you want to delete this rule? This action cannot be undone.",
@@ -479,11 +435,9 @@
 	"rules.leftmostLane": "Leftmost lane",
 	"rules.rightmost": "Rightmost",
 	"rules.rightmostStack": "Rightmost stack",
-
 	"prompt.gitNeedsInput": "Git needs input",
 	"prompt.cancel": "Cancel",
 	"prompt.submit": "Submit",
-
 	"share.title": "Share debug data with Ji-Cheng team for review",
 	"share.description": "If you are having trouble, please share your project and logs with the Ji-Cheng team. We will review it for you and help identify how we can help resolve the issue.",
 	"share.emailPlaceholder": "Provide an email so that we can get back to you",
@@ -500,13 +454,11 @@
 	"share.uploadingData": "Uploading data...",
 	"share.success": "Feedback sent successfully",
 	"share.error": "Failed to send feedback",
-
 	"aiPrompt.user": "User",
 	"aiPrompt.system": "System",
 	"aiPrompt.assistant": "Assistant",
 	"aiPrompt.removeExample": "Remove example",
 	"aiPrompt.addNewExample": "Add new example",
-
 	"absorb.title": "Absorb Changes into Commits",
 	"absorb.description": "The following changes will be absorbed into their respective commits:",
 	"absorb.noCommitsFound": "No suitable commits found to absorb changes into.",
@@ -515,11 +467,9 @@
 	"absorb.absorbing": "Absorbing changes",
 	"absorb.success": "Changes absorbed successfully",
 	"absorb.failed": "Failed to absorb changes",
-
 	"lineLocks.dependsOnStacks": "This line depends on changes inside the following stacks",
 	"lineLocks.dependsOnStack": "This line depends on changes inside",
 	"lineLocks.dependsOnUnknown": "This line depends on changes inside an unidentifiable stack",
-
 	"integrateUpstream.incomingChange": "Incoming change",
 	"integrateUpstream.incomingChanges": "Incoming changes",
 	"integrateUpstream.targetDivergence": "Target branch divergence",
@@ -532,7 +482,6 @@
 	"integrateUpstream.mayConflict": "May conflict",
 	"integrateUpstream.cancel": "Cancel",
 	"integrateUpstream.updateWorkspace": "Update workspace",
-
 	"integrateUpstreamDeprecated.incomingChange": "Incoming change",
 	"integrateUpstreamDeprecated.incomingChanges": "Incoming changes",
 	"integrateUpstreamDeprecated.deprecated": "Deprecated:",
@@ -545,9 +494,7 @@
 	"integrateUpstreamDeprecated.toBeUpdated": "To be updated:",
 	"integrateUpstreamDeprecated.cancel": "Cancel",
 	"integrateUpstreamDeprecated.updateWorkspace": "Update workspace",
-
 	"prListCard.noRemote": "No remote",
-
 	"branchesViewPR.applyTitle": "Apply {reviewUnitName}",
 	"branchesViewPR.description": "To apply a branch from a fork, GitButler must first add the fork as a remote.",
 	"branchesViewPR.descriptionBold": "Choose a remote name:",
@@ -556,9 +503,7 @@
 	"branchesViewPR.confirmAndApply": "Confirm and apply",
 	"branchesViewPR.cannotCreateRemote": "Cannot create a remote",
 	"branchesViewPR.provideRemoteName": "Please provide a remote name.",
-
 	"branchesViewStack.notFound": "Stack not found.",
-
 	"aiSettings.aboutText": "Ji-Cheng supports multiple AI providers: OpenAI and Anthropic (via API or your own key), OpenRouter for access to hundreds of models, plus local models through Ollama and LM Studio.",
 	"aiSettings.openai": "Open AI",
 	"aiSettings.anthropic": "Anthropic",
@@ -579,7 +524,6 @@
 	"aiSettings.customPrompts": "Custom AI prompts",
 	"aiSettings.customPromptsDesc": "Ji-Cheng's AI assistant generates commit messages and branch names. Use default prompts or create your own. Assign prompts in the project settings.",
 	"aiSettings.diffLengthCaption": "How many characters of your git diff should be provided to AI",
-
 	"credentialCheck.checking": "Checking git credentials …",
 	"credentialCheck.problem": "There was a problem with your credentials",
 	"credentialCheck.allPassed": "All checks passed successfully",
@@ -588,7 +532,6 @@
 	"credentialCheck.testCredentials": "Test credentials",
 	"credentialCheck.retestCredentials": "Re-test credentials",
 	"credentialCheck.disclaimer": "To test the push command, we create an empty branch and promptly remove it after the check. <Link href=\"https://docs.gitbutler.com/troubleshooting/fetch-push\">Read more</Link> about authentication methods.",
-
 	"commitSigning.signCommits": "Sign commits",
 	"commitSigning.caption": "Use GPG or SSH to sign your commits so they can be verified as authentic.",
 	"commitSigning.gitButlerNote": "Ji-Cheng will sign commits as per your git configuration, but evaluates",
@@ -602,7 +545,6 @@
 	"commitSigning.testSigning": "Test signing",
 	"commitSigning.retestSigning": "Re-test signing",
 	"commitSigning.disclaimer": "Signing commits can allow other people to verify your commits if you publish the public version of your signing key. <Link href=\"https://docs.gitbutler.com/features/virtual-branches/signing-commits\">Read more</Link> about commit signing and verification.",
-
 	"cloudForm.description": "Ji-Cheng supports the use of OpenAI and Anthropic to provide commit message and branch name generation. This works either through Ji-Cheng's API or in a bring your own key configuration and can be configured in the main preferences screen.",
 	"cloudForm.enableBranchGen": "Enable branch and commit message generation",
 	"cloudForm.enableBranchGenCaption": "If enabled, diffs will be sent to OpenAI or Anthropic's servers when pressing the \"Generate message\" and \"Generate branch name\" button.",
@@ -611,16 +553,13 @@
 	"cloudForm.customPrompts": "Custom prompts",
 	"cloudForm.customPromptsDesc": "You can apply your own custom prompts to the project. By default, the project uses Ji-Cheng prompts, but you can create your own prompts in the general settings.",
 	"cloudForm.customizePrompts": "Customize prompts",
-
 	"forgeAccountConfig.configure": "Configure {displayName} integration",
 	"forgeAccountConfig.connect": "Connect your {displayName} account",
 	"forgeAccountConfig.caption": "Enable {requestType} creation. Read more in the",
 	"forgeAccountConfig.setupGeneral": "Set up in General Settings",
 	"forgeAccountConfig.accountLabel": "{displayName} account for this project",
-
 	"gerritForm.title": "Gerrit configuration",
 	"gerritForm.caption": "Enable or disable Gerrit mode for this project. <Link href=\"https://docs.gitbutler.com/features/gerrit-mode\">Learn more</Link>",
-
 	"settings.useGitButlerAPI": "Use GitButler API",
 	"settings.yourOwnKey": "Use your own key",
 	"settings.provideOwnKey": "Provide your own key",
@@ -630,10 +569,11 @@
 	"settings.endpoint": "Endpoint",
 	"settings.model": "Model",
 	"settings.diffLengthLimit": "Diff length limit",
-
 	"common.readMore": "Read more",
 	"common.learnMore": "Learn more",
 	"settings.customizePrompts": "Customize prompts",
 	"forge.setupInGeneral": "Set up in General Settings",
-	"forge.readMoreInDocs": "Read more in the docs"
+	"forge.readMoreInDocs": "Read more in the docs",
+	"common.releaseNotes": "Release notes",
+	"settings.showCommand": "Show command"
 }

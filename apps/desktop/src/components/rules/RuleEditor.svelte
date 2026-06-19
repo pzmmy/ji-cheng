@@ -222,7 +222,7 @@
 	<Spacer margin={2} dotted />
 
 	<div class="rule-editor__buttons">
-		<Button onclick={oncancel} kind="outline">Cancel</Button>
+		<Button onclick={oncancel} kind="outline">{t('common.cancel')}</Button>
 		<Button
 			onclick={saveRule}
 			kind="solid"

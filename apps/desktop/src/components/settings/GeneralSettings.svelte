@@ -333,7 +333,7 @@
 						style="gray"
 						kind="outline"
 						disabled={showSymlink}
-						onclick={() => (showSymlink = !showSymlink)}>Show command</Button
+						onclick={() => (showSymlink = !showSymlink)}>{t('settings.showCommand')}</Button
 					>
 				</div>
 			</div>
