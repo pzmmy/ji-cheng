@@ -13,6 +13,7 @@ import type {
 } from "$lib/ai/types";
 
 const DEFAULT_MAX_TOKENS = 1024;
+const AI_REQUEST_TIMEOUT_MS = 60_000; // 60s timeout for AI API calls
 
 export class OpenAIClient implements AIClient {
 	defaultCommitTemplate = SHORT_DEFAULT_COMMIT_TEMPLATE;
@@ -34,15 +35,16 @@ export class OpenAIClient implements AIClient {
 	}
 
 	async evaluate(prompt: Prompt, options?: AIEvalOptions): Promise<string> {
-		// The 'max_tokens' parameter has been renamed to 'max_completion_tokens' in the OpenAI API.
-		// This change aligns with the updated API specification where 'max_completion_tokens'
-		// specifically controls the maximum number of tokens for the completion portion of the response.
-		// https://platform.openai.com/docs/api-reference/completions/create
+		// Use AbortSignal for request timeout
+		const signal = AbortSignal.timeout(AI_REQUEST_TIMEOUT_MS);
+
 		const response = await this.client.chat.completions.create({
 			max_completion_tokens: options?.maxTokens ?? DEFAULT_MAX_TOKENS,
 			messages: prompt,
 			model: this.modelName,
 			stream: true,
+		}, {
+			signal,
 		});
 
 		const buffer: string[] = [];
