@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { CLIPBOARD_SERVICE } from "$lib/backend/clipboard";
 	import { STACK_SERVICE } from "$lib/stacks/stackService.svelte";
 	import { inject } from "@gitbutler/core/context";
@@ -41,7 +42,7 @@
 			},
 		});
 		if (!plan || plan.length === 0) {
-			chipToasts.error("No suitable commits found to absorb changes into.");
+			chipToasts.error(t('absorb.noCommitsFound'));
 			return;
 		}
 		absorbPlan = plan;
@@ -66,9 +67,9 @@
 	onSubmit={async () => {
 		try {
 			await chipToasts.promise(absorb({ projectId, absorptionPlan: absorbPlan }), {
-				loading: "Absorbing changes",
-				success: "Changes absorbed successfully",
-				error: "Failed to absorb changes",
+				loading: t('absorb.absorbing'),
+				success: t('absorb.success'),
+				error: t('absorb.failed'),
 			});
 			modal?.close();
 		} catch (error) {
@@ -76,11 +77,11 @@
 		}
 	}}
 >
-	<ModalHeader sticky={!isScrollVisible}>Absorb Changes into Commits</ModalHeader>
+	<ModalHeader sticky={!isScrollVisible}>{t('absorb.title')}</ModalHeader>
 	<ScrollableContainer onscrollTop={(visible) => (isScrollVisible = visible)}>
 		<div class="absorb-plan-content">
 			<p class="text-13 text-body clr-text-2">
-				The following changes will be absorbed into their respective commits:
+				{t('absorb.description')}
 			</p>
 			<div class="commit-absorptions">
 				{#each absorbPlan as commitAbsorption}
@@ -134,7 +135,7 @@
 	</ScrollableContainer>
 
 	{#snippet controls(close)}
-		<Button kind="outline" onclick={close}>Cancel</Button>
+		<Button kind="outline" onclick={close}>{t('absorb.cancel')}</Button>
 		<Button
 			style="pop"
 			type="submit"
@@ -142,7 +143,7 @@
 			disabled={absorbPlan.length === 0 || absorbingChanges.current.isLoading}
 			testId={TestId.AbsorbModal_ActionButton}
 		>
-			Absorb changes
+			{t('absorb.absorbChanges')}
 		</Button>
 	{/snippet}
 </Modal>

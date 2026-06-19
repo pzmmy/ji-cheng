@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { CLIPBOARD_SERVICE } from "$lib/backend/clipboard";
 	import { URL_SERVICE } from "$lib/backend/url";
 	import { BASE_BRANCH_SERVICE } from "$lib/baseBranch/baseBranchService.svelte";
@@ -348,14 +349,13 @@
 		{#if base}
 			<div class="section">
 				<h3 class="text-14 text-semibold section-title">
-					<span>Incoming {base.upstreamCommits.length === 1 ? "change" : "changes"}</span><Badge
+					<span>{base.upstreamCommits.length === 1 ? t('integrateUpstreamDeprecated.incomingChange') : t('integrateUpstreamDeprecated.incomingChanges')}</span><Badge
 						>{base.upstreamCommits.length}</Badge
 					>
 				</h3>
 				<h3 class="text-11 section-title">
-					<Badge style="warning" kind="soft" icon="warning">Deprecated:</Badge>
-					This is the older modal, using deprecated APIs. Please consider enabling the new integration
-					modal in the experimental settings.
+					<Badge style="warning" kind="soft" icon="warning">{t('integrateUpstreamDeprecated.deprecated')}</Badge>
+					{t('integrateUpstreamDeprecated.deprecatedDesc')}
 				</h3>
 				<div class="scroll-wrap">
 					<ScrollableContainer maxHeight="16.5rem">
@@ -379,12 +379,12 @@
 		{#if branchStatuses?.type === "updatesRequired" && branchStatuses?.worktreeConflicts.length > 0}
 			<div class="section">
 				<h3 class="text-14 text-semibold section-title">
-					<span>Conflicting uncommitted files</span>
+					<span>{t('integrateUpstreamDeprecated.conflictingUncommitted')}</span>
 
 					<Badge>{branchStatuses?.worktreeConflicts.length}</Badge>
 				</h3>
 				<p class="text-12 clr-text-2">
-					Updating the workspace will add conflict markers to the following files.
+					{t('integrateUpstreamDeprecated.conflictingDesc')}
 				</p>
 				<div class="scroll-wrap">
 					<ScrollableContainer maxHeight="15rem">
@@ -408,11 +408,11 @@
 				<img class="target-icon" src="/images/domain-icons/trunk.svg" alt="" />
 
 				<div class="target-divergence-about">
-					<h3 class="text-14 text-semibold">Target branch divergence</h3>
+					<h3 class="text-14 text-semibold">{t('integrateUpstreamDeprecated.targetDivergence')}</h3>
 					<p class="text-12 text-body target-divergence-description">
-						<span class="text-bold">target/main</span> has diverged from the workspace.
+						<span class="text-bold">target/main</span> {t('integrateUpstreamDeprecated.targetDivergenceDesc')}
 						<br />
-						Select an action to proceed with updating.
+						{t('integrateUpstreamDeprecated.selectAction')}
 					</p>
 				</div>
 
@@ -435,7 +435,7 @@
 		<!-- STACKS AND BRANCHES TO UPDATE -->
 		{#if statuses.length > 0}
 			<div class="section" class:section-disabled={isDivergedResolved}>
-				<h3 class="text-14 text-semibold">To be updated:</h3>
+				<h3 class="text-14 text-semibold">{t('integrateUpstreamDeprecated.toBeUpdated')}</h3>
 				<div class="scroll-wrap">
 					<ScrollableContainer maxHeight="15rem">
 						{#each statuses as { stack, status }}
@@ -451,7 +451,7 @@
 
 	{#snippet controls()}
 		<div class="controls">
-			<Button onclick={() => modal?.close()} kind="outline">Cancel</Button>
+			<Button onclick={() => modal?.close()} kind="outline">{t('integrateUpstreamDeprecated.cancel')}</Button>
 			<AsyncButton
 				testId={TestId.IntegrateUpstreamActionButton}
 				wide
@@ -462,7 +462,7 @@
 					await integrate();
 				}}
 			>
-				Update workspace
+				{t('integrateUpstreamDeprecated.updateWorkspace')}
 			</AsyncButton>
 		</div>
 	{/snippet}

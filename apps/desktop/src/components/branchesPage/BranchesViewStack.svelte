@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import BranchDividerLine from "$components/branch/BranchDividerLine.svelte";
 	import ReduxResult from "$components/shared/ReduxResult.svelte";
 	import BranchesViewBranch from "$components/views/BranchesViewBranch.svelte";
@@ -36,7 +37,7 @@
 <ReduxResult result={stackQuery.result} {projectId} {stackId} {onerror}>
 	{#snippet children(stack, { stackId, projectId })}
 		{#if stack === null}
-			<p>Stack not found.</p>
+			<p>{t('branchesViewStack.notFound')}</p>
 		{:else}
 			{#each stack.segments as segment, idx}
 				{@const branchName = segment.refName?.displayName}

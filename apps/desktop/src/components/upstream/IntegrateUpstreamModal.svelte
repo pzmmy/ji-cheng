@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { CLIPBOARD_SERVICE } from "$lib/backend/clipboard";
 	import { URL_SERVICE } from "$lib/backend/url";
 	import { BASE_BRANCH_SERVICE } from "$lib/baseBranch/baseBranchService.svelte";
@@ -149,7 +150,7 @@
 		{#if base}
 			<div class="section">
 				<h3 class="text-14 text-semibold section-title">
-					<span>Incoming {base.upstreamCommits.length === 1 ? "change" : "changes"}</span><Badge
+					<span>{base.upstreamCommits.length === 1 ? t('integrateUpstream.incomingChange') : t('integrateUpstream.incomingChanges')}</span><Badge
 						>{base.upstreamCommits.length}</Badge
 					>
 				</h3>
@@ -177,12 +178,11 @@
 				<img class="target-icon" src="/images/domain-icons/trunk.svg" alt="" />
 
 				<div class="target-divergence-about">
-					<h3 class="text-14 text-semibold">Target branch divergence</h3>
+					<h3 class="text-14 text-semibold">{t('integrateUpstream.targetDivergence')}</h3>
 					<p class="text-12 text-body target-divergence-description">
-						<span class="text-bold">{base?.branchName ?? "The target branch"}</span> has diverged
-						from the workspace.
+						<span class="text-bold">{base?.branchName ?? "The target branch"}</span> {t('integrateUpstream.targetDivergenceDesc')}
 						<br />
-						Resolve target branch divergence before updating the workspace.
+						{t('integrateUpstream.resolveDivergence')}
 					</p>
 				</div>
 			</div>
@@ -190,7 +190,7 @@
 		<!-- STACKS AND BRANCHES TO UPDATE -->
 		{#if statuses.length > 0}
 			<div class="section">
-				<h3 class="text-14 text-semibold">To be updated:</h3>
+				<h3 class="text-14 text-semibold">{t('integrateUpstream.toBeUpdated')}</h3>
 				<div class="scroll-wrap">
 					<ScrollableContainer maxHeight="15rem">
 						{#each statuses as status}
@@ -202,12 +202,11 @@
 		{/if}
 		{#if worktreeConflicts.length > 0}
 			<div class="worktree-conflicts" data-testid={TestId.IntegrateUpstreamWorktreeConflicts}>
-				<h3 class="text-14 text-semibold">Uncommitted changes conflict</h3>
+				<h3 class="text-14 text-semibold">{t('integrateUpstream.uncommittedConflict')}</h3>
 				<p class="text-12 text-body worktree-conflicts-description">
-					These files will conflict when your current uncommitted changes are applied onto the
-					updated workspace.
+					{t('integrateUpstream.uncommittedConflictDesc')}
 					<br />
-					You're free to proceed, but conflict markers will be added to your uncommitted work.
+					{t('integrateUpstream.uncommittedConflictContinue')}
 				</p>
 				<div class="scroll-wrap">
 					<ScrollableContainer maxHeight="10rem">
@@ -216,7 +215,7 @@
 								filePath={path}
 								clickable={false}
 								conflicted
-								conflictHint="May conflict"
+								conflictHint={t('integrateUpstream.mayConflict')}
 								isLast={i === worktreeConflicts.length - 1}
 							/>
 						{/each}
@@ -228,7 +227,7 @@
 
 	{#snippet controls()}
 		<div class="controls">
-			<Button onclick={() => modal?.close()} kind="outline">Cancel</Button>
+			<Button onclick={() => modal?.close()} kind="outline">{t('integrateUpstream.cancel')}</Button>
 			<AsyncButton
 				testId={TestId.IntegrateUpstreamActionButton}
 				wide
@@ -239,7 +238,7 @@
 					await integrate();
 				}}
 			>
-				Update workspace
+				{t('integrateUpstream.updateWorkspace')}
 			</AsyncButton>
 		</div>
 	{/snippet}

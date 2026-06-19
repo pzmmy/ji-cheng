@@ -202,15 +202,14 @@
 {/snippet}
 
 <p class="text-13 text-body ai-settings__about-text">
-	GitButler supports multiple AI providers: OpenAI and Anthropic (via API or your own key),
-	OpenRouter for access to hundreds of models, plus local models through Ollama and LM Studio.
+	{t('aiSettings.aboutText')}
 </p>
 
 <CardGroup>
 	<form class="git-radio" bind:this={form} onchange={(e) => onFormChange(e.currentTarget)}>
 		<CardGroup.Item labelFor="open-ai">
 			{#snippet title()}
-				Open AI
+				{t('aiSettings.openai')}
 			{/snippet}
 			{#snippet actions()}
 				<RadioButton name="modelKind" id="open-ai" value={ModelKind.OpenAI} />
@@ -236,9 +235,9 @@
 
 				{#if openAIKeyOption === KeyOption.ButlerAPI}
 					{#if !userService.user}
-						<AuthorizationBanner message="Please sign in to use the GitButler API." />
+						<AuthorizationBanner message={t('aiSettings.signInApi')} />
 					{:else}
-						{@render shortNote("GitButler uses OpenAI API for commit messages and branch names.")}
+						{@render shortNote(t('aiSettings.butlerApiNoteOpenAI'))}
 					{/if}
 				{/if}
 
@@ -278,7 +277,7 @@
 
 		<CardGroup.Item labelFor="anthropic">
 			{#snippet title()}
-				Anthropic
+				{t('aiSettings.anthropic')}
 			{/snippet}
 			{#snippet actions()}
 				<RadioButton name="modelKind" id="anthropic" value={ModelKind.Anthropic} />
@@ -304,10 +303,10 @@
 
 				{#if anthropicKeyOption === KeyOption.ButlerAPI}
 					{#if !userService.user}
-						<AuthorizationBanner message="Please sign in to use the GitButler API." />
+						<AuthorizationBanner message={t('aiSettings.signInApi')} />
 					{:else}
 						{@render shortNote(
-							"GitButler uses Anthropic API for commit messages and branch names.",
+							t('aiSettings.butlerApiNoteAnthropic'),
 						)}
 					{/if}
 				{/if}
@@ -341,7 +340,7 @@
 
 		<CardGroup.Item labelFor="ollama">
 			{#snippet title()}
-				Ollama 🦙
+				{t('aiSettings.ollama')}
 			{/snippet}
 			{#snippet actions()}
 				<RadioButton name="modelKind" id="ollama" value={ModelKind.Ollama} />
@@ -357,14 +356,12 @@
 				<Textbox label={t("settings.model")} bind:value={ollamaModel} placeholder="llama3" />
 				<InfoMessage filled outlined={false}>
 					{#snippet title()}
-						Configuring Ollama
+						{t('aiSettings.configuringOllama')}
 					{/snippet}
 					{#snippet content()}
-						To connect to your Ollama endpoint, <b>allow-list it in the app’s CSP settings</b>.
+						{@html t('aiSettings.ollamaCspNote')}
 						<br />
-						See the <Link href="https://docs.gitbutler.com/troubleshooting/custom-csp"
-							>docs for details</Link
-						>
+						{@html t('aiSettings.ollamaDocsLink')}
 					{/snippet}
 				</InfoMessage>
 			</CardGroup.Item>
@@ -372,7 +369,7 @@
 
 		<CardGroup.Item labelFor="lmstudio">
 			{#snippet title()}
-				LM Studio
+				{t('aiSettings.lmStudio')}
 			{/snippet}
 			{#snippet actions()}
 				<RadioButton name="modelKind" id="lmstudio" value={ModelKind.LMStudio} />
@@ -388,26 +385,18 @@
 				<Textbox label={t("settings.model")} bind:value={lmStudioModel} placeholder="default" />
 				<InfoMessage filled outlined={false}>
 					{#snippet title()}
-						Configuring LM Studio
+						{t('aiSettings.configuringLMStudio')}
 					{/snippet}
 					{#snippet content()}
 						<div class="ai-settings__section-text-block">
-							<p>Connecting to your LM Studio endpoint requires that you do two things:</p>
+							<p>{t('aiSettings.lmStudioIntro')}</p>
 
 							<p>
-								1. <span class="text-bold"
-									>Allow-list it in the CSP settings for the application</span
-								>. You can find more details on how to do that in the <Link
-									href="https://docs.gitbutler.com/troubleshooting/custom-csp">GitButler docs</Link
-								>.
+								{@html t('aiSettings.lmStudioCsp')}
 							</p>
 
 							<p>
-								2. <span class="text-bold">Enable CORS support in LM Studio</span>. You can find
-								more details on how to do that in the <Link
-									href="https://lmstudio.ai/docs/cli/server-start#enable-cors-support"
-									>LM Studio docs</Link
-								>.
+								{@html t('aiSettings.lmStudioCors')}
 							</p>
 						</div>
 					{/snippet}
@@ -417,7 +406,7 @@
 
 		<CardGroup.Item labelFor="openrouter">
 			{#snippet title()}
-				OpenRouter
+				{t('aiSettings.openrouter')}
 			{/snippet}
 			{#snippet actions()}
 				<RadioButton name="modelKind" id="openrouter" value={ModelKind.OpenRouter} />

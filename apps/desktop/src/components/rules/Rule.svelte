@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import ReduxResult from "$components/shared/ReduxResult.svelte";
 	import {
 		semanticTypeToString,
@@ -149,7 +150,7 @@
 			{#snippet contextMenu({ close })}
 				<ContextMenuSection>
 					<ContextMenuItem
-						label="Edit rule"
+						label={t('rules.editRule')}
 						icon="edit"
 						onclick={() => {
 							close();
@@ -157,7 +158,7 @@
 						}}
 					/>
 					<ContextMenuItem
-						label="Delete rule"
+						label={t('rules.deleteRule')}
 						icon="bin"
 						onclick={async () => {
 							close();
@@ -182,10 +183,10 @@
 				{/each}
 			{:else}
 				<div class="filter-pill">
-					<span class="text-12 truncate">*. All changes</span>
+					<span class="text-12 truncate">{t('rules.allChanges')}</span>
 				</div>
 			{/if}
-			<Tooltip text="Stage to branch">
+			<Tooltip text={t('rules.stageToBranch')}>
 				<Icon name="arrow-right" color="var(--text-3)" />
 			</Tooltip>
 			{@render stackTarget(target)}
@@ -199,18 +200,18 @@
 	bind:this={confirmationModal}
 	width="small"
 	type="warning"
-	title="Delete rule"
+	title={t('rules.deleteRule')}
 	onSubmit={async (close) => {
 		await handleDeleteRule();
 		close();
 	}}
 >
-	Are you sure you want to delete this rule? This action cannot be undone.
+	{t('rules.deleteConfirm')}
 
 	{#snippet controls(close)}
-		<Button kind="outline" onclick={close}>Cancel</Button>
+		<Button kind="outline" onclick={close}>{t('common.cancel')}</Button>
 		<Button loading={deletingRule.current.isLoading} style="danger" type="submit"
-			>Delete rule</Button
+			>{t('rules.deleteRule')}</Button
 		>
 	{/snippet}
 </Modal>

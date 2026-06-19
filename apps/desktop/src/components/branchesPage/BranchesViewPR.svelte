@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { goto } from "$app/navigation";
 	import PRListCard from "$components/branchesPage/PRListCard.svelte";
 	import ReduxResult from "$components/shared/ReduxResult.svelte";
@@ -60,7 +61,7 @@
 		}
 
 		if (!inputRemoteName) {
-			showWarning("Cannot create a remote", "Please provide a remote name.");
+			showWarning(t('branchesViewPR.cannotCreateRemote'), t('branchesViewPR.provideRemoteName'));
 			return;
 		}
 
@@ -103,26 +104,26 @@
 
 		<Modal
 			testId={TestId.BranchesView_CreateRemoteModal}
-			title="Apply {reviewUnitName}"
+			title={t('branchesViewPR.applyTitle', { reviewUnitName })}
 			width="small"
 			bind:this={createRemoteModal}
 			onSubmit={async () => await handleConfirmRemote(pr)}
 		>
 			<p class="fork-notice">
-				To apply a branch from a fork, GitButler must first add the fork as a remote. <span
-					class="text-bold">Choose a remote name:</span
+				{t('branchesViewPR.description')} <span
+					class="text-bold">{t('branchesViewPR.descriptionBold')}</span
 				>
 			</p>
-			<Textbox bind:value={inputRemoteName} placeholder="remote-name-example" required />
+			<Textbox bind:value={inputRemoteName} placeholder={t('branchesViewPR.remoteNamePlaceholder')} required />
 
 			{#snippet controls(close)}
-				<Button kind="outline" onclick={close}>Cancel</Button>
+				<Button kind="outline" onclick={close}>{t('branchesViewPR.cancel')}</Button>
 				<Button
 					testId={TestId.BranchesView_CreateRemoteModalActionButton}
 					style="pop"
 					type="submit"
 					{loading}
-					disabled={!inputRemoteName}>Confirm and apply</Button
+					disabled={!inputRemoteName}>{t('branchesViewPR.confirmAndApply')}</Button
 				>
 			{/snippet}
 		</Modal>
