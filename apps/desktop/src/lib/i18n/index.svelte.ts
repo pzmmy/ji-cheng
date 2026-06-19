@@ -5,13 +5,15 @@
 
 // Direct import of locale data (type-safe with resolveJsonModule)
 import zhCN from './locales/zh-CN.json';
+import en from './locales/en.json';
 
-type Locale = 'zh-CN';
+export type Locale = 'zh-CN' | 'en';
 
 let currentLocale: Locale = $state('zh-CN');
 
 const locales: Record<string, Record<string, string>> = {
 	'zh-CN': zhCN as Record<string, string>,
+	'en': en as Record<string, string>,
 };
 
 export function setLocale(locale: Locale) {

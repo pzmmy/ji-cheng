@@ -27,7 +27,7 @@ export enum AnthropicModelName {
 	Opus = "claude-opus-4-6",
 }
 
-// https://platform.deepseek.com/api-docs
+// https://api-docs.deepseek.com
 export enum DeepSeekModelName {
 	Chat = "deepseek-chat",
 	Reasoner = "deepseek-reasoner",
