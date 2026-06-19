@@ -161,7 +161,7 @@
 							{:else if signCheckResult}
 								<p>{t('commitSigning.working')}</p>
 							{:else}
-								<p>Signing is not working correctly</p>
+								<p>{t('commitSigning.notWorking')}</p>
 							{/if}
 						{/snippet}
 					</InfoMessage>
