@@ -12,6 +12,7 @@
 	import { inject } from "@gitbutler/core/context";
 	import { TestId } from "@gitbutler/ui";
 	import { tick } from "svelte";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		projectId: string;
@@ -51,7 +52,7 @@
 
 	async function createCommit(message: string) {
 		if (isCooking) {
-			showToast({ message: "Commit is already in progress", style: "danger" });
+			showToast({ message: t('commit.newCommitView.alreadyInProgress'), style: "danger" });
 			return;
 		}
 
@@ -90,7 +91,7 @@
 			if ($runCommitHooks) {
 				const messageHookResult = await runMessageHook({ projectId, message });
 				if (messageHookResult?.status === "failure") {
-					showWarning("Commit message hook failed", messageHookResult.error);
+					showWarning(t('commit.newCommitView.hookFailed'), messageHookResult.error);
 					return;
 				} else if (messageHookResult?.status === "message") {
 					finalMessage = messageHookResult.message;
@@ -177,7 +178,7 @@
 
 		const message = description ? title + "\n\n" + description : title;
 		if (!message) {
-			showToast({ message: "Commit message is required", style: "danger" });
+			showToast({ message: t('commit.newCommitView.messageRequired'), style: "danger" });
 			return;
 		}
 
@@ -224,7 +225,7 @@
 		bind:this={input}
 		{projectId}
 		{stackId}
-		actionLabel="Create commit"
+		actionLabel={t('commit.newCommitView.createCommit')}
 		action={({ title, description }) => handleCommitCreation(title, description)}
 		onChange={({ title, description }) => handleMessageUpdate(title, description)}
 		onCancel={cancel}

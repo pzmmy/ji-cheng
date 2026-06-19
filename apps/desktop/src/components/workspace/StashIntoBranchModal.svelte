@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import BranchNameTextbox from "$components/branch/BranchNameTextbox.svelte";
 	import { changesToDiffSpec } from "$lib/commits/utils";
 	import { autoSelectBranchCreationFeature } from "$lib/config/uiFeatureFlags";
@@ -65,13 +66,13 @@
 	}
 </script>
 
-<Modal width={434} type="info" title="Stash changes into a new branch" bind:this={modal}>
+<Modal width={434} type="info" title={t('workspace.stash.title')} bind:this={modal}>
 	{#snippet children(item)}
 		<div class="content-wrap">
 			<BranchNameTextbox
 				bind:this={stashBranchNameInput}
 				id="stashBranchName"
-				placeholder="Enter your branch name..."
+				placeholder={t('workspace.stash.placeholder')}
 				bind:value={stashBranchName}
 				autofocus
 				onnormalizedvalue={(value) => (normalizedRefName = value)}
@@ -80,25 +81,23 @@
 			<div class="explanation">
 				<p class="primary-text">
 					{#if isChangedFilesItem(item) && isChangedFolderItem(item)}
-						All changes in this folder
+						{t('workspace.stash.folderChanges')}
 					{:else}
-						Your selected changes
+						{t('workspace.stash.selectedChanges')}
 					{/if}
-					will be moved to a new branch and removed from your current workspace. To get these changes
-					back later, switch to the new branch and uncommit the stash.
+					{t('workspace.stash.explanation')}
 				</p>
 			</div>
 
 			<div class="technical-note">
 				<p class="text-12 text-body clr-text-2">
-					💡 This creates a new branch, commits your changes, then unapplies the branch. Future
-					versions will have simpler stash management.
+					{t('workspace.stash.technicalNote')}
 				</p>
 			</div>
 		</div>
 	{/snippet}
 	{#snippet controls(close, item)}
-		<Button kind="outline" type="reset" onclick={close}>Cancel</Button>
+		<Button kind="outline" type="reset" onclick={close}>{t('common.cancel')}</Button>
 		<AsyncButton
 			style="pop"
 			disabled={!isStashBranchNameValid}
@@ -107,7 +106,7 @@
 				if (isChangedFilesItem(item)) await confirmStashIntoBranch(item, normalizedRefName);
 			}}
 		>
-			Stash into branch
+			{t('workspace.stash.button')}
 		</AsyncButton>
 	{/snippet}
 </Modal>

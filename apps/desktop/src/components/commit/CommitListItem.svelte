@@ -10,6 +10,7 @@
 	import { slide } from "svelte/transition";
 	import type { Reaction } from "$lib/irc/ircEndpoints";
 	import type { Snippet } from "svelte";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type BaseProps = {
 		type: CommitStatusType;
@@ -121,7 +122,7 @@
 		bind:this={container}
 		role="button"
 		tabindex="0"
-		aria-label="Commit row"
+		aria-label={t('commit.listItem.commitRow')}
 		class="commit-row"
 		class:selected
 		class:active
@@ -187,7 +188,7 @@
 							role="button"
 							tabindex="0"
 							onclick={openGerritReview}
-							title="Open Gerrit review #{reviewId}"
+							title={t('commit.listItem.openGerritReview', { reviewId })}
 						>
 							<span class="text-11 text-semibold">{reviewId}</span>
 						</div>

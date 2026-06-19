@@ -68,6 +68,7 @@
 		TestId,
 	} from "@gitbutler/ui";
 	import type { AnchorPosition } from "$lib/stacks/stack";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		showOnHover?: boolean;
@@ -197,7 +198,7 @@
 					<!-- Multi-select actions -->
 					<ContextMenuSection>
 						<ContextMenuItem
-							label="Squash {multiSelect.commitIds.length} commits"
+							label={t('commit.contextMenu.squashCommits', { count: multiSelect.commitIds.length })}
 							icon="commit-double-chevron-down"
 							testId={TestId.CommitRowContextMenu_SquashSelected}
 							disabled={isReadOnly}
@@ -209,7 +210,7 @@
 							}}
 						/>
 						<ContextMenuItem
-							label="Uncommit {multiSelect.commitIds.length} commits"
+							label={t('commit.contextMenu.uncommitCommits', { count: multiSelect.commitIds.length })}
 							icon="undo"
 							testId={TestId.CommitRowContextMenu_UncommitSelected}
 							disabled={isReadOnly}
@@ -226,7 +227,7 @@
 					{@const { onUncommitClick, onEditMessageClick } = contextData}
 					<ContextMenuSection>
 						<ContextMenuItem
-							label="Uncommit"
+							label={t('commit.contextMenu.uncommit')}
 							icon="undo"
 							testId={TestId.CommitRowContextMenu_UncommitMenuButton}
 							disabled={isReadOnly}
@@ -238,7 +239,7 @@
 							}}
 						/>
 						<ContextMenuItem
-							label="Reword commit"
+							label={t('commit.contextMenu.reword')}
 							icon="edit"
 							testId={TestId.CommitRowContextMenu_EditMessageMenuButton}
 							disabled={isReadOnly}
@@ -250,7 +251,7 @@
 							}}
 						/>
 						<ContextMenuItem
-							label="Edit commit"
+							label={t('commit.contextMenu.editCommit')}
 							icon="commit-edit"
 							testId={TestId.CommitRowContextMenu_EditCommit}
 							disabled={isReadOnly}
@@ -269,7 +270,7 @@
 				<ContextMenuSection>
 					{#if commitUrl}
 						<ContextMenuItem
-							label="Open in browser"
+							label={t('commit.contextMenu.openInBrowser')}
 							icon="open-in-browser"
 							onclick={async () => {
 								await urlService.openExternalUrl(commitUrl);
@@ -277,31 +278,31 @@
 							}}
 						/>
 					{/if}
-					<ContextMenuItemSubmenu label="Copy" icon="copy">
+					<ContextMenuItemSubmenu label={t('commit.contextMenu.copy')} icon="copy">
 						{#snippet submenu({ close: closeSubmenu })}
 							<ContextMenuSection>
 								{#if commitUrl}
 									<ContextMenuItem
-										label="Copy commit link"
+										label={t('commit.contextMenu.copyCommitLink')}
 										onclick={() => {
-											clipboardService.write(commitUrl, { message: "Commit link copied" });
+											clipboardService.write(commitUrl, { message: t('commit.contextMenu.linkCopied') });
 											closeSubmenu();
 											close();
 										}}
 									/>
 								{/if}
 								<ContextMenuItem
-									label="Copy commit hash"
+									label={t('commit.contextMenu.copyCommitHash')}
 									onclick={() => {
-										clipboardService.write(commitId, { message: "Commit hash copied" });
+										clipboardService.write(commitId, { message: t('commit.contextMenu.hashCopied') });
 										closeSubmenu();
 										close();
 									}}
 								/>
 								<ContextMenuItem
-									label="Copy commit message"
+									label={t('commit.contextMenu.copyCommitMessage')}
 									onclick={() => {
-										clipboardService.write(commitMessage, { message: "Commit message copied" });
+										clipboardService.write(commitMessage, { message: t('commit.contextMenu.messageCopied') });
 										closeSubmenu();
 										close();
 									}}
@@ -312,11 +313,11 @@
 					{#if isLocal}
 						{@const stackId = contextData.stackId}
 
-						<ContextMenuItemSubmenu label="Add empty commit" icon="commit-plus">
+						<ContextMenuItemSubmenu label={t('commit.contextMenu.addEmptyCommit')} icon="commit-plus">
 							{#snippet submenu({ close: closeSubmenu })}
 								<ContextMenuSection>
 									<ContextMenuItem
-										label="Add empty commit above"
+										label={t('commit.contextMenu.addEmptyCommitAbove')}
 										disabled={isReadOnly || commitInsertion.current.isLoading}
 										onclick={() => {
 											insertBlankCommit(commitId, "above");
@@ -325,7 +326,7 @@
 										}}
 									/>
 									<ContextMenuItem
-										label="Add empty commit below"
+										label={t('commit.contextMenu.addEmptyCommitBelow')}
 										disabled={isReadOnly || commitInsertion.current.isLoading}
 										onclick={() => {
 											insertBlankCommit(commitId, "below");
@@ -336,11 +337,11 @@
 								</ContextMenuSection>
 							{/snippet}
 						</ContextMenuItemSubmenu>
-						<ContextMenuItemSubmenu label="Create branch" icon="branch">
+						<ContextMenuItemSubmenu label={t('commit.contextMenu.createBranch')} icon="branch">
 							{#snippet submenu({ close: closeSubmenu })}
 								<ContextMenuSection>
 									<ContextMenuItem
-										label="Add branch above"
+										label={t('commit.contextMenu.addBranchAbove')}
 										disabled={isReadOnly || refCreation.current.isLoading}
 										onclick={async () => {
 											if (!isReadOnly) {
@@ -351,7 +352,7 @@
 										}}
 									/>
 									<ContextMenuItem
-										label="Add branch below"
+										label={t('commit.contextMenu.addBranchBelow')}
 										disabled={isReadOnly || refCreation.current.isLoading}
 										onclick={async () => {
 											if (!isReadOnly) {
@@ -379,7 +380,7 @@
 
 				<ContextMenuSection>
 					<ContextMenuItem
-						label={$rewrapCommitMessage ? "Show original wrapping" : "Rewrap message"}
+						label={$rewrapCommitMessage ? t('commit.contextMenu.showOriginalWrapping') : t('commit.contextMenu.rewrapMessage')}
 						icon="text-wrap"
 						disabled={commitInsertion.current.isLoading}
 						onclick={() => {

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Badge, TestId } from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		commitId: string | undefined;
@@ -27,7 +28,7 @@
 			<div class="pin__circle"></div>
 		</div>
 		<div class="indicator__label waving-animation">
-			<Badge size="tag" style="pop">Your commit goes here</Badge>
+			<Badge size="tag" style="pop">{t('commit.positionIndicator.yourCommitGoesHere')}</Badge>
 		</div>
 	</div>
 {/snippet}
@@ -45,7 +46,7 @@
 		<div class="commit-here__line"></div>
 		<div class="commit-here__circle"></div>
 
-		<div class="commit-here__label text-11 text-semibold">Commit here</div>
+		<div class="commit-here__label text-11 text-semibold">{t('commit.positionIndicator.commitHere')}</div>
 	</button>
 {/snippet}
 

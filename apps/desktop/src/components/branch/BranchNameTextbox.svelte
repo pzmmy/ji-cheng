@@ -4,6 +4,7 @@
 	import { inject } from "@gitbutler/core/context";
 	import { Icon, Textbox } from "@gitbutler/ui";
 	import { onDestroy } from "svelte";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		value?: string;
@@ -47,7 +48,7 @@
 	);
 	const computedHelperText = $derived(
 		namesDiverge && normalizedResult
-			? `Will be created as '${normalizedResult.normalized}'`
+			? t('branch.nameTextbox.willBeCreated', { normalized: normalizedResult.normalized })
 			: helperText,
 	);
 
@@ -79,7 +80,7 @@
 			if (!isDestroyed && value === inputValue && currentValidation === validationCounter) {
 				normalizedResult = undefined;
 				onnormalizedvalue?.(undefined);
-				validationError = "Invalid branch name";
+				validationError = t('branch.nameTextbox.invalidName');
 			}
 		} finally {
 			if (!isDestroyed && currentValidation === validationCounter) {

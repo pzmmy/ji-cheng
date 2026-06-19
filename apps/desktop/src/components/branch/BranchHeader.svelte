@@ -1,12 +1,3 @@
-<script lang="ts" module>
-	export type DragableBranchData = {
-		disabled: boolean;
-		label: string;
-		pushStatus: PushStatus | undefined;
-		data: BranchDropData | undefined;
-	};
-</script>
-
 <script lang="ts">
 	import BranchHeaderIcon from "$components/branch/BranchHeaderIcon.svelte";
 	import BranchLabel from "$components/branch/BranchLabel.svelte";
@@ -22,6 +13,7 @@
 	import type { PushStatus } from "@gitbutler/but-sdk";
 	import type { Snippet } from "svelte";
 	import type { ComponentProps } from "svelte";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		branchName: string;
@@ -169,7 +161,7 @@
 
 				{#if conflicts}
 					<div class="branch-header__top-badges">
-						<Badge style="danger">Conflicts</Badge>
+						<Badge style="danger">{t('branch.header.conflicts')}</Badge>
 					</div>
 				{/if}
 			</div>

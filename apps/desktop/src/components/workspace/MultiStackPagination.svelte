@@ -10,6 +10,7 @@
 </script>
 
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { Tooltip } from "@gitbutler/ui";
 
 	type Props = {
@@ -32,11 +33,11 @@
 
 	function getPaginationTooltip(index: number) {
 		if (visibleIndexes.includes(index)) {
-			return "In view";
+			return t('workspace.pagination.inView');
 		} else if (index === selectedBranchIndex) {
-			return "Selected";
+			return t('workspace.pagination.selected');
 		} else {
-			return "Scroll to lane";
+			return t('workspace.pagination.scrollToLane');
 		}
 	}
 </script>
@@ -60,7 +61,7 @@
 			></div>
 		</Tooltip>
 	{/each}
-	<Tooltip text="Create new branch">
+	<Tooltip text={t('workspace.pagination.createNewBranch')}>
 		<div
 			role="button"
 			tabindex="0"

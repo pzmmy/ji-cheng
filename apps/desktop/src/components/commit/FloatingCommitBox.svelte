@@ -6,6 +6,7 @@
 
 	import { type Snippet } from "svelte";
 	import type { SnapPositionName } from "$lib/floating/types";
+	import { t } from "$lib/i18n/index.svelte";
 
 	interface Props {
 		children: Snippet;
@@ -56,7 +57,7 @@
 </FloatingModal>
 
 <button class="exit-floating-mode" type="button" onclick={onExitFloatingModeClick}>
-	<span class="text-12 text-semibold underline-dotted">Exit floating mode</span>
+	<span class="text-12 text-semibold underline-dotted">{t('commit.floatingCommitBox.exitFloatingMode')}</span>
 </button>
 
 <style>

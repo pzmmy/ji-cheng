@@ -10,6 +10,7 @@
 	import { STACK_SERVICE } from "$lib/stacks/stackService.svelte";
 	import { inject } from "@gitbutler/core/context";
 	import { Button, Modal, TestId } from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 
 	const { projectId, stackId, branchName }: DeleteBranchModalProps = $props();
 	const stackService = inject(STACK_SERVICE);
@@ -26,7 +27,7 @@
 	testId={TestId.BranchHeaderDeleteModal}
 	bind:this={modal}
 	width="small"
-	title="Delete branch"
+	title={t('branch.deleteModal.title')}
 	onSubmit={async (close) => {
 		await removeBranch({
 			projectId,
@@ -37,15 +38,15 @@
 	}}
 >
 	<p class="text-13 text-body">
-		Are you sure you want to delete <code class="code-string">{branchName}</code>?
+		{t('branch.deleteModal.confirm', { branchName })}
 	</p>
 	{#snippet controls(close)}
-		<Button kind="outline" onclick={close} autofocus>Cancel</Button>
+		<Button kind="outline" onclick={close} autofocus>{t('common.cancel')}</Button>
 		<Button
 			testId={TestId.BranchHeaderDeleteModal_ActionButton}
 			style="danger"
 			type="submit"
-			loading={branchRemovalOp.current.isLoading}>Delete</Button
+			loading={branchRemovalOp.current.isLoading}>{t('common.delete')}</Button
 		>
 	{/snippet}
 </Modal>

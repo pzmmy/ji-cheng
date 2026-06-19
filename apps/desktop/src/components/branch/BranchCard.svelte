@@ -24,6 +24,7 @@
 	import type { DropzoneHandler } from "$lib/dragging/handler";
 	import type { PushStatus, Segment } from "@gitbutler/but-sdk";
 	import type { Snippet } from "svelte";
+	import { t } from "$lib/i18n/index.svelte";
 
 	interface BranchCardProps {
 		type: "normal-branch" | "stack-branch" | "pr-branch";
@@ -160,10 +161,10 @@
 	}
 
 	function getDropzoneOverlayLabel(handler: DropzoneHandler | undefined): string {
-		if (handler instanceof MoveCommitDzHandler) return "Move here";
-		if (handler instanceof ReorderCommitDzHandler) return "Reorder here";
-		if (handler instanceof StartCommitDzHandler) return "Start commit";
-		return "Drop here";
+		if (handler instanceof MoveCommitDzHandler) return t('branch.card.moveHere');
+		if (handler instanceof ReorderCommitDzHandler) return t('branch.card.reorderHere');
+		if (handler instanceof StartCommitDzHandler) return t('branch.card.startCommit');
+		return t('branch.card.dropHere');
 	}
 </script>
 
@@ -240,10 +241,10 @@
 				}}
 			>
 				{#snippet emptyState()}
-					<span class="branch-header__empty-state-span">This is an empty branch.</span>
-					<span class="branch-header__empty-state-span">Click for details.</span>
+					<span class="branch-header__empty-state-span">{t('branch.card.thisIsEmptyBranch')}</span>
+					<span class="branch-header__empty-state-span">{t('branch.card.clickForDetails')}</span>
 					<br />
-					Create or drag & drop commits here.
+					{t('branch.card.createOrDragDrop')}
 				{/snippet}
 
 				{#snippet content()}
@@ -326,8 +327,7 @@
 			roundedBottom={args.roundedBottom}
 		>
 			{#snippet emptyState()}
-				<span class="branch-header__empty-state-span">There are no commits yet on this branch.</span
-				>
+				<span class="branch-header__empty-state-span">{t('branch.card.noCommitsYet')}</span>
 			{/snippet}
 		</BranchHeader>
 	{:else if args.type === "pr-branch"}

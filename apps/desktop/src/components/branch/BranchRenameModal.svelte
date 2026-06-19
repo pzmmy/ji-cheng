@@ -1,18 +1,9 @@
-<script lang="ts" module>
-	export type BranchRenameModalProps = {
-		projectId: string;
-		stackId?: string;
-		laneId: string;
-		branchName: string;
-		isPushed: boolean;
-	};
-</script>
-
 <script lang="ts">
 	import BranchNameTextbox from "$components/branch/BranchNameTextbox.svelte";
 	import { STACK_SERVICE } from "$lib/stacks/stackService.svelte";
 	import { inject } from "@gitbutler/core/context";
 	import { Button, ElementId, Modal, TestId } from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 
 	const { projectId, stackId, laneId, branchName, isPushed }: BranchRenameModalProps = $props();
 	const stackService = inject(STACK_SERVICE);
@@ -37,7 +28,7 @@
 <Modal
 	testId={TestId.BranchHeaderRenameModal}
 	width="small"
-	title={isPushed ? "Branch has already been pushed" : "Rename branch"}
+	title={isPushed ? t('branch.renameModal.titlePushed') : t('branch.renameModal.title')}
 	type={isPushed ? "warning" : "info"}
 	bind:this={modal}
 	onSubmit={async (close) => {
@@ -49,7 +40,7 @@
 >
 	<BranchNameTextbox
 		bind:this={branchNameInput}
-		placeholder="New name"
+		placeholder={t('branch.renameModal.placeholder')}
 		id={ElementId.NewBranchNameInput}
 		bind:value={newName}
 		autofocus
@@ -59,19 +50,18 @@
 
 	{#if isPushed}
 		<div class="text-12 helper-text">
-			Renaming a branch that has already been pushed will create a new branch at the remote. The old
-			one will remain untouched but will be disassociated from this branch.
+			{t('branch.renameModal.pushedWarning')}
 		</div>
 	{/if}
 
 	{#snippet controls(close)}
-		<Button kind="outline" type="reset" onclick={close}>Cancel</Button>
+		<Button kind="outline" type="reset" onclick={close}>{t('common.cancel')}</Button>
 		<Button
 			testId={TestId.BranchHeaderRenameModal_ActionButton}
 			style="pop"
 			type="submit"
 			disabled={!isBranchNameValid}
-			loading={renameQuery.current.isLoading}>Rename</Button
+			loading={renameQuery.current.isLoading}>{t('branch.renameModal.rename')}</Button
 		>
 	{/snippet}
 </Modal>

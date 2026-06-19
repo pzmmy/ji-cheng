@@ -20,6 +20,7 @@
 	import type { ConflictEntriesObj } from "$lib/files/conflicts";
 	import type { HunkLockTarget } from "@gitbutler/but-sdk";
 	import type { TreeChange } from "@gitbutler/but-sdk";
+	import { t } from "$lib/i18n/index.svelte";
 
 	interface Props {
 		projectId: string;
@@ -122,11 +123,11 @@
 			.map(getStackName);
 
 		if (stackNames.length === 0) {
-			return "Depends on changes in an unidentified stack";
+			return t('file.dependsOnUnknown');
 		} else if (stackNames.length === 1) {
-			return `Depends on changes in:\n '${stackNames[0]}'`;
+			return t('file.dependsOnOne', { stack: stackNames[0] });
 		} else {
-			return `Depends on changes in:\n ${stackNames.join(", ")}`;
+			return t('file.dependsOnMany', { stacks: stackNames.join(", ") });
 		}
 	});
 

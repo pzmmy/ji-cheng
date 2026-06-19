@@ -12,6 +12,7 @@
 	import type { ConflictEntriesObj } from "$lib/files/conflicts";
 	import type { TreeStats } from "@gitbutler/but-sdk";
 	import type { TreeChange } from "@gitbutler/but-sdk";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		projectId: string;
@@ -115,7 +116,7 @@
 					bottomMargin={20}
 				>
 					{#snippet caption()}
-						No files changed
+						{t('file.noFilesChanged')}
 					{/snippet}
 				</EmptyStatePlaceholder>
 			{:else}

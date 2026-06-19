@@ -18,6 +18,7 @@
 	import { inject } from "@gitbutler/core/context";
 	import { Button, Modal, ModalFooter, SegmentControl, TestId } from "@gitbutler/ui";
 	import type { BranchIntegrationStrategy } from "@gitbutler/but-sdk";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		modalRef: Modal | undefined;
@@ -31,18 +32,16 @@
 	const stackService = inject(STACK_SERVICE);
 	const DEFAULT_TEMPLATE: BranchIntegrationStrategy = "pullRebase";
 	const integrationTemplates: Array<{ id: BranchIntegrationStrategy; label: string }> = [
-		{ id: "pullRebase", label: "Pull rebase" },
-		{ id: "smartSquash", label: "Smart squash" },
-		{ id: "merge", label: "Merge" },
-		{ id: "pickRemote", label: "Pick remote" },
+		{ id: "pullRebase", label: t('branch.integrationModal.template.pullRebase') },
+		{ id: "smartSquash", label: t('branch.integrationModal.template.smartSquash') },
+		{ id: "merge", label: t('branch.integrationModal.template.merge') },
+		{ id: "pickRemote", label: t('branch.integrationModal.template.pickRemote') },
 	];
 	const integrationTemplateDescriptions: Record<BranchIntegrationStrategy, string> = {
-		pullRebase:
-			"Rebuilds the branch picking first the commits on the remote, and then the commits on the local branch.",
-		smartSquash:
-			"Tries to fold matching remote work into related local commits. This is done through matching Change IDs, and falling back to pull-rebase ordering otherwise.",
-		merge: "Keeps your local history and merges the remote tip into it.",
-		pickRemote: "Rebuilds the branch picking only the commits on the remote.",
+		pullRebase: t('branch.integrationModal.desc.pullRebase'),
+		smartSquash: t('branch.integrationModal.desc.smartSquash'),
+		merge: t('branch.integrationModal.desc.merge'),
+		pickRemote: t('branch.integrationModal.desc.pickRemote'),
 	};
 	let selectedTemplate = $state<BranchIntegrationStrategy>(DEFAULT_TEMPLATE);
 	const initialBranchIntegration = $derived(
@@ -221,7 +220,7 @@
 
 <Modal
 	bind:this={modalRef}
-	title={`Update ${branchName}`}
+	title={t('branch.integrationModal.title', { branchName })}
 	noPadding
 	width="full-screen"
 	testId={TestId.BranchIntegrationModal}
@@ -237,10 +236,9 @@
 			})}
 			<div class="branch-integration">
 				<div class="branch-integration__intro">
-					<p class="text-13">The local branch and its remote counterpart have diverged.</p>
+					<p class="text-13">{t('branch.integrationModal.divergedDescription1')}</p>
 					<p class="text-13">
-						You can review the divergence between them, decide if and how to integrate the changes
-						into your local branch, preview and apply the changes.
+						{t('branch.integrationModal.divergedDescription2')}
 					</p>
 				</div>
 
@@ -250,7 +248,7 @@
 						data-testid="branch-integration-current-state"
 					>
 						<div class="branch-integration__section-header">
-							<h3 class="text-13 text-semibold">Current state</h3>
+							<h3 class="text-13 text-semibold">{t('branch.integrationModal.currentState')}</h3>
 						</div>
 						<BranchIntegrationGraph
 							isPreview={false}
@@ -264,7 +262,7 @@
 
 					<section class="branch-integration__section" data-testid="branch-integration-steps">
 						<div class="branch-integration__section-header">
-							<h3 class="text-13 text-semibold">Integration strategy</h3>
+							<h3 class="text-13 text-semibold">{t('branch.integrationModal.integrationStrategy')}</h3>
 							<div class="branch-integration__section-actions">
 								<SegmentControl
 									size="small"
@@ -287,7 +285,7 @@
 									testId={TestId.BranchIntegrationToggleStepsButton}
 									onclick={() => (showSteps = !showSteps)}
 								>
-									{showSteps ? "Hide steps" : "Show steps"}
+									{showSteps ? t('branch.integrationModal.hideSteps') : t('branch.integrationModal.showSteps')}
 								</Button>
 							</div>
 						</div>
@@ -295,7 +293,7 @@
 							<BranchIntegrationSteps bind:stepDrafts {commitOptions} />
 						{:else}
 							<div class="branch-integration__collapsed-note text-12 clr-text-2">
-								Using the selected strategy steps. Expand to inspect or edit them.
+								{t('branch.integrationModal.usingStrategySteps')}
 								<ul class="branch-integration__strategy-descriptions">
 									{#each integrationTemplates as template (template.id)}
 										<li>
@@ -310,11 +308,11 @@
 
 					<section class="branch-integration__section" data-testid="branch-integration-preview">
 						<div class="branch-integration__section-header">
-							<h3 class="text-13 text-semibold">Preview</h3>
+							<h3 class="text-13 text-semibold">{t('branch.integrationModal.preview')}</h3>
 						</div>
 						{#if previewEmpty}
 							<div class="branch-integration__empty" data-testid="branch-integration-empty-state">
-								Run preview to inspect the resulting branch shape.
+								{t('branch.integrationModal.runPreview')}
 							</div>
 						{:else if previewError}
 							<div class="branch-integration__error" data-testid="branch-integration-error">
@@ -322,11 +320,11 @@
 							</div>
 						{:else if previewRows === null}
 							<div class="branch-integration__empty" data-testid="branch-integration-empty-state">
-								Preview produced no branch segment for this ref.
+								{t('branch.integrationModal.previewNoSegment')}
 							</div>
 						{:else if previewRows.length === 0}
 							<div class="branch-integration__empty" data-testid="branch-integration-empty-state">
-								The resulting branch would be empty.
+								{t('branch.integrationModal.previewEmptyBranch')}
 							</div>
 						{:else}
 							<BranchIntegrationGraph
@@ -340,7 +338,7 @@
 			</div>
 
 			<ModalFooter>
-				<Button kind="outline" type="reset" onclick={closeModal}>Cancel</Button>
+				<Button kind="outline" type="reset" onclick={closeModal}>{t('common.cancel')}</Button>
 				<Button
 					kind="outline"
 					type="button"
@@ -353,7 +351,7 @@
 					disabled={stepDrafts.length === 0 || integrationMutation.current.isLoading}
 					loading={integrationMutation.current.isLoading && activeAction === "preview"}
 				>
-					Preview
+					{t('branch.integrationModal.previewButton')}
 				</Button>
 				<Button
 					style="pop"
@@ -367,7 +365,7 @@
 					disabled={stepDrafts.length === 0 || integrationMutation.current.isLoading}
 					loading={integrationMutation.current.isLoading && activeAction === "apply"}
 				>
-					Apply integration
+					{t('branch.integrationModal.applyIntegration')}
 				</Button>
 			</ModalFooter>
 		{/snippet}

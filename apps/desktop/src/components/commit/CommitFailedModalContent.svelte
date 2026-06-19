@@ -7,6 +7,7 @@
 	import { Icon, ModalHeader, TestId, Tooltip } from "@gitbutler/ui";
 	import { untrack } from "svelte";
 	import type { CommitFailedModalState } from "$lib/state/uiState.svelte";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		data: CommitFailedModalState;
@@ -53,7 +54,7 @@
 		closeButton
 		{oncloseclick}
 		closeButtonTestId={TestId.GlobalModalActionButton}
-		>{data.newCommitId ? "Some changes were not committed" : "Failed to create commit"}</ModalHeader
+		>{data.newCommitId ? t('commit.failedModal.someChangesNotCommitted') : t('commit.failedModal.failedToCreateCommit')}</ModalHeader
 	>
 	<AppScrollableContainer
 		onscrollTop={(visible) => {
@@ -63,13 +64,13 @@
 		<div class="commit-failed__content">
 			<div class="text-13 commit-failed__description">
 				{#if data.newCommitId}
-					Commit <i class="commit-failed__text-icon"><Icon name="commit" /></i>
-					<Tooltip text={data.commitTitle ? data.commitTitle : "No commit title provided"}
+					{t('commit.failedModal.commitCreated')} <i class="commit-failed__text-icon"><Icon name="commit" /></i>
+					<Tooltip text={data.commitTitle ? data.commitTitle : t('commit.failedModal.noCommitTitle')}
 						><span class="h-dotted-underline text-semibold">{data.newCommitId.substring(0, 7)}</span
 						></Tooltip
-					> was created, but some changes weren't fully committed:
+					> {t('commit.failedModal.someChangesNotCommittedDesc')}
 				{:else}
-					Commit could not be created because of the following reasons:
+					{t('commit.failedModal.couldNotCreateCommit')}
 				{/if}
 			</div>
 
@@ -78,7 +79,7 @@
 					<hr class="commit-failed__reasons-divider" />
 
 					<p class="text-13">
-						Cause: <span class="text-bold">{reasonReadable}</span>
+						{t('commit.failedModal.cause')}: <span class="text-bold">{reasonReadable}</span>
 					</p>
 
 					<div class="commit-failed__reason-file-list">

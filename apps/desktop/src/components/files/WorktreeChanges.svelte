@@ -22,6 +22,7 @@
 	import { isDefined } from "@gitbutler/ui/utils/typeguards";
 	import { untrack, type Snippet } from "svelte";
 	import type { DropzoneHandler } from "$lib/dragging/handler";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		projectId: string;
@@ -97,11 +98,11 @@
 
 	function getDropzoneLabel(handler: DropzoneHandler | undefined): string {
 		if (handler instanceof UncommitDzHandler) {
-			return "Uncommit";
+			return t('file.uncommit');
 		} else if (mode === "assigned") {
-			return "Assign";
+			return t('file.assign');
 		} else {
-			return "Unassign";
+			return t('file.unassign');
 		}
 	}
 </script>

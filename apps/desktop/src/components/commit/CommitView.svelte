@@ -15,6 +15,7 @@
 	import { inject, injectOptional } from "@gitbutler/core/context";
 	import { Button, TestId } from "@gitbutler/ui";
 	import type { Commit, UpstreamCommit } from "@gitbutler/but-sdk";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		projectId: string;
@@ -97,7 +98,7 @@
 			throw new Error("No branch selected!");
 		}
 		if (!commitMessage) {
-			showToast({ message: "Commit message is required", style: "danger" });
+			showToast({ message: t('commit.view.commitMessageRequired'), style: "danger" });
 			return;
 		}
 
@@ -167,7 +168,7 @@
 				kind="ghost"
 				icon="pop-out-bottom-right"
 				size="tag"
-				tooltip="Pop out diff view"
+				tooltip={t('commit.view.popOutDiff')}
 				onclick={onpopout}
 			/>
 		{/if}
@@ -195,7 +196,7 @@
 					drawer?.open();
 					setMode("edit");
 				}}
-				tooltip={isReadOnly ? "Read-only mode" : "Reword commit"}
+				tooltip={isReadOnly ? t('commit.view.readOnlyMode') : t('commit.view.reword')}
 				disabled={isReadOnly || isEditingMessage}
 			/>
 		{/if}
@@ -230,9 +231,9 @@
 					{projectId}
 					{stackId}
 					action={({ title, description }) => saveCommitMessage(title, description)}
-					actionLabel="Save changes"
+					actionLabel={t('commit.view.saveChanges')}
 					onCancel={cancelEdit}
-					floatingBoxHeader="Reword commit"
+					floatingBoxHeader={t('commit.view.rewordCommit')}
 					loading={messageUpdateQuery.current.isLoading}
 					existingCommitId={commit.id}
 					title={parsedMessage?.title || ""}

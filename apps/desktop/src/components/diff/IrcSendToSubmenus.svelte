@@ -4,6 +4,7 @@
 	import { SETTINGS_SERVICE } from "$lib/settings/appSettings";
 	import { inject } from "@gitbutler/core/context";
 	import { ContextMenuItem, ContextMenuItemSubmenu, ContextMenuSection } from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		projectId: string;
@@ -42,7 +43,7 @@
 			{#if ircChannels.length > 0 || filteredUsers.length > 0}
 				<ContextMenuSection>
 					{#if ircChannels.length > 0}
-						<ContextMenuItemSubmenu label="Send to channel">
+						<ContextMenuItemSubmenu label={t('diff.sendToChannel')}>
 							{#snippet submenu({ close: closeSubmenu })}
 								<ContextMenuSection>
 									{#each ircChannels as ch}
@@ -61,7 +62,7 @@
 						</ContextMenuItemSubmenu>
 					{/if}
 					{#if filteredUsers.length > 0}
-						<ContextMenuItemSubmenu label="Send to user">
+						<ContextMenuItemSubmenu label={t('diff.sendToUser')}>
 							{#snippet submenu({ close: closeSubmenu })}
 								<ContextMenuSection>
 									{#each filteredUsers as user}

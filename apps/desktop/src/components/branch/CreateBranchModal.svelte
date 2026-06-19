@@ -22,6 +22,7 @@
 		TestId,
 	} from "@gitbutler/ui";
 	import { isDefined } from "@gitbutler/ui/utils/typeguards";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		projectId: string;
@@ -142,7 +143,7 @@
 	<div class="content-wrap">
 		<BranchNameTextbox
 			bind:this={branchNameInput}
-			label="New branch"
+			label={t('branch.createModal.newBranch')}
 			id={ElementId.NewBranchNameInput}
 			value={createRefName}
 			autofocus
@@ -150,7 +151,7 @@
 			onvalidationchange={(isValid) => (isBranchNameValid = isValid)}
 		/>
 
-		<div class="options-wrap" role="radiogroup" aria-label="Branch type selection">
+		<div class="options-wrap" role="radiogroup" aria-label={t('branch.createModal.branchTypeSelection')}>
 			<!-- Option 1 -->
 			<label for="new-stack" class="radio-label" class:radio-selected={createRefType === "stack"}>
 				<div class="radio-btn">
@@ -163,9 +164,9 @@
 				</div>
 
 				<div class="radio-content">
-					<h3 class="text-14 text-bold text-body radio-title">Independent branch</h3>
+					<h3 class="text-14 text-bold text-body radio-title">{t('branch.createModal.independentBranch')}</h3>
 					<p class="text-12 text-body radio-caption">
-						Create an independent branch<br />in a new stack.
+						{t('branch.createModal.independentDesc')}
 					</p>
 
 					<div class="radio-illustration">
@@ -195,12 +196,12 @@
 				</div>
 
 				<div class="radio-content">
-					<h3 class="text-14 text-bold text-body radio-title">Dependent branch</h3>
+					<h3 class="text-14 text-bold text-body radio-title">{t('branch.createModal.dependentBranch')}</h3>
 					<p class="text-12 text-body radio-caption">
 						{#if allStacks.length === 0}
-							Create a branch that depends<br />on another stack (none available).
+							{t('branch.createModal.dependentDescNone')}
 						{:else}
-							Create a branch that depends<br />on a selected stack.
+							{t('branch.createModal.dependentDescAvailable')}
 						{/if}
 					</p>
 
@@ -215,9 +216,9 @@
 			<Select
 				options={stackOptions}
 				value={selectedStackId}
-				label="Add to stack"
+				label={t('branch.createModal.addToStack')}
 				disabled={stackOptions.length <= 1}
-				placeholder="Select a stack..."
+				placeholder={t('branch.createModal.selectStackPlaceholder')}
 				onselect={(value) => (selectedStackId = value)}
 			>
 				{#snippet itemSnippet({ item, highlighted })}
@@ -233,9 +234,9 @@
 
 			<p>
 				{#if createRefType === "stack"}
-					The new branch will be applied in parallel with other stacks in the workspace.
+					{t('branch.createModal.stackInfo')}
 					<br />
-					Adjust branch placement and preferences in
+					{t('branch.createModal.adjustPlacement')}
 					<button
 						type="button"
 						class="settings-link underline-dotted"
@@ -244,13 +245,14 @@
 							openGeneralSettings("lanes-and-branches");
 						}}
 					>
-						Settings → Lanes & branches
+						{t('branch.createModal.settingsLanes')}
 					</button>
 				{:else}
-					Creates a branch that depends on a selected stack.
+					{t('branch.createModal.dependentInfo')}
 					<br />
-					A stack's top branches also have a
-					<i class="create-dependent-icon"><Icon name="stack-plus" /></i> icon to create dependent branches.
+					{t('branch.createModal.stackTopBranches')}
+					<i class="create-dependent-icon"><Icon name="stack-plus" /></i>
+					{t('branch.createModal.createDependentIcon')}
 				{/if}
 			</p>
 		</div>
@@ -259,14 +261,14 @@
 	{#snippet controls(close)}
 		<div class="footer">
 			<span class="text-12 text-body footer-text"
-				>See more: <Link
+				>{t('branch.createModal.seeMore')}: <Link
 					href="https://docs.gitbutler.com/features/branch-management/stacked-branches"
-					>Stacked vs. Independent</Link
+					>{t('branch.createModal.stackedVsIndependent')}</Link
 				></span
 			>
 
 			<div class="footer__controls">
-				<Button kind="outline" type="reset" onclick={close}>Cancel</Button>
+				<Button kind="outline" type="reset" onclick={close}>{t('common.cancel')}</Button>
 				<Button
 					style="pop"
 					type="submit"
@@ -275,7 +277,7 @@
 					loading={isAddingNew}
 					testId={TestId.ConfirmSubmit}
 				>
-					Create branch
+					{t('branch.createModal.createBranch')}
 				</Button>
 			</div>
 		</div>

@@ -23,6 +23,7 @@
 	import { injectOptional, inject } from "@gitbutler/core/context";
 	import { AsyncButton, FileListItem, TestId } from "@gitbutler/ui";
 	import type { ConflictEntriesObj } from "$lib/files/conflicts";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		projectId: string;
@@ -97,8 +98,7 @@
 		{#if ancestorMostConflictedCommitId}
 			<div class="conflicted-entries__action">
 				<p class="text-12 text-body clr-text-2">
-					If the branch has multiple conflicted commits, GitButler opens the earliest one first,
-					since later commits depend on it.
+					{t('conflict.resolveDesc')}
 				</p>
 				<AsyncButton
 					testId={TestId.CommitDrawerResolveConflictsButton}
@@ -113,7 +113,7 @@
 							projectId,
 						})}
 				>
-					Resolve conflicts
+					{t('conflict.resolveConflicts')}
 				</AsyncButton>
 			</div>
 		{/if}

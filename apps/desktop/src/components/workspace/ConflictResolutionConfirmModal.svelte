@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { AsyncButton, Button, Modal } from "@gitbutler/ui";
 
 	interface Props {
@@ -19,18 +20,18 @@
 
 <Modal bind:this={modalEl} width="small">
 	<div>
-		<p>It's generally better to start resolving conflicts from the bottom up.</p>
+		<p>{t('workspace.conflictResolution.bottomUpHint')}</p>
 		<br />
-		<p>Are you sure you want to resolve conflicts for this commit?</p>
+		<p>{t('workspace.conflictResolution.confirmQuestion')}</p>
 	</div>
 	{#snippet controls(close)}
-		<Button kind="outline" type="reset" onclick={close}>Cancel</Button>
+		<Button kind="outline" type="reset" onclick={close}>{t('common.cancel')}</Button>
 		<AsyncButton
 			style="pop"
 			action={async () => {
 				await onSubmit();
 				close();
-			}}>Yes</AsyncButton
+			}}>{t('workspace.conflictResolution.yes')}</AsyncButton
 		>
 	{/snippet}
 </Modal>

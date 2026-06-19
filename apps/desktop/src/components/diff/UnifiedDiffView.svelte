@@ -29,6 +29,7 @@
 	import type { DiffHunk } from "@gitbutler/but-sdk";
 	import type { TreeChange } from "@gitbutler/but-sdk";
 	import type { LineId } from "@gitbutler/ui/utils/diffParsing";
+	import { t } from "$lib/i18n/index.svelte";
 
 	const LARGE_DIFF_THRESHOLD = 1000;
 	const INITIAL_HUNKS = 5;
@@ -236,7 +237,7 @@
 			<div class="hunk-placehoder">
 				<EmptyStatePlaceholder image={binarySvg} gap={12} topBottomPadding={34}>
 					{#snippet caption()}
-						Was not able to load the diff
+						{t('diff.wasNotAbleToLoad')}
 					{/snippet}
 				</EmptyStatePlaceholder>
 			</div>
@@ -366,7 +367,7 @@
 						<div class="hunk-placehoder">
 							<EmptyStatePlaceholder image={emptyFileSvg} gap={12} topBottomPadding={34}>
 								{#snippet caption()}
-									It’s empty ¯\_(ツ゚)_/¯
+									{t('diff.hunkIsEmpty')}
 								{/snippet}
 							</EmptyStatePlaceholder>
 						</div>
@@ -374,7 +375,7 @@
 						<div class="hunk-placehoder">
 							<EmptyStatePlaceholder gap={12} topBottomPadding={34}>
 								{#snippet caption()}
-									Loading diff…
+									{t('diff.loadingDiff')}
 								{/snippet}
 							</EmptyStatePlaceholder>
 						</div>
@@ -385,7 +386,7 @@
 			<div class="hunk-placehoder">
 				<EmptyStatePlaceholder image={tooLargeSvg} gap={12} topBottomPadding={34}>
 					{#snippet caption()}
-						Too large to display
+						{t('diff.tooLargeToDisplay')}
 					{/snippet}
 				</EmptyStatePlaceholder>
 			</div>
@@ -396,7 +397,7 @@
 				<div class="hunk-placehoder">
 					<EmptyStatePlaceholder image={binarySvg} gap={12} topBottomPadding={34}>
 						{#snippet caption()}
-							Binary! Not for human eyes
+							{t('diff.binaryNotForHuman')}
 						{/snippet}
 					</EmptyStatePlaceholder>
 				</div>

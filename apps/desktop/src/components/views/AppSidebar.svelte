@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { goto } from "$app/navigation";
 	import ProfileButton from "$components/shared/ProfileButton.svelte";
 	import ShareIssueModal from "$components/shared/ShareIssueModal.svelte";
@@ -60,7 +61,7 @@
 				width={34}
 				hotkey="⌘1"
 				class={["btn-square", isWorkspacePath() && "btn-active"]}
-				tooltip="Workspace"
+				tooltip={t('views.tooltip.workspace')}
 				{disabled}
 			>
 				{#snippet custom()}
@@ -98,7 +99,7 @@
 				width={34}
 				class={["btn-square", isBranchesPath() && "btn-active"]}
 				hotkey="⌘2"
-				tooltip="Branches"
+				tooltip={t('views.tooltip.branches')}
 				{disabled}
 			>
 				{#snippet custom()}
@@ -163,7 +164,7 @@
 				width={34}
 				class={["btn-square", isHistoryPath() && "btn-active"]}
 				hotkey="⌘3"
-				tooltip="Operations history"
+				tooltip={t('views.tooltip.history')}
 				{disabled}
 			>
 				{#snippet custom()}
@@ -207,7 +208,7 @@
 					icon="chat"
 					width={34}
 					class={["btn-square", ircChatOpen.current ? "btn-active" : undefined]}
-					tooltip="IRC Chat"
+					tooltip={t('views.tooltip.ircChat')}
 					{disabled}
 				/>
 				{#if ircUnreadChannels > 0 && !ircChatOpen.current}
@@ -231,7 +232,7 @@
 					class="btn-square"
 					tooltipPosition="top"
 					tooltipAlign="start"
-					tooltip="Project settings"
+					tooltip={t('views.tooltip.projectSettings')}
 				>
 					{#snippet custom()}
 						<svg

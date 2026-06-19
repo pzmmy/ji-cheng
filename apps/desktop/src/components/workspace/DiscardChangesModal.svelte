@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { changesToDiffSpec } from "$lib/commits/utils";
 	import { computeChangeStatus } from "$lib/files/fileStatus";
 	import { isTreeChange } from "$lib/hunks/change";
@@ -61,7 +62,7 @@
 <Modal
 	width="small"
 	type="warning"
-	title="Discard changes"
+	title={t('workspace.discard.title')}
 	testId={TestId.DiscardFileChangesConfirmationModal}
 	bind:this={modal}
 >
@@ -69,14 +70,14 @@
 		{#if isChangedFilesItem(item)}
 			{#if isChangedFolderItem(item)}
 				<p class="discard-caption">
-					Are you sure you want to discard all changes in
+					{t('workspace.discard.folderConfirm')}
 					<span class="text-bold">{item.path}</span>?
 				</p>
 			{:else}
 				{@const changes = item.changes}
 				{#if changes.length < 10}
 					<p class="discard-caption">
-						Are you sure you want to discard the changes<br />to the following files:
+						{t('workspace.discard.filesConfirm')}
 					</p>
 					<ul class="file-list">
 						{#each changes as change}
@@ -90,21 +91,21 @@
 					</ul>
 				{:else}
 					<p>
-						Discard the changes to all <span class="text-bold">
-							{changes.length} files
+						{t('workspace.discard.fileCount')} <span class="text-bold">
+							{changes.length} {t('workspace.discard.files')}
 						</span>?
 					</p>
 				{/if}
 			{/if}
 		{:else}
-			<p class="text-13">Woops! Malformed data :(</p>
+			<p class="text-13">{t('workspace.discard.malformedData')}</p>
 		{/if}
 	{/snippet}
 	{#snippet controls(close, item)}
 		<Button
 			testId={TestId.DiscardFileChangesConfirmationModal_Cancel}
 			kind="outline"
-			onclick={close}>Cancel</Button
+			onclick={close}>{t('common.cancel')}</Button
 		>
 		<AsyncButton
 			testId={TestId.DiscardFileChangesConfirmationModal_Discard}
@@ -114,7 +115,7 @@
 				if (isChangedFilesItem(item)) await confirmDiscard(item);
 			}}
 		>
-			Confirm
+			{t('workspace.discard.confirm')}
 		</AsyncButton>
 	{/snippet}
 </Modal>

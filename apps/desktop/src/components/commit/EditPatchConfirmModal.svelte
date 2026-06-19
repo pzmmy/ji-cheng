@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Modal, Button } from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		fileName: string;
@@ -20,14 +21,13 @@
 	}
 </script>
 
-<Modal bind:this={modal} width="small" type="warning" title="Resolve conflicts to preview">
+<Modal bind:this={modal} width="small" type="warning" title={t('commit.editPatchConfirmModal.title')}>
 	<p class="text-base-body-13 text-light">
-		The file <span class="text-bold">{fileName}</span> has unresolved merge conflicts that need to be
-		addressed before it can be previewed.
+		{t('commit.editPatchConfirmModal.description', { fileName })}
 	</p>
 
 	{#snippet controls()}
-		<Button kind="outline" onclick={onCancel}>Cancel</Button>
-		<Button style="pop" onclick={onConfirm}>Resolve Conflicts</Button>
+		<Button kind="outline" onclick={onCancel}>{t('common.cancel')}</Button>
+		<Button style="pop" onclick={onConfirm}>{t('commit.editPatchConfirmModal.resolveConflicts')}</Button>
 	{/snippet}
 </Modal>

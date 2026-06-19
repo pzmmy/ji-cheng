@@ -10,6 +10,7 @@
 		SimpleCommitRow,
 		SimpleCommitRowSkeleton,
 	} from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type AutoCommitEvent =
 		| { type: "started"; steps_length: number }
@@ -92,7 +93,7 @@
 
 <div class="auto-commit-modal__wrapper">
 	<ModalHeader sticky={!isScrollTopVisible} closeButton={isDone} oncloseclick={close}
-		>Auto commit changes</ModalHeader
+		>{t('commit.autoCommitModal.header')}</ModalHeader
 	>
 
 	<AppScrollableContainer
@@ -112,7 +113,7 @@
 							{@const commit = stackService.commitDetails(data.projectId, commitId)}
 							<ReduxResult projectId={data.projectId} result={commit.result}>
 								{#snippet children(commit)}
-									{@const commitTitle = commit.message.split("\n")[0] ?? "No commit message"}
+									{@const commitTitle = commit.message.split("\n")[0] ?? t('commit.autoCommitModal.noCommitMessage')}
 									{@const date = new Date(Number(commit.committedAt))}
 
 									<SimpleCommitRow
@@ -122,7 +123,7 @@
 										{date}
 										author={commit.author.name}
 										onCopy={() =>
-											clipboardService.write(commit.id, { message: "Commit hash copied" })}
+											clipboardService.write(commit.id, { message: t('commit.autoCommitModal.hashCopied') })}
 									/>
 								{/snippet}
 
@@ -134,7 +135,7 @@
 
 						{#if parentOfCommitBeingGenerated && !isDone && !isCurrentGenerationComplete}
 							{@const currentMessage = commitMessageMap.get(parentOfCommitBeingGenerated)}
-							{@const title = currentMessage?.split("\n")[0] ?? "Generating commit message..."}
+							{@const title = currentMessage?.split("\n")[0] ?? t('commit.autoCommitModal.generatingMessage')}
 							<SimpleCommitRow {title} sha="..." date={new Date()} aiMessage={currentMessage} />
 						{/if}
 

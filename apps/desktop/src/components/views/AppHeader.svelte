@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { goto } from "$app/navigation";
 	import CreateBranchModal from "$components/branch/CreateBranchModal.svelte";
 	import SyncButton from "$components/forge/SyncButton.svelte";
@@ -123,12 +124,12 @@
 					onclick={openModal}
 					disabled={!projectId || actionsDisabled}
 				>
-					{upstreamCommits} upstream {upstreamCommits === 1 ? "commit" : "commits"}
+					{upstreamCommits} {t('views.upstream')} {upstreamCommits === 1 ? t('views.upstreamSingular') : t('views.upstreamPlural')}
 				</Button>
 			{:else}
 				<div class="chrome-you-are-up-to-date">
 					<Icon name="tick" />
-					<span class="text-12">You’re up to date</span>
+					<span class="text-12">{t('views.upToDate')}</span>
 				</div>
 			{/if}
 		</div>
@@ -200,7 +201,7 @@
 								}
 							}}
 						>
-							Add local repository
+							{t('views.addLocalRepository')}
 						</SelectItem>
 					{/if}
 					<SelectItem
@@ -209,18 +210,18 @@
 							goto("/onboarding/clone");
 						}}
 					>
-						Clone repository
+						{t('views.cloneRepository')}
 					</SelectItem>
 				</OptionsGroup>
 			</Select>
 			{#if singleBranchMode}
-				<Tooltip text="Current branch">
+				<Tooltip text={t('views.currentBranch')}>
 					<div class="chrome-current-branch" data-testid={TestId.ChromeHeaderCurrentBranch}>
 						<div class="chrome-current-branch__content">
 							<Icon name="branch" color="var(--text-2)" />
 							<span class="text-12 text-bold clr-text-2 truncate">{currentBranchName}</span>
 							{#if isNotInWorkspace}
-								<span class="text-12 text-bold clr-text-2 op-60"> read-only </span>
+								<span class="text-12 text-bold clr-text-2 op-60"> {t('views.readOnly')} </span>
 							{/if}
 						</div>
 					</div>
@@ -229,7 +230,7 @@
 		</div>
 
 		{#if currentMode && isNotInWorkspace}
-			<Tooltip text="Switch back to gitbutler/workspace">
+			<Tooltip text={t('views.switchBackToWorkspace')}>
 				<Button
 					kind="outline"
 					testId={TestId.ChromeHeaderSwitchBackToWorkspaceButton}
@@ -239,7 +240,7 @@
 					reversedDirection
 					disabled={workspaceSwitch.current.isLoading}
 				>
-					Back to workspace
+					{t('views.backToWorkspace')}
 				</Button>
 			</Tooltip>
 		{/if}
@@ -255,7 +256,7 @@
 				reversedDirection
 				onclick={() => createBranchModal?.show()}
 			>
-				Create branch
+				{t('views.createBranch')}
 			</Button>
 		{/if}
 	</div>

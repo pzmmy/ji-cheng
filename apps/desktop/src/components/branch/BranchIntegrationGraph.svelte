@@ -14,6 +14,7 @@
 		IntegrationGraphRow,
 		IntegrationGraphRowCommit,
 	} from "$lib/upstream/branchIntegrationView";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type BranchIntegrationGraphRow = BranchIntegrationDisplayRow | IntegrationGraphRow;
 	type BranchIntegrationGraphCommitRow = Extract<BranchIntegrationGraphRow, { kind: "commit" }>;
@@ -160,7 +161,7 @@
 						{/if}
 						{#if row.content.hasConflicts}
 							<span>•</span>
-							<span class="branch-integration__conflict">conflict</span>
+							<span class="branch-integration__conflict">{t('branch.integrationGraph.conflict')}</span>
 						{/if}
 					</div>
 				</div>
@@ -214,9 +215,9 @@
 		<div class="branch-integration__graph-rail branch-integration__graph-rail--integrated"></div>
 		<div class="branch-integration__graph-content">
 			<div class="branch-integration__graph-subject">
-				{showIntegratedLocalCommits ? "Hide" : "Show"}
-				{row.hiddenCount} integrated
-				{row.hiddenCount === 1 ? " commit" : " commits"}
+				{showIntegratedLocalCommits ? t('branch.integrationGraph.hide') : t('branch.integrationGraph.show')}
+				{row.hiddenCount} {t('branch.integrationGraph.integrated')}
+				{row.hiddenCount === 1 ? t('branch.integrationGraph.commit') : t('branch.integrationGraph.commits')}
 			</div>
 		</div>
 	</button>

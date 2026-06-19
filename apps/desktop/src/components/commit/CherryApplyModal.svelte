@@ -8,6 +8,7 @@
 	import { combineResults } from "$lib/state/helpers";
 	import { inject } from "@gitbutler/core/context";
 	import { Button, CardGroup, InfoMessage, Modal, RadioButton } from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		projectId: string;
@@ -64,13 +65,13 @@
 
 		switch (status.type) {
 			case "applicableToAnyStack":
-				return "This commit can be applied to any stack. Select a stack below.";
+				return t('commit.cherryApplyModal.applicableToAnyStack');
 			case "lockedToStack":
-				return "This commit conflicts when applied to the selected stack, as such it must be applied to the selected stack to avoid a workspace conflict.";
+				return t('commit.cherryApplyModal.lockedToStack');
 			case "causesWorkspaceConflict":
-				return "This commit can't be applied since it would cause a workspace conflict.";
+				return t('commit.cherryApplyModal.causesWorkspaceConflict');
 			case "noStacks":
-				return "No stacks are currently applied to the workspace.";
+				return t('commit.cherryApplyModal.noStacks');
 		}
 	}
 
@@ -91,7 +92,7 @@
 	const messageStyle = $derived(status?.type === "causesWorkspaceConflict" ? "warning" : "info");
 </script>
 
-<Modal bind:this={modalRef} title="Cherry-pick commit" width={500}>
+<Modal bind:this={modalRef} title={t('commit.cherryApplyModal.title')} width={500}>
 	{#if statusResult}
 		<ReduxResult {projectId} result={combineResults(statusResult?.result, stacksResult.result)}>
 			{#snippet children([_status, stacks], { projectId: _projectId })}
@@ -115,7 +116,7 @@
 										{/snippet}
 										{#snippet caption()}
 											{branchesCount}
-											{branchesCount === 1 ? "branch" : "branches"}
+											{branchesCount === 1 ? t('commit.cherryApplyModal.branch') : t('commit.cherryApplyModal.branches')}
 										{/snippet}
 										{#snippet actions()}
 											<RadioButton
@@ -136,14 +137,14 @@
 		</ReduxResult>
 	{/if}
 	{#snippet controls()}
-		<Button kind="outline" onclick={close} disabled={isApplying}>Cancel</Button>
+		<Button kind="outline" onclick={close} disabled={isApplying}>{t('common.cancel')}</Button>
 		<Button
 			style="pop"
 			onclick={handleApply}
 			disabled={!canApply || !selectedStackId || isApplying}
 			loading={isApplying}
 		>
-			Apply commit
+			{t('commit.cherryApplyModal.applyCommit')}
 		</Button>
 	{/snippet}
 </Modal>

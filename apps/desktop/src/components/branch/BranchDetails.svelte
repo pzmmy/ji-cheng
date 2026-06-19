@@ -3,6 +3,7 @@
 	import { AvatarGroup, Button } from "@gitbutler/ui";
 	import type { Author, PushStatus } from "@gitbutler/but-sdk";
 	import type { Snippet } from "svelte";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		pushStatus: PushStatus;
@@ -31,7 +32,7 @@
 		</div>
 
 		<div class="factoid-wrap">
-			<span class="factoid-label">Contribs:</span>
+			<span class="factoid-label">{t('branch.details.contribs')}:</span>
 			<AvatarGroup
 				maxAvatars={2}
 				avatars={authors.map((a) => ({
@@ -50,12 +51,12 @@
 
 			<div class="header-details__conflicts-action">
 				<div class="stack-v gap-8">
-					<h3 class="text-13 text-semibold">Conflicted commits</h3>
+					<h3 class="text-13 text-semibold">{t('branch.details.conflictedCommits')}</h3>
 					<p class="text-12 text-body clr-text-2">
-						GitButler opens the earliest commit first, since later commits depend on it.
+						{t('branch.details.conflictDescription')}
 					</p>
 				</div>
-				<Button onclick={onResolveConflicts} style="danger">Start resolving</Button>
+				<Button onclick={onResolveConflicts} style="danger">{t('branch.details.startResolving')}</Button>
 			</div>
 		</div>
 	{/if}

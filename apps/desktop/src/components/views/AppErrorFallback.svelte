@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { goto } from "$app/navigation";
 	import ProjectNotFound from "$components/onboarding/ProjectNotFound.svelte";
 	import IllustrationSplitLayout from "$components/shared/IllustrationSplitLayout.svelte";
@@ -22,9 +23,9 @@
 
 	function apologiy(): string {
 		if (isMonday()) {
-			return "Sorry about that. Mondays can be tough!";
+			return t('views.mondaysApology');
 		}
-		return "We apologize for the inconvenience.";
+		return t('views.genericApology');
 	}
 </script>
 
@@ -34,7 +35,7 @@
 	<IllustrationSplitLayout img={loadErrorSvg}>
 		<div class="container">
 			<div class="text-content">
-				<h2 class="title-text text-18 text-body text-bold">Something went wrong</h2>
+				<h2 class="title-text text-18 text-body text-bold">{t('views.somethingWentWrong')}</h2>
 
 				<p class="description-text text-13 text-body">
 					{apologiy()}
@@ -46,12 +47,12 @@
 					{parsedError.name}
 				{/snippet}
 				{#snippet content()}
-					An asynchronous operation failed.
+					{t('views.asyncOpFailed')}
 				{/snippet}
 			</InfoMessage>
 
 			<div class="button-container">
-				<Button type="button" style="pop" onclick={async () => await goto("/")}>Go back</Button>
+				<Button type="button" style="pop" onclick={async () => await goto("/")}>{t('views.goBack')}</Button>
 			</div>
 		</div>
 	</IllustrationSplitLayout>

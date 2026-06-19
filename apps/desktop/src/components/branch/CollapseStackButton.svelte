@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Tooltip } from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 
 	interface Props {
 		disabled?: boolean;
@@ -9,7 +10,7 @@
 
 	let { disabled, isFolded, onClick }: Props = $props();
 
-	const label = $derived(isFolded ? "Expand stack" : "Collapse stack");
+	const label = $derived(isFolded ? t('branch.collapseStack.expand') : t('branch.collapseStack.collapse'));
 </script>
 
 <Tooltip text={label}>

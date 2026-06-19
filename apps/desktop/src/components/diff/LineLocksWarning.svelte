@@ -5,6 +5,7 @@
 	import { inject } from "@gitbutler/core/context";
 	import { TestId } from "@gitbutler/ui";
 	import type { DependencyLock } from "@gitbutler/ui/utils/diffParsing";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		projectId: string;
@@ -31,13 +32,13 @@
 		{@const stackNames = lockedToStacks.map(getStackName)}
 		<div data-testid={TestId.UnifiedDiffViewLockWarning}>
 			{#if stackNames.length > 1}
-				<p>This line depends on changes inside the following stacks</p>
+				<p>{t('diff.dependsOnStacks')}</p>
 				<br />
 				<p>{stackNames.join(", ")}</p>
 			{:else if stackNames.length === 1}
-				<p>This line depends on changes inside <b>'{stackNames[0]}'</b></p>
+				<p>{t('diff.dependsOnStack', { stack: stackNames[0] })}</p>
 			{:else}
-				<p>This line depends on changes inside an unidentifiable stack</p>
+				<p>{t('diff.dependsOnUnknown')}</p>
 			{/if}
 		</div>
 	{/snippet}

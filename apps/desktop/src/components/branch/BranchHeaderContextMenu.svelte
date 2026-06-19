@@ -37,6 +37,7 @@
 
 	import { tick } from "svelte";
 	import type { AnchorPosition } from "$lib/stacks/stack";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		projectId: string;
@@ -67,8 +68,8 @@
 
 	const forgeInfoQuery = $derived(forgeInfoService.get(projectId));
 	const forgeInfo = $derived(forgeInfoQuery.response);
-	const reviewUnitName = $derived(forgeInfo?.unit.name ?? "Pull request");
-	const reviewUnitAbbr = $derived(forgeInfo?.unit.abbr ?? "PR");
+	const reviewUnitName = $derived(forgeInfo?.unit.name ?? t('branch.contextMenu.pullRequest'));
+	const reviewUnitAbbr = $derived(forgeInfo?.unit.abbr ?? t('branch.contextMenu.pr'));
 	const baseBranchNameQuery = $derived(baseBranchService.baseBranchShortName(projectId));
 	const baseBranchName = $derived(baseBranchNameQuery.response);
 	const [insertBlankCommitInBranch, commitInsertion] = stackService.insertBlankCommit.useMutation();
@@ -179,7 +180,7 @@
 		<ContextMenuSection>
 			{#if remoteTrackingBranch && branchName}
 				<ContextMenuItem
-					label="Open in browser"
+					label={t('branch.contextMenu.openInBrowser')}
 					icon="open-in-browser"
 					testId={TestId.BranchHeaderContextMenu_OpenInBrowser}
 					onclick={() => {
@@ -189,12 +190,12 @@
 				/>
 			{/if}
 			<ContextMenuItem
-				label="Copy branch name"
+				label={t('branch.contextMenu.copyBranchName')}
 				icon="copy"
 				testId={TestId.BranchHeaderContextMenu_CopyBranchName}
 				onclick={() => {
 					if (branchName) {
-						clipboardService.write(branchName, { message: "Branch name copied" });
+						clipboardService.write(branchName, { message: t('branch.contextMenu.branchNameCopied') });
 					}
 					close();
 				}}
@@ -204,14 +205,14 @@
 		{#if stackId}
 			<ContextMenuSection>
 				<ContextMenuItemSubmenu
-					label="Create branch"
+					label={t('branch.contextMenu.createBranch')}
 					icon="stack-plus"
 					disabled={isReadOnly || refCreation.current.isLoading}
 				>
 					{#snippet submenu({ close: closeSubmenu })}
 						<ContextMenuSection>
 							<ContextMenuItem
-								label="Create branch above"
+								label={t('branch.contextMenu.createBranchAbove')}
 								testId={TestId.BranchHeaderContextMenu_AddDependentBranch}
 								disabled={isReadOnly}
 								onclick={async () => {
@@ -221,7 +222,7 @@
 								}}
 							/>
 							<ContextMenuItem
-								label="Create branch below"
+								label={t('branch.contextMenu.createBranchBelow')}
 								disabled={isReadOnly}
 								onclick={async () => {
 									await handleCreateNewRef(stackId, "Below");
@@ -233,7 +234,7 @@
 					{/snippet}
 				</ContextMenuItemSubmenu>
 				<ContextMenuItem
-					label="Add empty commit"
+					label={t('branch.contextMenu.addEmptyCommit')}
 					icon="commit-plus"
 					testId={TestId.BranchHeaderContextMenu_AddEmptyCommit}
 					onclick={async () => {
@@ -250,7 +251,7 @@
 				/>
 				{#if branchCommits.length > 1 && branchName}
 					<ContextMenuItem
-						label="Squash all commits"
+						label={t('branch.contextMenu.squashAllCommits')}
 						icon="commit-double-chevron-down"
 						testId={TestId.BranchHeaderContextMenu_SquashAllCommits}
 						onclick={async () => {
@@ -268,7 +269,7 @@
 			<ContextMenuSection>
 				{#if $aiGenEnabled && aiConfigurationValid && !remoteTrackingBranch && stackId && branchName}
 					<ContextMenuItem
-						label="Generate branch name"
+						label={t('branch.contextMenu.generateBranchName')}
 						icon="edit-ai"
 						testId={TestId.BranchHeaderContextMenu_GenerateBranchName}
 						disabled={isReadOnly || !hasCommits}
@@ -280,7 +281,7 @@
 				{/if}
 				{#if branchType !== "Integrated" && branchName}
 					<ContextMenuItem
-						label="Rename"
+						label={t('branch.contextMenu.rename')}
 						icon="edit"
 						testId={TestId.BranchHeaderContextMenu_Rename}
 						disabled={isReadOnly}
@@ -300,7 +301,7 @@
 				{/if}
 				{#if branchName && stackLength && ((stackLength > 1 && (!first || !hasCommits)) || (stackLength === 1 && branchCommits.length === 0))}
 					<ContextMenuItem
-						label="Delete"
+						label={t('branch.contextMenu.delete')}
 						icon="bin"
 						testId={TestId.BranchHeaderContextMenu_Delete}
 						disabled={isReadOnly}
@@ -327,7 +328,7 @@
 							{#snippet submenu({ close: closeSubmenu })}
 								<ContextMenuSection>
 									<ContextMenuItem
-										label="Open {reviewUnitAbbr} in browser"
+										label={t('branch.contextMenu.openInBrowser', { unit: reviewUnitAbbr })}
 										testId={TestId.BranchHeaderContextMenu_OpenPRInBrowser}
 										onclick={() => {
 											urlService.openExternalUrl(pr.htmlUrl);
@@ -336,11 +337,11 @@
 										}}
 									/>
 									<ContextMenuItem
-										label="Copy {reviewUnitAbbr} link"
+										label={t('branch.contextMenu.copyLink', { unit: reviewUnitAbbr })}
 										testId={TestId.BranchHeaderContextMenu_CopyPRLink}
 										onclick={() => {
 											clipboardService.write(pr.htmlUrl, {
-												message: `${reviewUnitAbbr} link copied`,
+												message: `${reviewUnitAbbr} ${t('branch.contextMenu.linkCopied')}`,
 											});
 											closeSubmenu();
 											close();
@@ -359,7 +360,7 @@
 		{#if stackId && first}
 			<ContextMenuSection>
 				<ContextMenuItem
-					label="Unapply Stack"
+					label={t('branch.contextMenu.unapplyStack')}
 					icon="eject"
 					testId={TestId.BranchHeaderContextMenu_UnapplyBranch}
 					disabled={isReadOnly}

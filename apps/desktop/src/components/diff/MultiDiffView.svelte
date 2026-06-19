@@ -25,6 +25,7 @@
 	import { Button, FileViewHeader, HunkDiffSkeleton, VirtualList } from "@gitbutler/ui";
 	import { untrack } from "svelte";
 	import type { TreeChange } from "@gitbutler/but-sdk";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		projectId: string;
@@ -98,7 +99,7 @@
 		kind="ghost"
 		icon="pop-out-bottom-right"
 		size="tag"
-		tooltip="Pop out diff view"
+		tooltip={t('diff.popOut')}
 		onclick={() => {
 			floatingDiffInitialIndex = highlightedIndex ?? startIndex ?? 0;
 			floatingDiffOpen = true;
@@ -191,7 +192,7 @@
 				kind="ghost"
 				icon="pop-out-bottom-right"
 				size="tag"
-				tooltip="Pop out diff view"
+				tooltip={t('diff.popOut')}
 				onclick={openFloatingDiff}
 			/>
 			<Button kind="ghost" icon="cross" size="tag" onclick={onclose} />

@@ -11,6 +11,7 @@
 	import { Avatar, CopyButton, TestId, TimeAgo, Tooltip } from "@gitbutler/ui";
 	import { pxToRem } from "@gitbutler/ui/utils/pxToRem";
 	import type { Commit, UpstreamCommit } from "@gitbutler/but-sdk";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		commit: UpstreamCommit | Commit;
@@ -45,7 +46,7 @@
 
 <div class="commit">
 	<div class="metadata text-12">
-		<span>Author:</span>
+		<span>{t('commit.details.author')}:</span>
 		<Avatar
 			size="medium"
 			username={commit.author.name}
@@ -54,13 +55,13 @@
 		<span class="divider">•</span>
 		<TimeAgo date={commitCommittedAtDate(commit)} />
 		<span class="divider">•</span>
-		<Tooltip text="Copy commit SHA">
+		<Tooltip text={t('commit.details.copySha')}>
 			<CopyButton
 				class="copy-sha"
 				text={commit.id}
 				onclick={() => {
 					clipboardService.write(commit.id, {
-						message: "Commit SHA copied",
+						message: t('commit.details.shaCopied'),
 					});
 				}}
 			/>
@@ -90,9 +91,9 @@
 					class="readmore underline-dotted text-bold"
 				>
 					{#if expanded}
-						less
+						{t('commit.details.less')}
 					{:else}
-						more
+						{t('commit.details.more')}
 					{/if}
 				</button>
 			{/if}

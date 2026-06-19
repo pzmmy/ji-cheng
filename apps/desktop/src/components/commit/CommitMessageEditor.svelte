@@ -20,6 +20,7 @@
 	import { IME_COMPOSITION_HANDLER } from "@gitbutler/ui/utils/imeHandling";
 
 	import { tick, untrack } from "svelte";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		projectId: string;
@@ -49,7 +50,7 @@
 		loading,
 		title,
 		description,
-		floatingBoxHeader = "Create commit",
+		floatingBoxHeader = t('commit.messageEditor.createCommit'),
 		existingCommitId,
 	}: Props = $props();
 
@@ -166,7 +167,7 @@
 		testId={TestId.CommitDrawerTitleInput}
 		bind:ref={titleInput}
 		bind:value={title}
-		placeholder="Commit title (required)"
+		placeholder={t('commit.messageEditor.titlePlaceholder')}
 		onchange={(value) => {
 			onChange?.({ title: value });
 		}}
@@ -192,7 +193,7 @@
 		testId={TestId.CommitDrawerDescriptionInput}
 		bind:this={composer}
 		initialValue={description}
-		placeholder="Commit message"
+		placeholder={t('commit.messageEditor.descriptionPlaceholder')}
 		messageType="commit"
 		enableRuler
 		{projectId}
@@ -235,7 +236,7 @@
 			style="pop"
 			onclick={emitAction}
 			disabled={disabledAction || !title.trim()}
-			tooltip={!title.trim() ? "Commit title is required" : undefined}
+			tooltip={!title.trim() ? t('commit.messageEditor.titleRequiredTooltip') : undefined}
 			hotkey="⌘↵"
 			{loading}
 			wide>{actionLabel}</Button

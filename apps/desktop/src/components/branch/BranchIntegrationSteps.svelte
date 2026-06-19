@@ -9,6 +9,7 @@
 		updateIntegrationStepDraftMessage,
 	} from "$lib/upstream/branchIntegrationEditor";
 	import { Button } from "@gitbutler/ui";
+	import { t } from "$lib/i18n/index.svelte";
 
 	type Props = {
 		stepDrafts: IntegrationStepDraft[];
@@ -48,7 +49,7 @@
 		onclick={() => (stepDrafts = [])}
 		icon="bin"
 	>
-		Clear steps
+		{t('branch.integrationSteps.clearSteps')}
 	</Button>
 
 	<Button
@@ -59,14 +60,14 @@
 		disabled={commitOptions.length === 0}
 		onclick={() => (stepDrafts = [...stepDrafts, createDefaultIntegrationStepDraft(commitOptions)])}
 	>
-		Add step
+		{t('branch.integrationSteps.addStep')}
 	</Button>
 </div>
 
 <div class="branch-integration__steps">
 	{#if stepDrafts.length === 0}
 		<div class="branch-integration__empty">
-			No integration steps yet. Add a step to build the plan.
+			{t('branch.integrationSteps.noSteps')}
 		</div>
 	{:else}
 		{#each stepDrafts as step, index (step.id)}
@@ -77,7 +78,7 @@
 				data-branch-integration-step-index={index}
 			>
 				<div class="branch-integration__step-toolbar">
-					<span class="text-11 clr-text-2">Step {index + 1}</span>
+					<span class="text-11 clr-text-2">{t('branch.integrationSteps.step')} {index + 1}</span>
 					<div class="branch-integration__step-actions">
 						<Button
 							kind="outline"
@@ -93,14 +94,14 @@
 							disabled={index === stepDrafts.length - 1}
 							onclick={() => moveStep(step.id, 1)}
 						/>
-						<Button kind="outline" size="tag" onclick={() => deleteStep(step.id)}>Delete</Button>
+						<Button kind="outline" size="tag" onclick={() => deleteStep(step.id)}>{t('branch.integrationSteps.delete')}</Button>
 					</div>
 				</div>
 
 				<div class="branch-integration__step-fields">
 					<label class="branch-integration__field">
 						<select
-							aria-label="Integration step type"
+							aria-label={t('branch.integrationSteps.typeLabel')}
 							value={step.kind}
 							onchange={(event) =>
 								(stepDrafts = stepDrafts.map((candidate) =>
@@ -113,9 +114,9 @@
 										: candidate,
 								))}
 						>
-							<option value="pick">Pick</option>
-							<option value="merge">Merge</option>
-							<option value="squash">Squash</option>
+							<option value="pick">{t('branch.integrationSteps.pick')}</option>
+							<option value="merge">{t('branch.integrationSteps.merge')}</option>
+							<option value="squash">{t('branch.integrationSteps.squash')}</option>
 						</select>
 					</label>
 
@@ -123,7 +124,7 @@
 						{#each step.commitIds as commitId, commitIndex}
 							<label class="branch-integration__field">
 								<select
-									aria-label={`Squash commit ${commitIndex + 1}`}
+									aria-label={t('branch.integrationSteps.squashCommit', { number: commitIndex + 1 })}
 									value={commitId}
 									onchange={(event) =>
 										(stepDrafts = stepDrafts.map((candidate) =>
@@ -146,7 +147,7 @@
 						{/each}
 						<label class="branch-integration__field branch-integration__field--full">
 							<textarea
-								aria-label="Squash commit message"
+								aria-label={t('branch.integrationSteps.squashMessageLabel')}
 								rows="3"
 								value={step.message}
 								oninput={(event) =>
@@ -163,7 +164,7 @@
 					{:else}
 						<label class="branch-integration__field branch-integration__field--full">
 							<select
-								aria-label="Integration commit"
+								aria-label={t('branch.integrationSteps.integrationCommitLabel')}
 								value={step.commitId}
 								onchange={(event) =>
 									(stepDrafts = stepDrafts.map((candidate) =>
@@ -187,7 +188,7 @@
 </div>
 
 {#snippet commitOptionsMarkup(commitOptions: CommitPickerOption[], excludeCommitIds: string[] = [])}
-	{@const groups = ["Local", "Upstream", "Shared"] as const}
+	{@const groups = [t('branch.integrationSteps.groupLocal'), t('branch.integrationSteps.groupUpstream'), t('branch.integrationSteps.groupShared')] as const}
 	{@const filteredOptions = commitOptions.filter((option) => !excludeCommitIds.includes(option.id))}
 	{#each groups as group}
 		{@const options = filteredOptions.filter((option) => option.group === group)}
