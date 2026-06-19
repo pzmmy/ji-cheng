@@ -22,6 +22,11 @@ import {
 	OpenAIModelName,
 	type AIClient,
 	AnthropicModelName,
+	DeepSeekModelName,
+	TongyiQwenModelName,
+	ZhipuGLMModelName,
+	KimiModelName,
+	DoubaoModelName,
 	ModelKind,
 	MessageRole,
 	type OpenRouterModelName,
@@ -50,6 +55,10 @@ export enum AISecretHandle {
 	AnthropicKey = "aiAnthropicKey",
 	OpenRouterKey = "aiOpenRouterKey",
 	DeepSeekKey = "aiDeepSeekKey",
+	TongyiQwenKey = "aiTongyiQwenKey",
+	ZhipuGLMKey = "aiZhipuGLMKey",
+	KimiKey = "aiKimiKey",
+	DoubaoKey = "aiDoubaoKey",
 }
 
 export enum GitAIConfigKey {
@@ -66,6 +75,10 @@ export enum GitAIConfigKey {
 	LMStudioModelName = "gitbutler.aiLMStudioModelName",
 	OpenRouterModelName = "gitbutler.aiOpenRouterModelName",
 	DeepSeekModelName = "gitbutler.aiDeepSeekModelName",
+	TongyiQwenModelName = "gitbutler.aiTongyiQwenModelName",
+	ZhipuGLMModelName = "gitbutler.aiZhipuGLMModelName",
+	KimiModelName = "gitbutler.aiKimiModelName",
+	DoubaoModelName = "gitbutler.aiDoubaoModelName",
 }
 
 interface BaseAIServiceOpts {
@@ -265,6 +278,50 @@ export class AIService {
 		);
 	}
 
+	async getTongyiQwenKey() {
+		return await this.secretsService.get(AISecretHandle.TongyiQwenKey);
+	}
+
+	async getTongyiQwenModelName() {
+		return await this.gitConfig.getWithDefault<string>(
+			GitAIConfigKey.TongyiQwenModelName,
+			TongyiQwenModelName.QwenTurbo,
+		);
+	}
+
+	async getZhipuGLMKey() {
+		return await this.secretsService.get(AISecretHandle.ZhipuGLMKey);
+	}
+
+	async getZhipuGLMModelName() {
+		return await this.gitConfig.getWithDefault<string>(
+			GitAIConfigKey.ZhipuGLMModelName,
+			ZhipuGLMModelName.GLM4Flash,
+		);
+	}
+
+	async getKimiKey() {
+		return await this.secretsService.get(AISecretHandle.KimiKey);
+	}
+
+	async getKimiModelName() {
+		return await this.gitConfig.getWithDefault<string>(
+			GitAIConfigKey.KimiModelName,
+			KimiModelName.MoonshotV18k,
+		);
+	}
+
+	async getDoubaoKey() {
+		return await this.secretsService.get(AISecretHandle.DoubaoKey);
+	}
+
+	async getDoubaoModelName() {
+		return await this.gitConfig.getWithDefault<string>(
+			GitAIConfigKey.DoubaoModelName,
+			DoubaoModelName.DoubaoPro32k,
+		);
+	}
+
 	async usingGitButlerAPI() {
 		const modelKind = await this.getModelKind();
 		const openAIKeyOption = await this.getOpenAIKeyOption();
@@ -299,6 +356,14 @@ export class AIService {
 			modelKind === ModelKind.OpenRouter && !!(await this.getOpenRouterKey());
 		const deepSeekActiveAndKeyProvided =
 			modelKind === ModelKind.DeepSeek && !!(await this.getDeepSeekKey());
+		const tongyiQwenActiveAndKeyProvided =
+			modelKind === ModelKind.TongyiQwen && !!(await this.getTongyiQwenKey());
+		const zhipuGLMActiveAndKeyProvided =
+			modelKind === ModelKind.ZhipuGLM && !!(await this.getZhipuGLMKey());
+		const kimiActiveAndKeyProvided =
+			modelKind === ModelKind.Kimi && !!(await this.getKimiKey());
+		const doubaoActiveAndKeyProvided =
+			modelKind === ModelKind.Doubao && !!(await this.getDoubaoKey());
 
 		return (
 			openAIActiveAndKeyProvided ||
@@ -306,7 +371,11 @@ export class AIService {
 			ollamaActiveAndEndpointProvided ||
 			lmStudioActiveAndEndpointProvided ||
 			openRouterActiveAndKeyProvided ||
-			deepSeekActiveAndKeyProvided
+			deepSeekActiveAndKeyProvided ||
+			tongyiQwenActiveAndKeyProvided ||
+			zhipuGLMActiveAndKeyProvided ||
+			kimiActiveAndKeyProvided ||
+			doubaoActiveAndKeyProvided
 		);
 	}
 
@@ -397,6 +466,50 @@ export class AIService {
 			}
 
 			return new OpenAIClient(deepSeekKey, deepSeekModelName, "https://api.deepseek.com");
+		}
+
+		if (modelKind === ModelKind.TongyiQwen) {
+			const tongyiQwenKey = (await this.getTongyiQwenKey())?.trim();
+			const tongyiQwenModelName = await this.getTongyiQwenModelName();
+
+			if (!tongyiQwenKey) {
+				throw new Error("When using 通义千问, you must provide a valid API key");
+			}
+
+			return new OpenAIClient(tongyiQwenKey, tongyiQwenModelName, "https://dashscope.aliyuncs.com/compatible-mode/v1");
+		}
+
+		if (modelKind === ModelKind.ZhipuGLM) {
+			const zhipuGLMKey = (await this.getZhipuGLMKey())?.trim();
+			const zhipuGLMModelName = await this.getZhipuGLMModelName();
+
+			if (!zhipuGLMKey) {
+				throw new Error("When using 智谱GLM, you must provide a valid API key");
+			}
+
+			return new OpenAIClient(zhipuGLMKey, zhipuGLMModelName, "https://open.bigmodel.cn/api/paas/v4");
+		}
+
+		if (modelKind === ModelKind.Kimi) {
+			const kimiKey = (await this.getKimiKey())?.trim();
+			const kimiModelName = await this.getKimiModelName();
+
+			if (!kimiKey) {
+				throw new Error("When using Kimi, you must provide a valid API key");
+			}
+
+			return new OpenAIClient(kimiKey, kimiModelName, "https://api.moonshot.cn/v1");
+		}
+
+		if (modelKind === ModelKind.Doubao) {
+			const doubaoKey = (await this.getDoubaoKey())?.trim();
+			const doubaoModelName = await this.getDoubaoModelName();
+
+			if (!doubaoKey) {
+				throw new Error("When using 豆包, you must provide a valid API key");
+			}
+
+			return new OpenAIClient(doubaoKey, doubaoModelName, "https://ark.cn-beijing.volces.com/api/v3");
 		}
 
 		return undefined;

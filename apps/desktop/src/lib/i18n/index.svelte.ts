@@ -60,7 +60,9 @@ export function t(key: string, params?: Record<string, string | number>): string
 	if (params) {
 		for (const [k, v] of Object.entries(params)) {
 			const escaped = escapeRegex(k);
-			text = text.replace(new RegExp(`\\{${escaped}\\}`, 'g'), String(v));
+			const val = String(v);
+			// Use callback form to prevent $& / $` / $' reinterpretation
+			text = text.replace(new RegExp(`\\{${escaped}\\}`, 'g'), () => val);
 		}
 	}
 

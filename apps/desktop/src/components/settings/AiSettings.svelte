@@ -5,7 +5,7 @@
 	import AuthorizationBanner from "$components/settings/AuthorizationBanner.svelte";
 	import SettingsSection from "$components/shared/SettingsSection.svelte";
 	import { AISecretHandle, AI_SERVICE, GitAIConfigKey, KeyOption } from "$lib/ai/service";
-	import { OpenAIModelName, AnthropicModelName, DeepSeekModelName, ModelKind } from "$lib/ai/types";
+	import { OpenAIModelName, AnthropicModelName, DeepSeekModelName, TongyiQwenModelName, ZhipuGLMModelName, KimiModelName, DoubaoModelName, ModelKind } from "$lib/ai/types";
 	import { GIT_CONFIG_SERVICE } from "$lib/config/gitConfigService";
 	import { SECRET_SERVICE } from "$lib/secrets/secretsService";
 	import { USER_SERVICE } from "$lib/user/userService.svelte";
@@ -48,6 +48,14 @@
 	let openRouterModel: string | undefined = $state();
 	let deepSeekKey: string | undefined = $state();
 	let deepSeekModel: string | undefined = $state();
+	let tongyiQwenKey: string | undefined = $state();
+	let tongyiQwenModel: string | undefined = $state();
+	let zhipuGLMKey: string | undefined = $state();
+	let zhipuGLMModel: string | undefined = $state();
+	let kimiKey: string | undefined = $state();
+	let kimiModel: string | undefined = $state();
+	let doubaoKey: string | undefined = $state();
+	let doubaoModel: string | undefined = $state();
 
 	async function setConfiguration(key: GitAIConfigKey, value: string | undefined) {
 		if (!initialized) return;
@@ -84,6 +92,18 @@
 
 		deepSeekKey = await aiService.getDeepSeekKey();
 		deepSeekModel = await aiService.getDeepSeekModelName();
+
+		tongyiQwenKey = await aiService.getTongyiQwenKey();
+		tongyiQwenModel = await aiService.getTongyiQwenModelName();
+
+		zhipuGLMKey = await aiService.getZhipuGLMKey();
+		zhipuGLMModel = await aiService.getZhipuGLMModelName();
+
+		kimiKey = await aiService.getKimiKey();
+		kimiModel = await aiService.getKimiModelName();
+
+		doubaoKey = await aiService.getDoubaoKey();
+		doubaoModel = await aiService.getDoubaoModelName();
 
 		// Ensure reactive declarations have finished running before we set initialized to true
 		await tick();
@@ -129,6 +149,58 @@
 		{
 			label: "Opus",
 			value: AnthropicModelName.Opus,
+		},
+	];
+
+	const tongyiQwenModelOptions = [
+		{
+			label: "Qwen Turbo",
+			value: TongyiQwenModelName.QwenTurbo,
+		},
+		{
+			label: "Qwen Plus",
+			value: TongyiQwenModelName.QwenPlus,
+		},
+		{
+			label: "Qwen Max",
+			value: TongyiQwenModelName.QwenMax,
+		},
+	];
+
+	const zhipuGLMModelOptions = [
+		{
+			label: "GLM-4 Flash",
+			value: ZhipuGLMModelName.GLM4Flash,
+		},
+		{
+			label: "GLM-4 Plus",
+			value: ZhipuGLMModelName.GLM4Plus,
+		},
+		{
+			label: "GLM-4",
+			value: ZhipuGLMModelName.GLM4,
+		},
+	];
+
+	const kimiModelOptions = [
+		{
+			label: "Moonshot v1 8K",
+			value: KimiModelName.MoonshotV18k,
+		},
+		{
+			label: "Moonshot v1 32K",
+			value: KimiModelName.MoonshotV132k,
+		},
+	];
+
+	const doubaoModelOptions = [
+		{
+			label: "Doubao Pro 32K",
+			value: DoubaoModelName.DoubaoPro32k,
+		},
+		{
+			label: "Doubao Lite 32K",
+			value: DoubaoModelName.DoubaoLite32k,
 		},
 	];
 
@@ -188,6 +260,30 @@
 	});
 	run(() => {
 		setConfiguration(GitAIConfigKey.DeepSeekModelName, deepSeekModel);
+	});
+	run(() => {
+		setSecret(AISecretHandle.TongyiQwenKey, tongyiQwenKey);
+	});
+	run(() => {
+		setConfiguration(GitAIConfigKey.TongyiQwenModelName, tongyiQwenModel);
+	});
+	run(() => {
+		setSecret(AISecretHandle.ZhipuGLMKey, zhipuGLMKey);
+	});
+	run(() => {
+		setConfiguration(GitAIConfigKey.ZhipuGLMModelName, zhipuGLMModel);
+	});
+	run(() => {
+		setSecret(AISecretHandle.KimiKey, kimiKey);
+	});
+	run(() => {
+		setConfiguration(GitAIConfigKey.KimiModelName, kimiModel);
+	});
+	run(() => {
+		setSecret(AISecretHandle.DoubaoKey, doubaoKey);
+	});
+	run(() => {
+		setConfiguration(GitAIConfigKey.DoubaoModelName, doubaoModel);
 	});
 	run(() => {
 		if (form) form.modelKind.value = modelKind;
@@ -445,6 +541,150 @@
 				/>
 
 				<Textbox label={t("settings.model")} bind:value={deepSeekModel} placeholder="deepseek-chat" />
+			</CardGroup.Item>
+		{/if}
+
+		<CardGroup.Item labelFor="tongyiqwen">
+			{#snippet title()}
+				{@html t('aiSettings.tongyiqwen')}
+			{/snippet}
+			{#snippet actions()}
+				<RadioButton name="modelKind" id="tongyiqwen" value={ModelKind.TongyiQwen} />
+			{/snippet}
+		</CardGroup.Item>
+		{#if modelKind === ModelKind.TongyiQwen}
+			<CardGroup.Item>
+				<Textbox
+					label={t("settings.apiKey")}
+					type="password"
+					bind:value={tongyiQwenKey}
+					required
+					placeholder="sk-..."
+				/>
+
+				<Select
+					value={tongyiQwenModel}
+					options={tongyiQwenModelOptions}
+					label={t("settings.modelVersion")}
+					wide
+					onselect={(value) => {
+						tongyiQwenModel = value as TongyiQwenModelName;
+					}}
+				>
+					{#snippet itemSnippet({ item, highlighted })}
+						<SelectItem selected={item.value === tongyiQwenModel} {highlighted}>
+							{item.label}
+						</SelectItem>
+					{/snippet}
+				</Select>
+			</CardGroup.Item>
+		{/if}
+
+		<CardGroup.Item labelFor="zhipuglm">
+			{#snippet title()}
+				{@html t('aiSettings.zhipuglm')}
+			{/snippet}
+			{#snippet actions()}
+				<RadioButton name="modelKind" id="zhipuglm" value={ModelKind.ZhipuGLM} />
+			{/snippet}
+		</CardGroup.Item>
+		{#if modelKind === ModelKind.ZhipuGLM}
+			<CardGroup.Item>
+				<Textbox
+					label={t("settings.apiKey")}
+					type="password"
+					bind:value={zhipuGLMKey}
+					required
+					placeholder="***..."
+				/>
+
+				<Select
+					value={zhipuGLMModel}
+					options={zhipuGLMModelOptions}
+					label={t("settings.modelVersion")}
+					wide
+					onselect={(value) => {
+						zhipuGLMModel = value as ZhipuGLMModelName;
+					}}
+				>
+					{#snippet itemSnippet({ item, highlighted })}
+						<SelectItem selected={item.value === zhipuGLMModel} {highlighted}>
+							{item.label}
+						</SelectItem>
+					{/snippet}
+				</Select>
+			</CardGroup.Item>
+		{/if}
+
+		<CardGroup.Item labelFor="kimi">
+			{#snippet title()}
+				{@html t('aiSettings.kimi')}
+			{/snippet}
+			{#snippet actions()}
+				<RadioButton name="modelKind" id="kimi" value={ModelKind.Kimi} />
+			{/snippet}
+		</CardGroup.Item>
+		{#if modelKind === ModelKind.Kimi}
+			<CardGroup.Item>
+				<Textbox
+					label={t("settings.apiKey")}
+					type="password"
+					bind:value={kimiKey}
+					required
+					placeholder="sk-..."
+				/>
+
+				<Select
+					value={kimiModel}
+					options={kimiModelOptions}
+					label={t("settings.modelVersion")}
+					wide
+					onselect={(value) => {
+						kimiModel = value as KimiModelName;
+					}}
+				>
+					{#snippet itemSnippet({ item, highlighted })}
+						<SelectItem selected={item.value === kimiModel} {highlighted}>
+							{item.label}
+						</SelectItem>
+					{/snippet}
+				</Select>
+			</CardGroup.Item>
+		{/if}
+
+		<CardGroup.Item labelFor="doubao">
+			{#snippet title()}
+				{@html t('aiSettings.doubao')}
+			{/snippet}
+			{#snippet actions()}
+				<RadioButton name="modelKind" id="doubao" value={ModelKind.Doubao} />
+			{/snippet}
+		</CardGroup.Item>
+		{#if modelKind === ModelKind.Doubao}
+			<CardGroup.Item>
+				<Textbox
+					label={t("settings.apiKey")}
+					type="password"
+					bind:value={doubaoKey}
+					required
+					placeholder="sk-..."
+				/>
+
+				<Select
+					value={doubaoModel}
+					options={doubaoModelOptions}
+					label={t("settings.modelVersion")}
+					wide
+					onselect={(value) => {
+						doubaoModel = value as DoubaoModelName;
+					}}
+				>
+					{#snippet itemSnippet({ item, highlighted })}
+						<SelectItem selected={item.value === doubaoModel} {highlighted}>
+							{item.label}
+						</SelectItem>
+					{/snippet}
+				</Select>
 			</CardGroup.Item>
 		{/if}
 

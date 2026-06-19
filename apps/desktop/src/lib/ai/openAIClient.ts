@@ -38,21 +38,28 @@ export class OpenAIClient implements AIClient {
 		// Use AbortSignal for request timeout
 		const signal = AbortSignal.timeout(AI_REQUEST_TIMEOUT_MS);
 
-		const response = await this.client.chat.completions.create({
-			max_completion_tokens: options?.maxTokens ?? DEFAULT_MAX_TOKENS,
-			messages: prompt,
-			model: this.modelName,
-			stream: true,
-		}, {
-			signal,
-		});
+		try {
+			const response = await this.client.chat.completions.create({
+				max_completion_tokens: options?.maxTokens ?? DEFAULT_MAX_TOKENS,
+				messages: prompt,
+				model: this.modelName,
+				stream: true,
+			}, {
+				signal,
+			});
 
-		const buffer: string[] = [];
-		for await (const chunk of response) {
-			const token = chunk.choices[0]?.delta.content ?? "";
-			options?.onToken?.(token);
-			buffer.push(token);
+			const buffer: string[] = [];
+			for await (const chunk of response) {
+				const token = chunk.choices[0]?.delta.content ?? "";
+				options?.onToken?.(token);
+				buffer.push(token);
+			}
+			return buffer.join("");
+		} catch (error) {
+			if (error instanceof Error && error.name === "TimeoutError") {
+				throw new Error("AI request timed out after 60s. Please try again or use a different model.");
+			}
+			throw error;
 		}
-		return buffer.join("");
 	}
 }
