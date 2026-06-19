@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { Button, TestId } from "@gitbutler/ui";
 	import { type Snippet } from "svelte";
 
@@ -8,7 +9,7 @@
 		children: Snippet;
 	}
 
-	const { children, CancelButtonLabel = "Cancel", onCancel }: Props = $props();
+	const { children, CancelButtonLabel = t('common.cancel'), onCancel }: Props = $props();
 </script>
 
 <div class="editor-footer">

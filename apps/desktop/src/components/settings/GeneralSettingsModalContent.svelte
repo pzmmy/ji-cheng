@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import AppearanceSettings from "$components/projectSettings/AppearanceSettings.svelte";
 	import AiSettings from "$components/settings/AiSettings.svelte";
 	import ExperimentalSettings from "$components/settings/ExperimentalSettings.svelte";
@@ -38,7 +39,7 @@
 </script>
 
 <SettingsModalLayout
-	title="Global settings"
+	title={t('settings.globalSettings')}
 	pages={generalSettingsPages.filter((p) => p.id !== "irc" || ircEnabled)}
 	selectedId={currentSelectedId}
 	isAdmin={userService.user?.role === "admin"}
@@ -67,10 +68,10 @@
 			{:else if currentPage.id === "organizations"}
 				<OrganisationSettings />
 			{:else}
-				Settings page {currentPage.id} not Found.
+				{t('settings.pageNotFound', { id: currentPage.id })}
 			{/if}
 		{:else}
-			Settings page {currentSelectedId} not Found.
+			{t('settings.pageNotFound', { id: currentSelectedId })}
 		{/if}
 	{/snippet}
 
@@ -82,7 +83,7 @@
 				onclick={async () => await urlService.openExternalUrl("https://docs.gitbutler.com/")}
 			>
 				<Icon name="docs" />
-				<span class="text-13 text-bold">Docs</span>
+				<span class="text-13 text-bold">{t('settings.docs')}</span>
 				<div class="text-13 open-link-icon">↗</div>
 			</button>
 			<button
@@ -91,7 +92,7 @@
 				onclick={async () => await urlService.openExternalUrl("https://discord.gg/MmFkmaJ42D")}
 			>
 				<Icon name="discord" />
-				<span class="text-13 text-bold">Our Discord</span>
+				<span class="text-13 text-bold">{t('settings.ourDiscord')}</span>
 				<div class="text-13 open-link-icon">↗</div>
 			</button>
 		</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import GithubUserLoginState from "$components/settings/GithubUserLoginState.svelte";
 	import ReduxResult from "$components/shared/ReduxResult.svelte";
 	import githubLogoSvg from "$lib/assets/unsized-logos/github.svg?raw";
@@ -88,10 +89,10 @@
 		loading = true;
 		try {
 			await githubUserService.checkAuthStatus({ deviceCode });
-			toasts.success("GitHub authenticated");
+			toasts.success(t('settings.githubAuthenticated'));
 		} catch (err: any) {
 			console.error(err);
-			toasts.error("GitHub authentication failed");
+			toasts.error(t('settings.githubAuthFailed'));
 			posthog.captureOnboarding(OnboardingEvent.GitHubOAuthFailed);
 		} finally {
 			// Reset the auth flow on completion
@@ -117,7 +118,7 @@
 			cleanupPatFlow();
 		} catch (err: any) {
 			console.error("Failed to store GitHub PAT:", err);
-			patError = "Invalid token or network error";
+			patError = t('settings.invalidTokenOrNetwork');
 			posthog.captureOnboarding(OnboardingEvent.GitHubStorePatFailed);
 		}
 	}
@@ -136,7 +137,7 @@
 			cleanupGheFlow();
 		} catch (err: any) {
 			console.error("Failed to store GitHub Enterprise PAT:", err);
-			ghePatError = "Invalid token or host";
+			ghePatError = t('settings.invalidTokenOrHost');
 			posthog.captureOnboarding(OnboardingEvent.GitHubStoreGHEPatFailed);
 		}
 	}
@@ -149,12 +150,12 @@
 			{#snippet error()}
 				<CardGroup.Item>
 					{#snippet title()}
-						Failed to load GitHub accounts
+						{t('settings.failedToLoadGitHubAccounts')}
 					{/snippet}
 					<Button
 						style="pop"
 						onclick={deleteAllGitHubAccounts}
-						loading={clearingAllResult.current.isLoading}>Try again</Button
+						loading={clearingAllResult.current.isLoading}>{t('common.retry')}</Button
 					>
 				</CardGroup.Item>
 			{/snippet}
@@ -174,11 +175,11 @@
 					{/snippet}
 
 					{#snippet title()}
-						GitHub
+						{t('settings.integrationGithub')}
 					{/snippet}
 
 					{#snippet caption()}
-						Allows you to create Pull Requests
+						{t('settings.githubAllowsPR')}
 					{/snippet}
 
 					{#snippet actions()}
@@ -201,7 +202,7 @@
 					<div class="step-section">
 						<div class="step-line"></div>
 						<div class="step-section__content">
-							<p class="text-13 text-body">Copy the following verification code:</p>
+							<p class="text-13 text-body">{t('settings.githubCopyCode')}</p>
 
 							<div class="code-wrapper">
 								<span class="text-head-20">
@@ -213,11 +214,11 @@
 									icon="copy"
 									disabled={codeCopied}
 									onclick={() => {
-										clipboardService.write(userCode, { message: "User code copied" });
+										clipboardService.write(userCode, { message: t('settings.userCodeCopied') });
 										codeCopied = true;
 									}}
 								>
-									Copy to Clipboard
+									{t('settings.copyToClipboard')}
 								</Button>
 							</div>
 						</div>
@@ -228,7 +229,7 @@
 							<div class="step-line step-line-default"></div>
 							<div class="step-section__content">
 								<p class="text-13 text-body">
-									Navigate to the GitHub activation page and paste the code you copied.
+									{t('settings.githubNavigateAndPaste')}
 								</p>
 								<Button
 									style="pop"
@@ -244,7 +245,7 @@
 										}, 500);
 									}}
 								>
-									Open GitHub activation page
+									{t('settings.githubOpenActivationPage')}
 								</Button>
 							</div>
 						</div>
@@ -262,7 +263,7 @@
 										await gitHubOauthCheckStatus(deviceCode);
 									}}
 								>
-									Check the status
+									{t('settings.githubCheckStatus')}
 								</Button>
 							</div>
 						</div>
@@ -276,7 +277,7 @@
 		<CardGroup>
 			<CardGroup.Item>
 				{#snippet title()}
-					Add Personal Access Token
+					{t('settings.githubAddPat')}
 				{/snippet}
 
 				<Textbox
@@ -290,14 +291,14 @@
 			</CardGroup.Item>
 			<CardGroup.Item>
 				<div class="flex justify-end gap-6">
-					<Button style="gray" kind="outline" onclick={cleanupPatFlow}>Cancel</Button>
+					<Button style="gray" kind="outline" onclick={cleanupPatFlow}>{t('common.cancel')}</Button>
 					<Button
 						style="pop"
 						disabled={!patInput}
 						loading={storePatResult.current.isLoading}
 						onclick={storePersonalAccessToken}
 					>
-						Add account
+						{t('settings.githubAddAccount')}
 					</Button>
 				</div>
 			</CardGroup.Item>
@@ -306,27 +307,27 @@
 		<CardGroup>
 			<CardGroup.Item>
 				{#snippet title()}
-					Add GitHub Enterprise Account
+					{t('settings.githubAddEnterprise')}
 				{/snippet}
 
 				{#snippet caption()}
-					To connect to your GitHub Enterprise API, allow-list it in the app’s CSP settings.
+					{t('settings.githubEnterpriseDesc')}
 					<br />
-					See <Link href="https://docs.gitbutler.com/troubleshooting/custom-csp"
-						>docs for details</Link
+					{t('settings.seeDocsForDetails')} <Link href="https://docs.gitbutler.com/troubleshooting/custom-csp"
+						>{t('settings.docsForDetails')}</Link
 					>
 				{/snippet}
 
 				<Textbox
-					label="API Base URL"
+					label={t('settings.apiBaseUrl')}
 					size="large"
 					value={gheHostInput}
 					oninput={(value) => (gheHostInput = value)}
-					helperText="This should be the root URL of the API. For example, if your GitHub Enterprise Server's hostname is github.acme-inc.com, then set the base URL to https://github.acme-inc.com/api/v3"
+					helperText={t('settings.githubApiBaseUrlHelper')}
 					error={gheHostError}
 				/>
 				<Textbox
-					label="Personal Access Token"
+					label={t('settings.personalAccessToken')}
 					placeholder="ghp_************************"
 					size="large"
 					type="password"
@@ -337,14 +338,14 @@
 			</CardGroup.Item>
 			<CardGroup.Item>
 				<div class="flex justify-end gap-6">
-					<Button style="gray" kind="outline" onclick={cleanupGheFlow}>Cancel</Button>
+					<Button style="gray" kind="outline" onclick={cleanupGheFlow}>{t('common.cancel')}</Button>
 					<Button
 						style="pop"
 						disabled={!gheHostInput || !ghePatInput}
 						loading={storeGhePatResult.current.isLoading}
 						onclick={storeGitHubEnterpriseToken}
 					>
-						Add account
+						{t('settings.githubAddAccount')}
 					</Button>
 				</div>
 			</CardGroup.Item>
@@ -362,10 +363,10 @@
 		disabled={showingFlow !== undefined}
 		loading={storePatResult.current.isLoading || storeGhePatResult.current.isLoading}
 		menuItems={[
-			{ label: "Authorize GitHub Account", icon: "link", onclick: gitHubStartOauth },
-			{ label: "Add Personal Access Token", icon: "lock-auth", onclick: startPatFlow },
+			{ label: t('settings.githubAuthorize'), icon: "link", onclick: gitHubStartOauth },
+			{ label: t('settings.githubAddPat'), icon: "lock-auth", onclick: startPatFlow },
 			{
-				label: "Add GitHub Enterprise Account",
+				label: t('settings.githubAddEnterprise'),
 				icon: "factory",
 				onclick: startGitHubEnterpriseFlow,
 			},

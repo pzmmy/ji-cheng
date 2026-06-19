@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import {
 		autoSelectBranchNameFeature,
 		autoSelectBranchCreationFeature,
@@ -19,11 +20,10 @@
 
 <CardGroup.Item standalone labelFor="add-leftmost">
 	{#snippet title()}
-		Place new lanes on the left side
+		{t('settings.lanesPlaceLeft')}
 	{/snippet}
 	{#snippet caption()}
-		By default, new lanes are added to the rightmost position. Enable this to add them to the
-		leftmost position instead.
+		{t('settings.lanesPlaceLeftDesc')}
 	{/snippet}
 	{#snippet actions()}
 		<Toggle
@@ -37,11 +37,10 @@
 <CardGroup>
 	<CardGroup.Item labelFor="auto-select-creation">
 		{#snippet title()}
-			Auto-select text on branch creation
+			{t('settings.lanesAutoSelectCreation')}
 		{/snippet}
 		{#snippet caption()}
-			Automatically select the pre-populated text in the branch name field when creating a new
-			branch, making it easier to type your own name.
+			{t('settings.lanesAutoSelectCreationDesc')}
 		{/snippet}
 		{#snippet actions()}
 			<Toggle
@@ -53,11 +52,10 @@
 	</CardGroup.Item>
 	<CardGroup.Item labelFor="auto-select-rename">
 		{#snippet title()}
-			Auto-select text on branch rename
+			{t('settings.lanesAutoSelectRename')}
 		{/snippet}
 		{#snippet caption()}
-			Automatically select the text when renaming a branch or lane, making it easier to replace the
-			entire name.
+			{t('settings.lanesAutoSelectRenameDesc')}
 		{/snippet}
 		{#snippet actions()}
 			<Toggle
@@ -72,11 +70,11 @@
 <Spacer />
 
 <div class="stack-v gap-8">
-	<h2 class="text-15 text-bold">Commit staging behavior</h2>
+	<h2 class="text-15 text-bold">{t('settings.lanesCommitStaging')}</h2>
 	<p class="text-12 text-body clr-text-2">
-		Controls which files are pre-selected when opening the staging view.
+		{t('settings.lanesCommitStagingDesc')}
 		<br />
-		You can always change the selection manually.
+		{t('settings.lanesCommitStagingManual')}
 	</p>
 </div>
 
@@ -84,11 +82,10 @@
 	<form class="stack-v" onchange={(e) => onStagingBehaviorFormChange(e.currentTarget)}>
 		<CardGroup.Item labelFor="stage-all">
 			{#snippet title()}
-				Auto-select all assigned files
+				{t('settings.lanesStageAll')}
 			{/snippet}
 			{#snippet caption()}
-				Pre-selects all files assigned to this branch. Falls back to unassigned files if none are
-				assigned.
+				{t('settings.lanesStageAllDesc')}
 			{/snippet}
 			{#snippet actions()}
 				<RadioButton
@@ -102,11 +99,10 @@
 
 		<CardGroup.Item labelFor="stage-selection">
 			{#snippet title()}
-				Auto-select only your picked files
+				{t('settings.lanesStageSelection')}
 			{/snippet}
 			{#snippet caption()}
-				Pre-selects only the files you have already picked. Falls back to assigned files, then
-				unassigned, if nothing is picked.
+				{t('settings.lanesStageSelectionDesc')}
 			{/snippet}
 			{#snippet actions()}
 				<RadioButton
@@ -120,10 +116,10 @@
 
 		<CardGroup.Item labelFor="stage-none">
 			{#snippet title()}
-				No auto-selection
+				{t('settings.lanesStageNone')}
 			{/snippet}
 			{#snippet caption()}
-				Nothing is pre-selected. You manually pick what to include in each commit.
+				{t('settings.lanesStageNoneDesc')}
 			{/snippet}
 			{#snippet actions()}
 				<RadioButton

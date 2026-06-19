@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import { Icon } from "@gitbutler/ui";
 	import { pxToRem } from "@gitbutler/ui/utils/pxToRem";
 	import type { Snippet } from "svelte";
@@ -44,7 +45,7 @@
 				isOpen = !isOpen;
 			}}
 		>
-			<span class="text-11">{isOpen ? "Fold files" : `Show ${foldedAmount} files`}</span>
+			<span class="text-11">{isOpen ? t('history.snapshotSection.foldFiles') : t('history.snapshotSection.showFiles', { amount: foldedAmount ?? 0 })}</span>
 			<div class="toggle-btn__icon" style="transform: rotate({isOpen ? '180deg' : '0'})">
 				<Icon name="chevron-down" size={14} />
 			</div>

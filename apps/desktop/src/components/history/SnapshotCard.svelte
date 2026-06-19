@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import FileListItems from "$components/files/FileListItems.svelte";
 	import FileListProvider from "$components/files/FileListProvider.svelte";
 	import SnapshotSection from "$components/history/SnapshotSection.svelte";
@@ -206,12 +207,12 @@
 			<Button
 				size="tag"
 				kind="outline"
-				tooltip="Restores GitButler and your files to the state before this operation. Revert actions can also be undone."
+				tooltip={t('history.snapshotCard.restoreTooltip')}
 				onclick={() => {
 					onRestoreClick();
 				}}
 				disabled={restoring || mode.response?.type !== "OpenWorkspace"}
-				loading={restoring}>Revert</Button
+				loading={restoring}>{t('history.snapshotCard.revert')}</Button
 			>
 		</div>
 		<span class="snapshot-time text-11">
@@ -236,7 +237,7 @@
 
 			{#if operation.commitMessage}
 				<p class="text-12 text-body snapshot-commit-message">
-					<span>Message:</span>
+					<span>{t('history.snapshotCard.message')}:</span>
 					{operation.commitMessage}
 				</p>
 			{/if}

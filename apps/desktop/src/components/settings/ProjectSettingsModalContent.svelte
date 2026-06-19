@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import CloudForm from "$components/projectSettings/CloudForm.svelte";
 	import GeneralSettings from "$components/projectSettings/GeneralSettings.svelte";
 	import GitForm from "$components/projectSettings/GitForm.svelte";
@@ -23,7 +24,7 @@
 </script>
 
 <SettingsModalLayout
-	title="Project settings"
+	title={t('settings.projectSettings')}
 	{pages}
 	selectedId={currentSelectedId}
 	onSelectPage={selectPage}
@@ -39,10 +40,10 @@
 			{:else if currentPage.id === "experimental"}
 				<PreferencesForm projectId={data.projectId} />
 			{:else}
-				Settings page {currentPage.id} not Found.
+				{t('settings.pageNotFound', { id: currentPage.id })}
 			{/if}
 		{:else}
-			Settings page {currentSelectedId} not Found.
+			{t('settings.pageNotFound', { id: currentSelectedId })}
 		{/if}
 	{/snippet}
 </SettingsModalLayout>

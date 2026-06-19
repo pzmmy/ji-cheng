@@ -7,6 +7,7 @@
 </script>
 
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import MessageEditorRuler from "$components/editor/MessageEditorRuler.svelte";
 	import CommitSuggestions from "$components/editor/commitSuggestions.svelte";
 	import {
@@ -236,13 +237,13 @@
 	};
 
 	const generateMessages = $derived.by(() => ({
-		commit: "Generate commit message",
-		pr: `Generate ${reviewUnitAbbr ?? "PR"} description`,
+		commit: t('editor.generateCommitMessage'),
+		pr: t('editor.generatePRDescription', { unit: reviewUnitAbbr ?? "PR" }),
 	}));
 
 	function getTooltipText(): string | undefined {
 		if (!canUseAI) {
-			return "You need to enable AI in the project settings to use this feature";
+			return t('editor.aiNeedsEnable');
 		}
 		if (currentEditorWidth <= DROPDOWN_BTN_BREAKPOINTS.medium) {
 			return generateMessages[messageType];
@@ -254,12 +255,12 @@
 </script>
 
 {#snippet buttonText()}
-	{currentEditorWidth > DROPDOWN_BTN_BREAKPOINTS.medium ? "Generate message" : "Generate"}
+	{currentEditorWidth > DROPDOWN_BTN_BREAKPOINTS.medium ? t('editor.generateMessage') : t('editor.generate')}
 {/snippet}
 
 <Modal
 	type="warning"
-	title="Off to the cloud it goes!"
+	title={t('editor.uploadModal.title')}
 	width="small"
 	bind:this={uploadConfirmationModal}
 	onSubmit={async (close) => {
@@ -280,18 +281,17 @@
 		close();
 	}}
 >
-	Your file will be stored in GitButler’s digital vault, safe and sound. We promise it’s secure, so
-	feel free to share the link however you like 🔐
+	{t('editor.uploadModal.description')}
 	{#snippet controls(close)}
 		<div class="modal-footer">
 			<div class="flex flex-1">
 				<label for="dont-show-again" class="modal-footer__checkbox">
 					<Checkbox name="dont-show-again" small bind:checked={$doNotShowUploadWarning} />
-					<span class="text-12"> Don’t show again</span>
+					<span class="text-12"> {t('editor.uploadModal.dontShowAgain')}</span>
 				</label>
 			</div>
-			<Button kind="outline" onclick={close}>Cancel</Button>
-			<Button style="pop" type="submit">Yes, upload!</Button>
+			<Button kind="outline" onclick={close}>{t('common.cancel')}</Button>
+			<Button style="pop" type="submit">{t('editor.uploadModal.yesUpload')}</Button>
 		</div>
 	{/snippet}
 </Modal>
@@ -365,7 +365,7 @@
 				<Button
 					kind="ghost"
 					icon={useFloatingBox.current ? "pop-out-top-left" : "pop-out-bottom-right"}
-					tooltip={useFloatingBox.current ? "Exit floating mode" : "Use floating mode"}
+					tooltip={useFloatingBox.current ? t('editor.exitFloatingMode') : t('editor.useFloatingMode')}
 					onclick={() => {
 						useFloatingBox.set(!useFloatingBox.current);
 					}}
@@ -378,7 +378,7 @@
 					<Button
 						kind="ghost"
 						icon="paperclip"
-						tooltip="Drop, paste or click to upload files"
+						tooltip={t('editor.uploadFilesTooltip')}
 						onclick={handleAttachFiles}
 					/>
 				{/if}
@@ -386,7 +386,7 @@
 					<FormattingButton
 						icon="text-wrap"
 						activated={useRuler}
-						tooltip="Wrap text automatically"
+						tooltip={t('editor.wrapTextAuto')}
 						onclick={async () => {
 							uiState.global.useRuler.set(!useRuler);
 							await tick(); // Wait for reactive update.
@@ -439,7 +439,7 @@
 				{#snippet contextMenuSlot()}
 					<ContextMenuSection>
 						<ContextMenuItem
-							label="Extra concise"
+							label={t('editor.extraConcise')}
 							onclick={() => ($commitGenerationExtraConcise = !$commitGenerationExtraConcise)}
 						>
 							{#snippet control()}
@@ -448,7 +448,7 @@
 						</ContextMenuItem>
 
 						<ContextMenuItem
-							label="Haiku"
+							label={t('editor.haiku')}
 							onclick={() => ($commitGenerationHaiku = !$commitGenerationHaiku)}
 						>
 							{#snippet control()}
@@ -457,7 +457,7 @@
 						</ContextMenuItem>
 
 						<ContextMenuItem
-							label="Use emojis 😎"
+							label={t('editor.useEmojis')}
 							onclick={() => ($commitGenerationUseEmojis = !$commitGenerationUseEmojis)}
 						>
 							{#snippet control()}

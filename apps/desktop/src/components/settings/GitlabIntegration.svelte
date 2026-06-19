@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import GitlabUserLoginState from "$components/settings/GitlabUserLoginState.svelte";
 	import ReduxResult from "$components/shared/ReduxResult.svelte";
 	import gitlabLogoSvg from "$lib/assets/unsized-logos/gitlab.svg?raw";
@@ -93,12 +94,12 @@
 			{#snippet error()}
 				<CardGroup.Item>
 					{#snippet title()}
-						Failed to load GitLab accounts
+						{t('settings.failedToLoadGitLabAccounts')}
 					{/snippet}
 					<Button
 						style="pop"
 						onclick={deleteAllGitLabAccounts}
-						loading={clearingAllResult.current.isLoading}>Try again</Button
+						loading={clearingAllResult.current.isLoading}>{t('common.retry')}</Button
 					>
 				</CardGroup.Item>
 			{/snippet}
@@ -118,11 +119,11 @@
 					{/snippet}
 
 					{#snippet title()}
-						GitLab
+						{t('settings.integrationGitlab')}
 					{/snippet}
 
 					{#snippet caption()}
-						Allows you to create Merge Requests
+						{t('settings.gitlabAllowsMR')}
 					{/snippet}
 
 					{#snippet actions()}
@@ -139,7 +140,7 @@
 			<CardGroup>
 				<CardGroup.Item>
 					{#snippet title()}
-						Add Personal Access Token
+						{t('settings.gitlabAddPat')}
 					{/snippet}
 
 					<Textbox
@@ -153,14 +154,14 @@
 				</CardGroup.Item>
 				<CardGroup.Item>
 					<div class="flex justify-end gap-6">
-						<Button style="gray" kind="outline" onclick={cleanupPatFlow}>Cancel</Button>
+						<Button style="gray" kind="outline" onclick={cleanupPatFlow}>{t('common.cancel')}</Button>
 						<Button
 							style="pop"
 							disabled={!patInput}
 							loading={storePatResult.current.isLoading}
 							onclick={storePersonalAccessToken}
 						>
-							Add account
+							{t('settings.gitlabAddAccount')}
 						</Button>
 					</div>
 				</CardGroup.Item>
@@ -171,27 +172,27 @@
 			<CardGroup>
 				<CardGroup.Item>
 					{#snippet title()}
-						Add Self-Hosted GitLab Account
+						{t('settings.gitlabAddSelfHosted')}
 					{/snippet}
 
 					{#snippet caption()}
-						To connect to your self-hosted GitLab API, allow-list it in the app's CSP settings.
+						{t('settings.gitlabSelfHostedDesc')}
 						<br />
-						See <Link href="https://docs.gitbutler.com/troubleshooting/custom-csp"
-							>docs for details</Link
+						{t('settings.seeDocsForDetails')} <Link href="https://docs.gitbutler.com/troubleshooting/custom-csp"
+							>{t('settings.docsForDetails')}</Link
 						>
 					{/snippet}
 
 					<Textbox
-						label="API Base URL"
+						label={t('settings.apiBaseUrl')}
 						size="large"
 						value={selfHostedHostInput}
 						oninput={(value) => (selfHostedHostInput = value)}
-						helperText="This should be the root URL of the API. For example, if your GitLab instance's hostname is gitlab.acme-inc.com, then set the base URL to https://gitlab.acme-inc.com"
+						helperText={t('settings.gitlabApiBaseUrlHelper')}
 						error={selfHostedHostError}
 					/>
 					<Textbox
-						label="Personal Access Token"
+						label={t('settings.personalAccessToken')}
 						placeholder="glpat-************************"
 						size="large"
 						type="password"
@@ -202,14 +203,14 @@
 				</CardGroup.Item>
 				<CardGroup.Item>
 					<div class="flex justify-end gap-6">
-						<Button style="gray" kind="outline" onclick={cleanupSelfHostedFlow}>Cancel</Button>
+						<Button style="gray" kind="outline" onclick={cleanupSelfHostedFlow}>{t('common.cancel')}</Button>
 						<Button
 							style="pop"
 							disabled={!selfHostedHostInput || !selfHostedPatInput}
 							loading={storeSelfHostedPatResult.current.isLoading}
 							onclick={storeSelfHostedToken}
 						>
-							Add account
+							{t('settings.gitlabAddAccount')}
 						</Button>
 					</div>
 				</CardGroup.Item>
@@ -219,7 +220,7 @@
 </div>
 
 <p class="text-12 text-body gitlab-integration-settings__text">
-	🔒 Credentials are persisted locally in your OS Keychain / Credential Manager.
+	{t('settings.credentialsPersistedLocally')}
 </p>
 
 {#snippet addProfileButton(noAccounts: boolean)}
@@ -228,9 +229,9 @@
 		disabled={showingFlow !== undefined}
 		loading={storePatResult.current.isLoading || storeSelfHostedPatResult.current.isLoading}
 		menuItems={[
-			{ label: "Add Personal Access Token", icon: "lock-auth", onclick: startPatFlow },
+			{ label: t('settings.gitlabAddPat'), icon: "lock-auth", onclick: startPatFlow },
 			{
-				label: "Add Self-Hosted GitLab Account",
+				label: t('settings.gitlabAddSelfHosted'),
 				icon: "factory",
 				onclick: startSelfHostedFlow,
 			},

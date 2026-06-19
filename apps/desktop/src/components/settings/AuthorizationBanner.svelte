@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from "$lib/i18n/index.svelte";
 	import GoToSettingsButton from "$components/settings/GoToSettingsButton.svelte";
 	import { CardGroup, Icon } from "@gitbutler/ui";
 
@@ -8,8 +9,8 @@
 	}
 
 	const {
-		title: titleLabel = "Authorization Required",
-		message = "Authorize GitButler to use this service",
+		title: titleLabel = t('settings.authorizationRequired'),
+		message = t('settings.authorizationMessage'),
 	}: Props = $props();
 </script>
 
