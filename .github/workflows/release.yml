@@ -68,7 +68,15 @@ jobs:
         run: pnpm --filter @gitbutler/desktop exec svelte-kit sync
 
       - name: Vite 构建
-        run: pnpm --filter @gitbutler/desktop exec vite build
+        run: |
+          pnpm --filter @gitbutler/desktop exec vite build > /tmp/vite-build.log 2>&1 || (echo "=== VITE BUILD FAILED ===" && cat /tmp/vite-build.log && exit 1)
+
+      - name: 上传构建日志
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vite-build-log-${{ runner.os }}
+          path: /tmp/vite-build.log
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
@@ -124,7 +132,15 @@ jobs:
         run: pnpm --filter @gitbutler/desktop exec svelte-kit sync
 
       - name: Vite 构建
-        run: pnpm --filter @gitbutler/desktop exec vite build
+        run: |
+          pnpm --filter @gitbutler/desktop exec vite build > /tmp/vite-build.log 2>&1 || (echo "=== VITE BUILD FAILED ===" && cat /tmp/vite-build.log && exit 1)
+
+      - name: 上传构建日志
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vite-build-log-${{ runner.os }}
+          path: /tmp/vite-build.log
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
