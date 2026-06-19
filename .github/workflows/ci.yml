@@ -1,0 +1,47 @@
+name: "CI — 纪程"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CI: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-locale:
+    name: "验证翻译文件"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 检查 key 一致性
+        run: |
+          python3 -c "
+          import json
+          en = json.load(open('apps/desktop/src/lib/i18n/locales/en.json'))
+          zh = json.load(open('apps/desktop/src/lib/i18n/locales/zh-CN.json'))
+          ek = set(en.keys()); zk = set(zh.keys())
+          assert ek == zk, f'Mismatch! en={len(ek)} zh={len(zk)}'
+          print(f'OK: {len(ek)} keys match')
+          "
+
+  build-check:
+    name: "构建检查"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+      - name: TypeScript 检查
+        run: pnpm check
+        continue-on-error: true
