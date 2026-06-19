@@ -1,6 +1,6 @@
 use anyhow::{Context as _, Result};
 
-use crate::{GiteeProjectId, client::GiteeClient};
+use crate::client::GiteeClient;
 
 pub async fn list(
     preferred_account: Option<&crate::GiteeAccountIdentifier>,
@@ -58,4 +58,46 @@ pub async fn get(
         .await
         .context("Failed to get pull request")?;
     Ok(pr)
+}
+
+pub async fn update(
+    preferred_account: Option<&crate::GiteeAccountIdentifier>,
+    owner: &str,
+    repo: &str,
+    number: i64,
+    title: Option<&str>,
+    body: Option<&str>,
+    state: Option<&str>,
+    storage: &but_forge_storage::Controller,
+) -> Result<crate::client::GiteePr> {
+    let client = GiteeClient::from_storage(storage, preferred_account)?;
+    let mut params = serde_json::json!({});
+    if let Some(t) = title {
+        params["title"] = serde_json::Value::String(t.to_string());
+    }
+    if let Some(b) = body {
+        params["body"] = serde_json::Value::String(b.to_string());
+    }
+    if let Some(s) = state {
+        params["state"] = serde_json::Value::String(s.to_string());
+    }
+    client
+        .update_pull_request(owner, repo, number, params)
+        .await
+        .context("Failed to update pull request")
+}
+
+pub async fn merge(
+    preferred_account: Option<&crate::GiteeAccountIdentifier>,
+    owner: &str,
+    repo: &str,
+    number: i64,
+    merge_message: Option<&str>,
+    storage: &but_forge_storage::Controller,
+) -> Result<serde_json::Value> {
+    let client = GiteeClient::from_storage(storage, preferred_account)?;
+    client
+        .merge_pull_request(owner, repo, number, merge_message)
+        .await
+        .context("Failed to merge pull request")
 }

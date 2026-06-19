@@ -237,6 +237,30 @@ impl From<but_gitee::GiteeLabel> for ForgeReviewLabel {
 
 impl From<but_gitee::GiteePr> for ForgeReview {
     fn from(pr: but_gitee::GiteePr) -> Self {
+        // Determine if head repo is a fork by comparing head and base repo full_names
+        let head_repo_full_name = pr.head.repo.as_ref().map(|r| r.full_name.as_str());
+        let base_repo_full_name = pr.base.repo.as_ref().map(|r| r.full_name.as_str());
+        let head_repo_is_fork = head_repo_full_name.is_some()
+            && base_repo_full_name.is_some()
+            && head_repo_full_name != base_repo_full_name;
+
+        // Extract repo_owner from base repo's owner or from full_name
+        let repo_owner = pr
+            .base
+            .repo
+            .as_ref()
+            .and_then(|r| r.owner.as_ref().map(|o| o.login.clone()))
+            .or_else(|| {
+                pr.base
+                    .repo
+                    .as_ref()
+                    .and_then(|r| r.full_name.split('/').next().map(String::from))
+            });
+
+        // SSH URL from clone_url, HTTPS URL from html_url
+        let repository_ssh_url = pr.base.repo.as_ref().map(|r| r.clone_url.clone());
+        let repository_https_url = pr.base.repo.as_ref().and_then(|r| r.html_url.clone());
+
         ForgeReview {
             html_url: pr.html_url,
             number: pr.number,
@@ -252,10 +276,10 @@ impl From<but_gitee::GiteePr> for ForgeReview {
             modified_at: pr.updated_at,
             merged_at: pr.merged_at,
             closed_at: pr.closed_at,
-            repository_ssh_url: None,
-            repository_https_url: None,
-            repo_owner: None,
-            head_repo_is_fork: false,
+            repository_ssh_url,
+            repository_https_url,
+            repo_owner,
+            head_repo_is_fork,
             reviewers: vec![],
             unit_symbol: "#".to_string(),
             last_sync_at: chrono::Local::now().naive_local(),
@@ -563,6 +587,16 @@ impl From<but_gitlab::CredentialCheckResult> for ForgeAccountValidity {
     }
 }
 
+impl From<but_gitee::CredentialCheckResult> for ForgeAccountValidity {
+    fn from(value: but_gitee::CredentialCheckResult) -> Self {
+        match value {
+            but_gitee::CredentialCheckResult::Invalid => ForgeAccountValidity::Invalid,
+            but_gitee::CredentialCheckResult::NoCredentials => ForgeAccountValidity::NoCredentials,
+            but_gitee::CredentialCheckResult::Valid => ForgeAccountValidity::Valid,
+        }
+    }
+}
+
 /// Check whether there's an account that would be used for this repository is authenticated.
 pub async fn check_forge_account_is_valid(
     preferred_forge_user: Option<crate::ForgeUser>,
@@ -612,10 +646,27 @@ pub async fn check_forge_account_is_valid(
                 .await
                 .map(Into::into)
         }
-        _ => Err(Error::msg(format!(
-            "Checking reviews for forge {:?} is not implemented yet",
-            forge_repo_info.forge
-        ))),
+        ForgeName::Gitee => {
+            let preferred_account = match preferred_forge_user
+                .as_ref()
+                .and_then(|user| user.gitee().cloned())
+            {
+                Some(account) => account,
+                None => {
+                    let known_accounts = but_gitee::list_known_gitee_accounts(storage)?;
+                    match known_accounts.first() {
+                        Some(account) => account.clone(),
+                        None => {
+                            return Ok(ForgeAccountValidity::NoCredentials);
+                        }
+                    }
+                }
+            };
+
+            but_gitee::check_credentials(&preferred_account, storage)
+                .await
+                .map(Into::into)
+        }
     }
 }
 
@@ -1054,9 +1105,21 @@ pub async fn get_review_merge_status(
                 is_mergeable: status.is_mergeable,
             })
         }
-        ForgeName::Gitee => Err(anyhow::anyhow!(
-            "Merge status for forge {forge:?} is not implemented yet."
-        )),
+        ForgeName::Gitee => {
+            let preferred_account = preferred_forge_user.as_ref().and_then(|user| user.gitee());
+            let pr = but_gitee::pr::get(
+                preferred_account,
+                owner,
+                repo,
+                review_number,
+                storage,
+            ).await?;
+            Ok(ReviewMergeStatus {
+                mergeable_state: pr.merge_status.clone(),
+                comments_count: 0,
+                is_mergeable: pr.merge_status.as_deref() == Some("can_merge"),
+            })
+        }
         _ => Err(anyhow::anyhow!(
             "Merge status for forge {forge:?} is not implemented yet."
         )),
@@ -1183,9 +1246,28 @@ pub async fn update_review(
             but_gitlab::mr::update(preferred_account, params, storage).await?;
             Ok(())
         }
-        ForgeName::Gitee => Err(anyhow::anyhow!(
-            "Updating reviews for forge {forge:?} is not implemented yet."
-        )),
+        ForgeName::Gitee => {
+            let preferred_account = preferred_forge_user.as_ref().and_then(|user| user.gitee());
+            let pr_number = review_number
+                .try_into()
+                .context("PR: Failed to cast usize to i64, somehow")?;
+            let state_str = state.as_ref().map(|s| match s {
+                ReviewState::Open => "open",
+                ReviewState::Closed => "closed",
+            });
+            but_gitee::pr::update(
+                preferred_account,
+                owner,
+                repo,
+                pr_number,
+                None::<&str>, // title — not supported through this signature
+                body.as_deref(),
+                state_str,
+                storage,
+            )
+            .await?;
+            Ok(())
+        }
         _ => Err(anyhow::anyhow!(
             "Updating pull requests for forge {forge:?} is not implemented yet."
         )),
@@ -1260,9 +1342,22 @@ pub async fn merge_review(
 
             but_gitlab::mr::merge(preferred_account, params, storage).await
         }
-        ForgeName::Gitee => Err(Error::msg(format!(
-            "Merging reviews for forge {forge:?} is not implemented yet.",
-        ))),
+        ForgeName::Gitee => {
+            let preferred_account = preferred_forge_user.as_ref().and_then(|user| user.gitee());
+            let pr_number = review_number
+                .try_into()
+                .context("PR: Failed to cast usize to i64, somehow")?;
+            but_gitee::pr::merge(
+                preferred_account,
+                owner,
+                repo,
+                pr_number,
+                None, // merge_message
+                storage,
+            )
+            .await?;
+            Ok(())
+        }
         _ => Err(Error::msg(format!(
             "Merging reviews for forge {forge:?} is not implemented yet.",
         ))),
@@ -1592,6 +1687,38 @@ pub async fn sync_reviews(
 
                 if let Err(err) = but_gitlab::mr::update(preferred_account, params, storage).await {
                     errors.push(format!("MR !{}: {err}", review.number));
+                }
+            }
+        }
+        ForgeName::Gitee => {
+            let preferred_account = preferred_forge_user.as_ref().and_then(|user| user.gitee());
+            let pr_numbers: Vec<i64> = reviews.iter().map(|r| r.number).collect();
+
+            for review in reviews {
+                let updated_body = if has_footer_content {
+                    Some(update_body(
+                        review.body.as_deref(),
+                        review.number,
+                        &pr_numbers,
+                        &review.unit_symbol,
+                    ))
+                } else {
+                    None
+                };
+
+                if let Err(err) = but_gitee::pr::update(
+                    preferred_account,
+                    owner,
+                    repo,
+                    review.number,
+                    None, // title
+                    updated_body.as_deref(),
+                    None, // state
+                    storage,
+                )
+                .await
+                {
+                    errors.push(format!("PR #{}: {err}", review.number));
                 }
             }
         }

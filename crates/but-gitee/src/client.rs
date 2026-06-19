@@ -286,6 +286,46 @@ impl GiteeClient {
         let pr: ApiPullRequest = response.json().await?;
         Ok(pr.into())
     }
+
+    /// Update a pull request (title, body, state)
+    pub async fn update_pull_request(
+        &self,
+        owner: &str,
+        repo: &str,
+        number: i64,
+        params: serde_json::Value,
+    ) -> Result<GiteePr> {
+        let url = format!("{}/repos/{}/{}/pulls/{}", self.base_url, owner, repo, number);
+        let response = self.client.patch(&url).json(&params).send().await?;
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!("Gitee API error (PATCH /pulls/{}): HTTP {} - {}", number, status, text);
+        }
+        Ok(response.json().await?)
+    }
+
+    /// Merge a pull request
+    pub async fn merge_pull_request(
+        &self,
+        owner: &str,
+        repo: &str,
+        number: i64,
+        merge_message: Option<&str>,
+    ) -> Result<serde_json::Value> {
+        let url = format!("{}/repos/{}/{}/pulls/{}/merge", self.base_url, owner, repo, number);
+        let mut body = serde_json::json!({});
+        if let Some(msg) = merge_message {
+            body["merge_message"] = serde_json::Value::String(msg.to_string());
+        }
+        let response = self.client.put(&url).json(&body).send().await?;
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!("Gitee API error (PUT /pulls/{}/merge): HTTP {} - {}", number, status, text);
+        }
+        Ok(response.json().await?)
+    }
 }
 
 pub struct CreatePullRequestParams<'a> {
@@ -353,6 +393,7 @@ pub struct GiteePr {
     pub merged_at: Option<String>,
     pub closed_at: Option<String>,
     pub sha: String,
+    pub merge_status: Option<String>,
 }
 
 #[derive(Debug, Serialize)]
@@ -377,6 +418,7 @@ pub struct GiteePrRepo {
     pub id: i64,
     pub full_name: String,
     pub clone_url: String,
+    pub html_url: Option<String>,
     pub owner: Option<GiteePrUser>,
 }
 
@@ -401,6 +443,8 @@ struct ApiPullRequest {
     merged_at: Option<String>,
     #[serde(default)]
     closed_at: Option<String>,
+    #[serde(default)]
+    merge_status: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -427,6 +471,8 @@ struct ApiPrRepo {
     id: i64,
     full_name: String,
     clone_url: String,
+    #[serde(default)]
+    html_url: Option<String>,
     owner: Option<ApiPrUser>,
 }
 
@@ -459,6 +505,7 @@ impl From<ApiPrBranch> for GiteePrBranch {
                 id: r.id,
                 full_name: r.full_name,
                 clone_url: r.clone_url,
+                html_url: r.html_url,
                 owner: r.owner.map(Into::into),
             }),
         }
@@ -489,6 +536,7 @@ impl From<ApiPullRequest> for GiteePr {
             merged_at: pr.merged_at,
             closed_at: pr.closed_at,
             sha: pr.head.sha,
+            merge_status: pr.merge_status,
         }
     }
 }
