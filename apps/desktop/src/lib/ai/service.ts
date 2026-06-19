@@ -152,7 +152,7 @@ export class AIService {
 	async getModelKind() {
 		return await this.gitConfig.getWithDefault<ModelKind>(
 			GitAIConfigKey.ModelProvider,
-			ModelKind.OpenAI,
+			ModelKind.DeepSeek,
 		);
 	}
 

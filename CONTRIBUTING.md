@@ -1,94 +1,59 @@
-# Contributing to GitButler
+# 贡献纪程
 
-So you're interested in contributing to GitButler. Amazing!
+你对贡献纪程感兴趣了。太棒了！
 
-## Understand the License
+## 了解许可协议
 
-First thing to know, GitButler is not a side project, it is the product of a
-pretty cool company located in Berlin who develop this client and its
-associated services professionally. For this reason, we have licensed this
-software under the [Functional Source License](https://fsl.software/), a
-mostly permissive non-compete license that converts to Apache 2.0 or MIT after
-two years.
+首先要知道的是，纪程不是一个副业项目，而是一家位于柏林、非常酷的公司所开发的产品——这家公司专业地开发此客户端及其相关服务。因此，我们采用 [Functional Source License](https://fsl.software/)（功能源代码许可协议）授权此软件，这是一种基本宽松的非竞争许可协议，两年后会自动转换为 Apache 2.0 或 MIT。
 
-So, it's not strictly OSS, but it _will_ be. You're free to contribute,
-but you can't take this and use it to compete with us. You can, however,
-otherwise use it however you want.
+所以，它并非严格意义上的开源软件，但_最终会_成为开源软件。你可以自由贡献，但不能利用它来与我们竞争。除此之外，你可以任意使用它。
 
-We figured this is better than closed source while still letting us make a
-living from our hard work without worrying too much about bad actors.
+我们认为这比封闭源代码要好，同时仍能让我们从辛勤工作中谋生，而不必过多担心恶意行为者。
 
-## Our Development Process
+## 我们的开发流程
 
-As a private company, we have our own development processes that we try to be
-fairly open about, but we're all sitting in a room in Berlin, so external
-contributions and remote work aren't really a central part of our process.
+作为一家私人公司，我们有自己相对开放的开发流程，但我们都坐在柏林的一个房间里，因此外部贡献和远程工作并不是我们流程的核心部分。
 
-It's possible that you want to see a feature, and we disagree, so if you want
-to get something accepted, please discuss it with us first, so we can all be
-fairly confident that your work has a chance to be accepted before you spend
-your time or result in needing to maintain a fork.
+你可能想要某个功能，而我们可能不同意。因此，如果你想让我们接受某项贡献，请先与我们讨论，以便我们都能合理地确信你的工作在被接受之前有足够的机会——避免你浪费时间或最终需要维护一个 fork。
 
-The two places to communicate with us are on Discord and GitHub (issues and
-discussions, etc.).
+与我们沟通的两个地方是 Discord 和 GitHub（issues 和 discussions 等）。
 
-Join our Discord here: https://discord.gg/MmFkmaJ42D
+加入我们的 Discord：https://discord.gg/MmFkmaJ42D
 
-## Submitting a Bug Report
+## 提交 Bug 报告
 
-You probably know how to submit a bug report.
+你可能已经知道如何提交 bug 报告。
 
-You know, check first to see if something is already there, give us detail to
-recreate it if at all possible. Things you would want you to do if you were
-maintaining this project.
+你知道的：先检查是否已有人报告过，尽可能提供复现细节。做那些你作为项目维护者希望别人为你做的事情。
 
-## Submitting a Change
+## 提交变更
 
-If you talked it over with us, and we agree that it's something we would take,
-please do the familiar GitHub dance of forking the repository and submitting
-a Pull Request, so we can review and possibly merge it.
+如果你已经与我们讨论过，并且我们同意接受你的贡献，请执行熟悉的 GitHub 流程：fork 仓库并提交 Pull Request，以便我们审查并可能合并。
 
-## Signed Commits Are Required
+## 必须使用签名提交
 
-To help keep contributions secure and traceable, all commits in pull requests
-must be signed and show as **Verified** on GitHub.
-If a commit is unsigned, we may ask you to re-sign or rewrite it before review
-or merge.
+为了确保贡献的安全性和可追溯性，所有 pull request 中的提交必须经过签名，并在 GitHub 上显示为 **Verified**（已验证）。如果提交未签名，我们可能会要求你在审查或合并之前重新签名或重写它。
 
-If you have not set up commit signing yet, start here:
-[About commit signature verification](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
+如果你尚未设置提交签名，请从这里开始：[关于提交签名验证](https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification)
 
-Any contributions sent to us implicitly give us the right to redistribute that
-work under the same license and rights.
+任何提交给我们的贡献，都默认授予我们在相同许可协议和权利下重新分发该工作的权利。
 
-[Why we don't explicitly require a CLA for contributions to GitButler](https://ben.balter.com/2018/01/02/why-you-probably-shouldnt-add-a-cla-to-your-open-source-project/)
+[为什么我们不明确要求为贡献纪程签署 CLA](https://ben.balter.com/2018/01/02/why-you-probably-shouldnt-add-a-cla-to-your-open-source-project/)
 
-## How will GitButler Stay in Business?
+## 纪程如何维持运营？
 
-The client is open source and free to use, forever. If you want to use this
-as your Git client, it will never be pulled out from under you.
+客户端是开源且永远免费使用的。如果你想将其作为你的 Git 客户端，它永远不会从你身边被夺走。
 
-In parallel with this client, we're also developing some rad cloud services
-that you can optionally enable but are not necessary or limiting to your
-client experience. If we can provide some compelling team functionality that
-you can get your boss to pay for, then we would love to have your business
-in that area. If it's not interesting to you, then never fear, the client is
-fully functional on its own and totally free.
+与此客户端并行，我们还在开发一些很棒的云服务，你可以选择启用，但这些服务对你的客户端体验来说并非必需，也不会造成限制。如果我们能提供一些吸引人的团队功能，让你的老板愿意为此付费，那么我们很乐意在这方面获得你的支持。如果这对你没有吸引力，也不用担心，客户端完全独立运行且完全免费。
 
-## Kudos
+## 致谢
 
-We _love_ our community. Whether you just join Discord to give us some feedback,
-file a well researched issue, or submit a killer PR, we are excited that you
-care about what we're doing.
+我们_热爱_我们的社区。无论你只是加入 Discord 给我们一些反馈，提交一个研究充分的问题，还是提交一个出色的 PR，我们都很高兴你在乎我们所做的事情。
 
-However, helping us with our codebase is over the top. We'll call out our
-contributors in some way, though we haven't quite figured out how yet. But
-rest assured, we'll give you credit. Or schwag, maybe. Or a beer, if you're
-ever in town.
+然而，帮助我们改进代码库更是超乎寻常。我们会以某种方式表彰我们的贡献者，尽管我们还没完全想好具体怎么做。但请放心，我们会给你应有的认可。也许是周边礼品，也许是啤酒——如果你恰好来柏林的话。
 
-## Get into the Code!
+## 开始编写代码！
 
-Ok, you're officially onboarded. Grab the code and start in on the
-[DEVELOPMENT.md](DEVELOPMENT.md) file.
+好了，你已经正式入职了。获取代码并从 [DEVELOPMENT.md](DEVELOPMENT.md) 开始吧。
 
-God speed.
+祝你好运。

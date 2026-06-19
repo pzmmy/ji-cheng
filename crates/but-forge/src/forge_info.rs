@@ -97,6 +97,7 @@ pub fn compare_branch_url(
         ForgeName::Azure => {
             format!("{base_url}/branchCompare?baseVersion=GB{base}&targetVersion=GB{head}")
         }
+        ForgeName::Gitee => format!("{base_url}/compare/{base}...{head}"),
     })
 }
 
@@ -115,6 +116,7 @@ fn build_base_url(remote_url: &str, repo_info: &ForgeRepoInfo) -> String {
             ForgeName::GitLab => "gitlab.com".into(),
             ForgeName::Bitbucket => "bitbucket.org".into(),
             ForgeName::Azure => "dev.azure.com".into(),
+            ForgeName::Gitee => "gitee.com".into(),
         });
     match repo_info.forge {
         ForgeName::Azure => {
@@ -157,12 +159,13 @@ fn url_paths(forge: &ForgeName) -> (&'static str, &'static str) {
         ForgeName::GitLab => ("/-/commit/", "/-/merge_requests/"),
         ForgeName::Bitbucket => ("/commits/", "/pull-requests/"),
         ForgeName::Azure => ("/commit/", "/pullrequest/"),
+        ForgeName::Gitee => ("/commits/", "/pulls/"),
     }
 }
 
 fn label_for(forge: &ForgeName) -> (ForgeUnitInfo, &'static str) {
     match forge {
-        ForgeName::GitHub | ForgeName::Bitbucket | ForgeName::Azure => (
+        ForgeName::GitHub | ForgeName::Bitbucket | ForgeName::Azure | ForgeName::Gitee => (
             ForgeUnitInfo {
                 name: "Pull request".into(),
                 abbr: "PR".into(),
@@ -190,6 +193,12 @@ fn capabilities_for(forge: &ForgeName) -> ForgeCapabilities {
             list_service: true,
         },
         ForgeName::GitLab => ForgeCapabilities {
+            checks: false,
+            repo_info: true,
+            pr_service: true,
+            list_service: true,
+        },
+        ForgeName::Gitee => ForgeCapabilities {
             checks: false,
             repo_info: true,
             pr_service: true,

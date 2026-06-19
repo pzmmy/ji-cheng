@@ -30,6 +30,8 @@ fn determine_forge_from_host(host: &str) -> Option<ForgeName> {
         Some(ForgeName::Bitbucket)
     } else if host.contains("azure.com") {
         Some(ForgeName::Azure)
+    } else if host.contains("gitee.com") {
+        Some(ForgeName::Gitee)
     } else {
         None
     }
@@ -75,11 +77,16 @@ fn match_host_to_accounts_custom_host(host: &str, accounts: &[ForgeUser]) -> Opt
             .custom_host()
             .as_deref()
             .is_some_and(|custom_host| custom_host_matches_repository_host(host, custom_host)),
+        ForgeUser::Gitee(ge_account) => ge_account
+            .custom_host()
+            .as_deref()
+            .is_some_and(|custom_host| custom_host_matches_repository_host(host, custom_host)),
     });
 
     match user {
         Some(ForgeUser::GitHub(_)) => Some(ForgeName::GitHub),
         Some(ForgeUser::GitLab(_)) => Some(ForgeName::GitLab),
+        Some(ForgeUser::Gitee(_)) => Some(ForgeName::Gitee),
         None => None,
     }
 }
@@ -137,6 +144,7 @@ pub fn get_all_forge_accounts() -> anyhow::Result<Vec<ForgeUser>> {
     let storage = but_forge_storage::Controller::from_path(but_path::app_data_dir()?);
     let gh_accounts = but_github::list_known_github_accounts(&storage)?;
     let gl_accounts = but_gitlab::list_known_gitlab_accounts(&storage)?;
+    let ge_accounts = but_gitee::list_known_gitee_accounts(&storage)?;
 
     let mut forge_users = vec![];
     for gh_account in gh_accounts {
@@ -145,6 +153,10 @@ pub fn get_all_forge_accounts() -> anyhow::Result<Vec<ForgeUser>> {
 
     for gl_account in gl_accounts {
         forge_users.push(ForgeUser::GitLab(gl_account));
+    }
+
+    for ge_account in ge_accounts {
+        forge_users.push(ForgeUser::Gitee(ge_account));
     }
 
     Ok(forge_users)

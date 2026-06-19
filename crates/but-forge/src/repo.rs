@@ -26,6 +26,12 @@ pub async fn get_repo_info(
                 .await
                 .map(RepoInfo::from)
         }
+        ForgeName::Gitee => {
+            let preferred_account = preferred_forge_user.as_ref().and_then(|user| user.gitee());
+            but_gitee::fetch_project(preferred_account, owner, repo, storage)
+                .await
+                .map(RepoInfo::from)
+        }
         ForgeName::Bitbucket | ForgeName::Azure => Err(anyhow::anyhow!(
             "Fetching repo info for forge {:?} is not implemented yet.",
             forge_repo_info.forge
@@ -93,6 +99,23 @@ impl From<but_gitlab::GitLabProject> for RepoInfo {
             permissions,
             fork: value.forked_from_project_id.is_some(),
             delete_branch_on_merge: value.remove_source_branch_after_merge,
+        }
+    }
+}
+
+impl From<but_gitee::GiteeProject> for RepoInfo {
+    fn from(value: but_gitee::GiteeProject) -> Self {
+        let permissions = value.permissions.map(|p| RepoPermissions {
+            pull: p.pull,
+            triage: p.pull,
+            push: p.push,
+            maintain: p.admin,
+            admin: p.admin,
+        });
+        RepoInfo {
+            permissions,
+            fork: value.forked_from_project_id.is_some(),
+            delete_branch_on_merge: None,
         }
     }
 }

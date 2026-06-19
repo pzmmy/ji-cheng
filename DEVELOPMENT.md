@@ -1,70 +1,64 @@
-# How to Hack on GitButler
+# 如何参与纪程开发
 
-Alrighty, you want to get compiling. We love you already. Your parents raised
-you right. Let's get started.
+好的，你想开始编译了。我们已经爱上你了。你的父母把你教育得很好。让我们开始吧。
 
 ---
 
-## Table of Contents
+## 目录
 
-- [Overview](#overview)
-- [CLI-only development](#cli-only-development)
-- [The Basics](#the-basics)
-  - [Prerequisites](#prerequisites)
-  - [Install dependencies](#install-dependencies)
-  - [Run the app](#run-the-app)
-  - [Lint & format](#lint--format)
-- [Debugging](#debugging)
-  - [Logs](#logs)
-  - [Repository](#Repository)
+- [概述](#概述)
+- [仅 CLI 开发](#仅-cli-开发)
+- [基础入门](#基础入门)
+  - [前置条件](#前置条件)
+  - [安装依赖](#安装依赖)
+  - [运行应用](#运行应用)
+  - [代码检查与格式化](#代码检查与格式化)
+- [调试](#调试)
+  - [日志](#日志)
+  - [仓库](#仓库)
   - [Tokio](#tokio)
-- [Troubleshooting](#troubleshooting)
-- [Building](#building)
-  - [Building on Windows](#building-on-windows)
-    - [File permissions](#file-permissions)
+- [故障排除](#故障排除)
+- [构建](#构建)
+  - [在 Windows 上构建](#在-windows-上构建)
+    - [文件权限](#文件权限)
     - [Perl](#perl)
-    - [Crosscompilation](#crosscompilation)
-- [Design](#design)
-- [Contributing](#contributing)
-- [Some Other Random Notes](#some-other-random-notes)
-  - [Icon generation](#icon-generation)
-  - [Release](#release)
-  - [Versioning](#versioning)
-  - [Publishing](#publishing)
-- [Development mode OAuth login](#development-mode-oauth-login)
-- [Joining the GitButler Team](#joining-the-gitbutler-team)
+    - [交叉编译](#交叉编译)
+- [设计](#设计)
+- [贡献](#贡献)
+- [其他随机笔记](#其他随机笔记)
+  - [图标生成](#图标生成)
+  - [发布](#发布)
+  - [版本管理](#版本管理)
+  - [发布流程](#发布流程)
+- [开发模式 OAuth 登录](#开发模式-oauth-登录)
+- [加入纪程团队](#加入纪程团队)
 
 ---
 
-## Overview
+## 概述
 
-So how does this whole thing work?
+那么，这整个项目是如何运作的呢？
 
-It's a [Tauri app](https://tauri.app/), which is basically like an Electron app,
-in that we can develop a desktop app from one source with multiple OS targets
-and write the UI in HTML and Javascript. Except instead of Node for the
-filesystem access part, Tauri uses [Rust](https://www.rust-lang.org/).
+这是一个 [Tauri 应用](https://tauri.app/)，类似于 Electron 应用，我们可以从同一份源码开发桌面应用，支持多个操作系统目标，并用 HTML 和 Javascript 编写 UI。不过，在文件系统访问部分，Tauri 使用 [Rust](https://www.rust-lang.org/) 而不是 Node。
 
-So everything that hits disk is in Rust, everything that the
-user sees is in HTML/JS. Specifically we use [Svelte](https://svelte.dev/)
-in Typescript for that layer.
+因此，所有涉及磁盘操作的部分使用 Rust，用户看到的所有内容使用 HTML/JS。具体来说，我们使用 [Svelte](https://svelte.dev/)（TypeScript）来实现这一层。
 
-For a deep dive into the architecture, see [DEEPWIKI](https://deepwiki.com/gitbutlerapp/gitbutler).
+有关架构的深入解读，请参见 [DEEPWIKI](https://deepwiki.com/gitbutlerapp/gitbutler)。
 
 ---
 
-## CLI-only development
+## 仅 CLI 开发
 
-The easiest way to get started is by hacking on the `but` CLI.
+最简单的入门方式是参与 `but` CLI 的开发。
 
-You only need Rust installed…[^cli-build-prereqs]
+你只需要安装 Rust……[^cli-build-prereqs]
 
 ```bash
 $ cd gitbutler-repo
 $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
-…to build and run the CLI:
+……然后构建并运行 CLI：
 
 ```bash
 $ cargo build -p but
@@ -72,45 +66,35 @@ $ cargo run -p but -- --help
 $ cargo run -p but -- -C /path/to/git-repo status
 ```
 
-To test only the CLI:
+仅测试 CLI：
 
 ```bash
 $ cargo test -p but
 ```
 
-Useful locations in the source tree:
+源码树中的有用位置：
 
-- `crates/but/src/args` for CLI argument parsing and help text
-- `crates/but/src/command` for command implementations
-- `crates/but/tests` for integration tests
+- `crates/but/src/args` — CLI 参数解析和帮助文本
+- `crates/but/src/command` — 命令实现
+- `crates/but/tests` — 集成测试
 
 [^cli-build-prereqs]:
-    In practice, `cargo build -p but` also builds native
-    dependencies such as `git2` with vendored `openssl` and `libgit2`, so you
-    still need a working C toolchain. On Linux, that commonly means tools such
-    as `build-essential`, `make`, `perl`, `cmake`, and `pkg-config`; on macOS,
-    install Xcode Command Line Tools. On Windows, you’ll need a working
-    MSVC-based toolchain and related native dependencies; see
-    [Building on Windows](#building-on-windows) below for details (including
-    `perl` for `openssl-sys`). If you already completed the desktop
-    prerequisites in [The Basics](#the-basics), you already have the stricter setup.
-    If you already completed the desktop prerequisites in [The Basics](#the-basics) below,
-    you already have the stricter setup.
+    实际上，`cargo build -p but` 也会构建原生依赖，例如 `git2`（使用 vendored 的 `openssl` 和 `libgit2`），因此你仍然需要可用的 C 工具链。在 Linux 上，通常需要 `build-essential`、`make`、`perl`、`cmake` 和 `pkg-config` 等工具；在 macOS 上，安装 Xcode Command Line Tools。在 Windows 上，你需要可用的基于 MSVC 的工具链及相关原生依赖；详情请参见下方的 [在 Windows 上构建](#在-windows-上构建)（包括 `openssl-sys` 所需的 `perl`）。如果你已经完成了 [基础入门](#基础入门) 中的桌面端前置条件，你就已经完成了更严格的配置。
 
-## The Basics
+## 基础入门
 
-OK, let's get it running.
+好的，让我们把它跑起来。
 
-### Prerequisites
+### 前置条件
 
-First of all, this is a Tauri app, which uses Rust for the backend and Javascript for the frontend. So let's make sure you have all the prerequisites installed.
+首先，这是一个 Tauri 应用，后端使用 Rust，前端使用 Javascript。请确保你已经安装了所有前置条件。
 
-1. Tauri Dev Deps (https://tauri.app/start/prerequisites/#system-dependencies)
+1. Tauri 开发依赖（https://tauri.app/start/prerequisites/#system-dependencies）
 
-On Mac OS, ensure you've installed XCode and `cmake`. On Linux, if you're on Debian or one of its derivatives like Ubuntu, you can use the following command.
+在 Mac OS 上，确保已安装 XCode 和 `cmake`。在 Linux 上，如果你使用的是 Debian 或其衍生版（如 Ubuntu），可以使用以下命令。
 
 <details>
-<summary>Linux Tauri dependencies</summary>
+<summary>Linux Tauri 依赖</summary>
 
 ```bash
 $ sudo apt update
@@ -130,7 +114,7 @@ $ sudo apt install libwebkit2gtk-4.1-dev \
 
 2. Rust
 
-For both Mac OS and Linux, you can use the following `rustup` quick install script to get all the necessary tools.
+对于 Mac OS 和 Linux，你可以使用以下 `rustup` 快速安装脚本获取所有必要工具。
 
 ```bash
 $ cd gitbutler-repo
@@ -139,9 +123,9 @@ $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 
 3. Node
 
-Next, ensure you've got at least Node 20 installed. If you're on Mac OS or Linux and you're missing `node`, you can use your favorite package manager like `brew` or `apt`.
+接下来，确保你至少安装了 Node 20。如果你在 Mac OS 或 Linux 上缺少 `node`，可以使用你喜欢的包管理器，如 `brew` 或 `apt`。
 
-Alternatively, you can use the following Node installer from Vercel to get the latest version.
+或者，你也可以使用 Vercel 的 Node 安装程序来获取最新版本。
 
 ```bash
 $ curl https://install-node.vercel.app/latest > install_node.sh
@@ -150,181 +134,175 @@ $ sudo ./install_node.sh
 
 4. pnpm
 
-Finally, we use `pnpm` as our javascript package manager. You can leverage `corepack`, which comes shipped with `node`, to install and use the `pnpm` version we defined in our `package.json`.
+最后，我们使用 `pnpm` 作为 Javascript 包管理器。你可以利用 `node` 自带的 `corepack` 来安装并使用 `package.json` 中定义的 pnpm 版本。
 
 ```bash
 $ cd gitbutler-repo
 $ corepack enable
 ```
 
-### Install dependencies
+### 安装依赖
 
-Next, install the app dependencies.
+接下来，安装应用依赖。
 
-I hope you have some disk space for 300M of `node_modules`, because this bad
-boy will fill er up:
+希望你还有足够的磁盘空间容纳 300M 的 `node_modules`，因为这个家伙会把它塞满：
 
 ```bash
-$ pnpm install # This should now ask you to confirm the download, installation, and use of pnpm via corepack
+$ pnpm install # 现在它会要求你通过 corepack 确认下载、安装和使用 pnpm
 ```
 
-You'll have to re-run this occasionally when our deps change.
+当我们的依赖发生变化时，你需要偶尔重新运行此命令。
 
 > [!NOTE]  
-> We use [turborepo](https://turbo.build/repo) as our monorepo tooling and by default Vercel collects some [basic telemetry](https://turbo.build/repo/docs/telemetry). If you'd like to disable this, please run `pnpm exec turbo telemetry disable` once in the project's root directory after installing dependencies.
+> 我们使用 [turborepo](https://turbo.build/repo) 作为我们的 monorepo 工具，默认情况下 Vercel 会收集一些[基本遥测数据](https://turbo.build/repo/docs/telemetry)。如果你想禁用它，请在安装依赖后在项目根目录运行 `pnpm exec turbo telemetry disable`。
 
-### Run the app
+### 运行应用
 
-First, run cargo build such that supplementary bins such as `gitbutler-git-askpass` are created (Note the default folder (`target`) will be used for the build):
+首先，运行 cargo build，以便创建辅助二进制文件（如 `gitbutler-git-askpass`）（注意：默认文件夹（`target`）将用于构建）：
 
 ```bash
 $ cargo build
 ```
 
-Now you should be able to run the app in development mode:
+现在你应该可以在开发模式下运行应用：
 
 ```bash
 $ pnpm dev:desktop
 ```
 
-By default it will not print debug logs to console. If you want debug logs, set `LOG_LEVEL` environment variable:
+默认情况下，它不会在控制台打印 debug 日志。如果你需要 debug 日志，请设置 `LOG_LEVEL` 环境变量：
 
 ```bash
 $ LOG_LEVEL=debug pnpm dev:desktop
 ```
 
-### Lint & format
+### 代码检查与格式化
 
-In order to have a PR accepted, you need to make sure everything passes our
-Linters, so make sure to run these before submitting. Our CI will shame you
-if you don't.
+为了让 PR 被接受，你需要确保通过所有的代码检查。因此，请在提交前运行以下命令。我们的 CI 会在你没做的时候让你难堪的。
 
-Javascript:
+Javascript：
 
 ```bash
 $ pnpm lint
 $ pnpm format
 ```
 
-Rust:
+Rust：
 
 ```bash
-$ cargo clippy   # see linting errors
-$ cargo fmt      # format code
+$ cargo clippy   # 查看 lint 错误
+$ cargo fmt      # 格式化代码
 ```
 
 ---
 
-## Debugging
+## 调试
 
-Now that you have the app running, here are some hints for debugging whatever
-it is that you're working on.
+现在你已经让应用运行起来了，这里有一些调试提示，帮助你处理正在开发的内容。
 
-### Logs
+### 日志
 
-The app writes logs into:
+应用将日志写入：
 
-1. `stdout` in development mode
-2. The Tauri [logs](https://tauri.app/v1/api/js/path/#platform-specific) directory
+1. 开发模式下的 `stdout`
+2. Tauri 的[日志](https://tauri.app/v1/api/js/path/#platform-specific)目录
 
-One can get performance log when launching the application locally as follows:
+可以在本地启动应用时获取性能日志，方法如下：
 
 ```bash
 GITBUTLER_PERFORMANCE_LOG=1 LOG_LEVEL=debug pnpm tauri dev
 ```
 
-For more realistic performance logging, use local release builds with `--release`.
+要获得更真实的性能日志，请使用带 `--release` 的本地 release 构建。
 
 ```bash
 GITBUTLER_PERFORMANCE_LOG=1 LOG_LEVEL=debug pnpm tauri dev --release
 ```
 
-### Repository
+### 仓库
 
-Often the behaviour depends on the current context: the repository being displayed. Next to _logs_, it's useful to learn how it's structured.
+行为通常取决于当前上下文：即正在显示的仓库。除了_日志_之外，了解其结构也很有用。
 
-To do that, _launch the application from a terminal_ as shown in the paragraph above this one, or right below, but with `graphviz` installed.
-The `dot` program should be available in `PATH` so it can run from the terminal.
+为此，请_从终端启动应用程序_，方式如上文段落所示（或正下方所示），但需要安装 `graphviz`。`dot` 程序应位于 `PATH` 中，以便从终端运行。
 
-Doing so can look like this on MacOS, for example:
+例如，在 MacOS 上可以这样操作：
 
-###### For the stable build
+###### 稳定版构建
 
 ```shell
 GITBUTLER_PERFORMANCE_LOG=1 /Applications/GitButler/Contents/MacOS/gitbutler-tauri
 ```
 
-###### For the nightly build
+###### 夜间版构建
 
 ```shell
 GITBUTLER_PERFORMANCE_LOG=1 /Applications/GitButler\ Nightly.app/Contents/MacOS/gitbutler-tauri
 ```
 
-###### Producing a commit-graph visualization
+###### 生成 commit-graph 可视化
 
-Then, within the application, type `dot` in any non-editable portion of the GUI, like the cheat code that it is.
-This will pop open an SVG version of the graph that GitButler uses to create the workspace projection.
+然后，在应用程序中，在任何不可编辑的 GUI 区域输入 `dot`，就像输入秘籍代码一样。这将弹出一个 SVG 版本的图形，纪程用它来创建工作区投影。
 
 ### Tokio
 
-We are also collecting tokio's runtime tracing information that could be viewed using [tokio-console](https://github.com/tokio-rs/console#tokio-console-prototypes):
+我们也在收集 tokio 的运行时跟踪信息，可以使用 [tokio-console](https://github.com/tokio-rs/console#tokio-console-prototypes) 查看：
 
-- development:
+- 开发模式：
   ```bash
   $ tokio-console
   ```
-- nightly:
+- 夜间版：
   ```bash
   $ tokio-console http://127.0.0.1:6668
   ```
-- production:
+- 生产版：
   ```bash
   $ tokio-console http://127.0.0.1:6667
   ```
 
 ---
 
-## Troubleshooting
+## 故障排除
 
-Common issues and solutions when developing GitButler.
+开发纪程时的常见问题及解决方案。
 
-### Turbo/build issues
+### Turbo/构建问题
 
-#### Case-sensitive volume problems
+#### 大小写敏感卷问题
 
-If you're experiencing issues with the `dev:desktop` target failing to start, especially on macOS with case-sensitive filesystems, this may be related to Turborepo's handling of case-sensitive volumes.
+如果你在 macOS 上遇到 `dev:desktop` 目标无法启动的问题，尤其是在大小写敏感的文件系统上，这可能与 Turborepo 处理大小写敏感卷的方式有关。
 
-**Solution:** See the related issue at [vercel/turborepo#8491](https://github.com/vercel/turborepo/issues/8491) for current workarounds.
+**解决方案：** 参见相关 issue [vercel/turborepo#8491](https://github.com/vercel/turborepo/issues/8491) 了解当前的解决方法。
 
-#### Turbo daemon issues
+#### Turbo daemon 问题
 
-If builds are hanging or behaving unexpectedly:
+如果构建挂起或行为异常：
 
 ```bash
-# Stop the turbo daemon
+# 停止 turbo daemon
 pnpm exec turbo daemon stop
 
-# Clear turbo cache
+# 清除 turbo 缓存
 pnpm exec turbo daemon clean
 
-# Restart development
+# 重新启动开发
 pnpm dev:desktop
 ```
 
-### Cache issues
+### 缓存问题
 
-If you're seeing stale builds or unexpected behavior:
+如果你遇到过时构建或意外行为：
 
 ```bash
 rm -rf .turbo node_modules
 pnpm install
-# Optional (Rust artifacts):
+# 可选（Rust 构建产物）：
 cargo clean
 ```
 
-### Node.js & pnpm
+### Node.js 与 pnpm
 
-Use the Node version pinned by `.nvmrc` (currently LTS “jod” / Node 22):
+使用 `.nvmrc` 锁定的 Node 版本（当前为 LTS "jod" / Node 22）：
 
 ```bash
 nvm install
@@ -332,211 +310,180 @@ nvm use
 node -v
 ```
 
-Use pnpm via Corepack (avoid global installs):
+通过 Corepack 使用 pnpm（避免全局安装）：
 
 ```bash
 corepack enable
 corepack pnpm -v
-# optionally pin a major:
+# 可选地锁定主版本：
 corepack prepare pnpm@10 --activate
 ```
 
-### Additional resources
+### 其他资源
 
-For issues specific to our toolchain components:
+针对我们工具链组件的特定问题：
 
 - [Turborepo issues](https://github.com/vercel/turborepo/issues)
 - [Tauri issues](https://github.com/tauri-apps/tauri/issues)
 
-If none of these solutions work, please check our [GitHub Issues](https://github.com/gitbutlerapp/gitbutler/issues) or create a new issue with detailed information about your system and the error you're encountering.
+如果上述解决方案都不奏效，请查看我们的 [GitHub Issues](https://github.com/gitbutlerapp/gitbutler/issues) 或创建一个新 issue，并提供详细的系统和错误信息。
 
 ---
 
-## Building
+## 构建
 
-To build the app in production mode, run:
+要以生产模式构建应用，请运行：
 
 ```bash
 $ pnpm tauri build --features devtools,builtin-but,disable-auto-updates --config crates/gitbutler-tauri/tauri.conf.nightly-local.json
 ```
 
-This will make an asset similar to our nightly build.
+这将生成类似于我们夜间版的构建产物。
 
-### Building on Windows
+### 在 Windows 上构建
 
-Building on Windows is a bit of a tricky process. Here are some helpful tips.
+在 Windows 上构建是一个有点棘手的过程。以下是一些有用的提示。
 
-#### File permissions
+#### 文件权限
 
-We use `pnpm`, which requires a relatively recent version of Node.js.
-Make sure that the latest stable version of Node.js is installed and
-on the PATH, and then `npm install -g pnpm`.
+我们使用 `pnpm`，它需要相对较新的 Node.js 版本。请确保安装了最新的稳定版 Node.js 并已加入 PATH，然后运行 `npm install -g pnpm`。
 
-Sometimes npm's prefix is incorrect on Windows, we can check this via:
+有时 npm 的 prefix 在 Windows 上不正确，我们可以通过以下方式检查：
 
 ```sh
 npm config get prefix
 ```
 
-If it's not `C:\Users\<username>\AppData\Roaming\npm` or another folder that is
-normally writable, then we can set it in Powershell:
+如果它不是 `C:\Users\<用户名>\AppData\Roaming\npm` 或其他通常可写的文件夹，则可以在 Powershell 中设置：
 
 ```sh
 mkdir -p $APPDATA\npm
 npm config set prefix $env:APPDATA\npm
 ```
 
-Afterwards, add this folder to your PATH.
+之后，将此文件夹加入你的 PATH。
 
 #### Perl
 
-A Perl interpreter is required to be installed in order to configure the `openssl-sys`
-crate. We've used [Strawberry Perl](https://strawberryperl.com/) without issue.
-Make sure it's installed and `perl` is available on the `PATH` (it is by default
-after installation, just make sure to restart the terminal after installing).
-[Scoop](https://scoop.sh/) users can install this via `scoop install perl`.
+需要安装 Perl 解释器才能配置 `openssl-sys` crate。我们使用 [Strawberry Perl](https://strawberryperl.com/) 没有问题。请确保已安装且 `perl` 在 `PATH` 中可用（安装后默认即可，只需确保安装后重启终端）。[Scoop](https://scoop.sh/) 用户可以通过 `scoop install perl` 安装。
 
-Note that it might appear that the build has hung or frozen on the `openssl-sys` crate.
-It's not, it's just that Cargo can't report the status of a C/C++ build happening
-under the hood, and openssl is _large_. It'll take a while to compile.
+请注意，构建可能看起来在 `openssl-sys` crate 上挂起或冻结了。其实没有，只是 Cargo 无法报告底层 C/C++ 构建的状态，而且 openssl _很大_。编译需要一些时间。
 
 #### OpenSSL
 
-To build it, one needs to export the path to the perl installation to use.
-The line below will do the trick in a git-bash.
+要构建它，需要导出要使用的 Perl 安装路径。以下命令在 git-bash 中可以完成。
 
 ```bash
 export OPENSSL_SRC_PERL="c:/Strawberry/perl/bin/perl.exe"
 ```
 
-To make this change permanent, one would one can add this change (and others) to the `~/.bash_profile`.
+要使此更改永久生效，可以将此更改（及其他更改）添加到 `~/.bash_profile`。
 
 ```bash
 echo 'export OPENSSL_SRC_PERL="c:/Strawberry/perl/bin/perl.exe"' >> ~/.bash_profile
 ```
 
-#### Crosscompilation
+#### 交叉编译
 
-This paragraph is about crosscompilation to x86_64-MSVC from ARM Windows,
-a configuration typical for people with Apple Silicon and Parallels VMs,
-which only allow ARM Windows to be used.
+本节讨论从 ARM Windows 交叉编译到 x86_64-MSVC，这是使用 Apple Silicon 和 Parallels VM 的用户的典型配置，这些 VM 只允许使用 ARM Windows。
 
-The `windows` dependency on `gitbutler-git` doesn't currently compile on ARM,
-which means cross-compilation to x86-64 is required to workaround that. Besides,
-most users will probably still be on INTEL machines, making this capability
-a common requirement.
+`gitbutler-git` 上的 `windows` 依赖目前无法在 ARM 上编译，这意味着需要交叉编译到 x86-64 来解决这个问题。此外，大多数用户可能仍然使用 INTEL 机器，使得这项能力成为常见需求。
 
-In a Git `bash`, _with MSVC for x86-64 installed on the system_, run the following
-to prepare the environment.
+在 Git `bash` 中（_系统已安装 x86-64 的 MSVC_），运行以下命令来准备环境。
 
 ```bash
 export TRIPLE_OVERRIDE=x86_64-pc-windows-msvc
 export CARGO_BUILD_TARGET=x86_64-pc-windows-msvc
-# for good measure
+# 为了保险起见
 export OPENSSL_SRC_PERL="c:/Strawberry/perl/bin/perl.exe"
 ```
 
-Here is how to produce a nightly release build:
+以下是生成夜间 release 构建的方法：
 
 ```
 pnpm tauri build --features windows,devtools --config  crates/gitbutler-tauri/tauri.conf.nightly.json
 ```
 
-And this is how to get a local developer debug build:
+而这是获取本地开发者 debug 构建的方法：
 
 ```bash
 pnpm tauri dev --features windows --target x86_64-pc-windows-msvc
 ```
 
-Note that it's necessary to repeat the `--target` specification as otherwise the final copy operation doesn't work,
-triggered by `tauri` itself.
+请注意，必须重复 `--target` 指定，否则最终的复制操作（由 `tauri` 触发）将无法正常工作。
 
 ---
 
-## Design
+## 设计
 
-We use [Figma](https://www.figma.com/) for our design work.
-If you're a designer (and even if you're not), you want to contribute to the
-design of GitButler, or your work involves UI, you could duplicate our design file.
+我们使用 [Figma](https://www.figma.com/) 进行设计工作。如果你是一名设计师（即使不是），想要为纪程的设计做贡献，或者你的工作涉及 UI，你可以复制我们的设计文件。
 
-GitButler design: [Figma file](https://www.figma.com/file/FbeLt0yjY9RiNn8MXUXsYs/Client-Design?type=design&node-id=0%3A1&mode=design&t=MUDQhR3iOM3DpI9m-1) 🎨
+纪程设计：[Figma 文件](https://www.figma.com/file/FbeLt0yjY9RiNn8MXUXsYs/Client-Design?type=design&node-id=0%3A1&mode=design&t=MUDQhR3iOM3DpI9m-1) 🎨
 
 ---
 
-## Contributing
+## 贡献
 
-Now that you're up and running, if you want to change something and open a PR
-for us, make sure to read [CONTRIBUTING.md](CONTRIBUTING.md) to make sure you're
-not wasting your time.
+现在你已经成功运行起来了，如果你想做些修改并为我们提交 PR，请务必阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，以确保没有浪费时间。
 
 ---
 
-## Some Other Random Notes
+## 其他随机笔记
 
-Most of this is for internal GitButler use, but maybe everyone else will find
-it interesting too.
+这些大多为纪程内部使用，但也许其他人也会觉得有趣。
 
 ---
 
-### Icon generation
+### 图标生成
 
-I always forget how to do this, but when we update our app icon, run this to
-import it.
+我总是忘记怎么做，但当我们更新应用图标时，运行以下命令来导入它。
 
 ```bash
 $ pnpm tauri icon path/to/icon.png
 ```
 
-### Release
+### 发布
 
-Building is done via [GitHub Action](https://github.com/gitbutlerapp/gitbutler/actions/workflows/publish.yaml).
-Go to the link and select `Run workflow` from the desired branch.
+构建通过 [GitHub Action](https://github.com/gitbutlerapp/gitbutler/actions/workflows/publish.yaml) 完成。访问链接并从所需分支选择 `Run workflow`。
 
-### Versioning
+### 版本管理
 
-When running the [release action](https://github.com/gitbutlerapp/gitbutler/actions/workflows/publish.yaml),
-you will have to choose one of `major`, `minor`, or `patch` release type. Action will generate a new version based on your input and current
-version found at `https://app.gitbutler.com/releases`.
+运行[发布 action](https://github.com/gitbutlerapp/gitbutler/actions/workflows/publish.yaml) 时，你需要选择 `major`、`minor` 或 `patch` 发布类型。Action 将根据你的输入和 `https://app.gitbutler.com/releases` 上的当前版本生成新版本。
 
-### Publishing
+### 发布流程
 
-To publish a version that you've just build, use [Release Manager](https://gitbutler.retool.com/apps/cb9cbed6-ae0a-11ed-918c-736c4335d3af/Release%20Manager).
+要发布刚刚构建的版本，请使用 [Release Manager](https://gitbutler.retool.com/apps/cb9cbed6-ae0a-11ed-918c-736c4335d3af/Release%20Manager)。
 
 ---
 
-## Development mode OAuth login
+## 开发模式 OAuth 登录
 
-By default, you will not be able to log into GitButler using Github/Google because the base url does not match. To be able to do this add ( or update ) the following line to your `.env.development` file. You will need to create the file if it does not exist.
+默认情况下，你将无法使用 Github/Google 登录纪程，因为基础 URL 不匹配。要实现此功能，请在 `.env.development` 文件中添加（或更新）以下行。如果文件不存在，你需要创建它。
 
 ```
 PUBLIC_API_BASE_URL=https://app.gitbutler.com/
 ```
 
-The desktop frontend and local backend both honor `PUBLIC_API_BASE_URL`. If you
-need a backend-only override while debugging, `GITBUTLER_API_URL` still takes
-precedence on the Rust side.
+桌面前端和本地后端都遵循 `PUBLIC_API_BASE_URL`。如果在调试时需要仅后端的覆盖配置，`GITBUTLER_API_URL` 在 Rust 端仍然具有更高优先级。
 
-When you start the desktop app with `pnpm dev:desktop`, the Tauri launcher now
-loads `apps/desktop/.env`, `.env.local`, `.env.development`, and
-`.env.development.local` into the Rust process as well, so the frontend and
-backend see the same local overrides by default.
+当你使用 `pnpm dev:desktop` 启动桌面应用时，Tauri 启动器现在也会将 `apps/desktop/.env`、`.env.local`、`.env.development` 和 `.env.development.local` 加载到 Rust 进程中，因此前端和后端默认看到相同的本地覆盖配置。
 
 ---
 
-## Joining the GitButler Team
+## 加入纪程团队
 
-If you are interested in joining our small but tightly knit engineering team, we are currently looking for the following roles:
+如果你有兴趣加入我们小而紧密的工程团队，我们目前正在招聘以下岗位：
 
-- [Senior Rust developer](https://jobs.gitbutler.com/jobs/backend-rust) (SF, Berlin or Remote)
-- [Senior TypeScript developer](https://jobs.gitbutler.com/jobs/frontend-typescript) (SF, Berlin or Remote)
-- [Gerrit developer](https://jobs.gitbutler.com/jobs/gerrit-developer) (SF, Berlin or Remote)
+- [高级 Rust 开发工程师](https://jobs.gitbutler.com/jobs/backend-rust)（旧金山、柏林或远程）
+- [高级 TypeScript 开发工程师](https://jobs.gitbutler.com/jobs/frontend-typescript)（旧金山、柏林或远程）
+- [Gerrit 开发工程师](https://jobs.gitbutler.com/jobs/gerrit-developer)（旧金山、柏林或远程）
 
-## Code Hitlist
+## 代码清理清单
 
-This is a list of crates/modules that we want to eliminate or split into smaller crates:
+以下是我们希望消除或拆分为更小 crate 的 crate/模块列表：
 
-- [gitbutler-reference](crates/gitbutler-reference/) (just bad)
-- [gitbutler-branch-actions](crates/gitbutler-branch-actions/) (contains functionality outside of the virtual branch domain (e.g. commit actions etc.))
-- [gitbutler-branch](crates/gitbutler-branch/) (contains `diff` and `branch` contexts due to a cyclic dependency)
-- [gitbutler-url](crates/gitbutler-url/) (this is a huge mess and ideally we need none of it)
-- [gitbutler_repo::config](crates/gitbutler-repo/src/config.rs) (seems like the wrong abstraction)
+- [gitbutler-reference](crates/gitbutler-reference/)（质量较差）
+- [gitbutler-branch-actions](crates/gitbutler-branch-actions/)（包含虚拟分支领域之外的功能，如 commit 操作等）
+- [gitbutler-branch](crates/gitbutler-branch/)（由于循环依赖，包含 `diff` 和 `branch` 上下文）
+- [gitbutler-url](crates/gitbutler-url/)（非常混乱，理想情况下我们完全不需要它）
+- [gitbutler_repo::config](crates/gitbutler-repo/src/config.rs)（似乎是错误的抽象）

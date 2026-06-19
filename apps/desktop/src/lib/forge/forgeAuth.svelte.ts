@@ -1,6 +1,7 @@
 import { FORGE_INFO_SERVICE } from "$lib/forge/forgeInfo.svelte";
 import { useGitHubForgeUser } from "$lib/forge/github/hooks.svelte";
 import { useGitLabForgeUser } from "$lib/forge/gitlab/hooks.svelte";
+import { useGiteeForgeUser } from "$lib/forge/gitee/hooks.svelte";
 import { inject } from "@gitbutler/core/context";
 import { reactive } from "@gitbutler/shared/reactiveUtils.svelte";
 import type { Reactive } from "@gitbutler/shared/storeUtils";
@@ -25,20 +26,25 @@ export function useForgeAuth(projectId: Reactive<string>): {
 	// account resolves, so the non-active forge costs nothing.
 	const githubUser = useGitHubForgeUser(projectId);
 	const gitlabUser = useGitLabForgeUser(projectId);
+	const giteeUser = useGiteeForgeUser(projectId);
 
 	const authenticated = $derived(
 		forgeName === "github"
 			? githubUser.user.current !== undefined
 			: forgeName === "gitlab"
 				? gitlabUser.user.current !== undefined
-				: false,
+				: forgeName === "gitee"
+					? giteeUser.user.current !== undefined
+					: false,
 	);
 	const isLoading = $derived(
 		forgeName === "github"
 			? githubUser.isLoading.current
 			: forgeName === "gitlab"
 				? gitlabUser.isLoading.current
-				: false,
+				: forgeName === "gitee"
+					? giteeUser.isLoading.current
+					: false,
 	);
 
 	return {

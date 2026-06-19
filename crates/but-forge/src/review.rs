@@ -212,6 +212,57 @@ impl From<but_gitlab::GitLabLabel> for ForgeReviewLabel {
     }
 }
 
+impl From<but_gitee::GiteePrUser> for ForgeReviewUser {
+    fn from(user: but_gitee::GiteePrUser) -> Self {
+        ForgeReviewUser {
+            id: user.id,
+            login: user.login,
+            name: user.name,
+            email: user.email,
+            avatar_url: user.avatar_url,
+            is_bot: false,
+        }
+    }
+}
+
+impl From<but_gitee::GiteeLabel> for ForgeReviewLabel {
+    fn from(label: but_gitee::GiteeLabel) -> Self {
+        ForgeReviewLabel {
+            name: label.name,
+            description: None,
+            color: None,
+        }
+    }
+}
+
+impl From<but_gitee::GiteePr> for ForgeReview {
+    fn from(pr: but_gitee::GiteePr) -> Self {
+        ForgeReview {
+            html_url: pr.html_url,
+            number: pr.number,
+            title: pr.title,
+            body: pr.body,
+            author: pr.user.map(ForgeReviewUser::from),
+            labels: pr.labels.into_iter().map(ForgeReviewLabel::from).collect(),
+            draft: pr.draft,
+            source_branch: pr.head.label,
+            target_branch: pr.base.label,
+            sha: pr.sha,
+            created_at: pr.created_at,
+            modified_at: pr.updated_at,
+            merged_at: pr.merged_at,
+            closed_at: pr.closed_at,
+            repository_ssh_url: None,
+            repository_https_url: None,
+            repo_owner: None,
+            head_repo_is_fork: false,
+            reviewers: vec![],
+            unit_symbol: "#".to_string(),
+            last_sync_at: chrono::Local::now().naive_local(),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[cfg_attr(feature = "export-schema", derive(schemars::JsonSchema))]
 #[serde(rename_all = "camelCase")]
@@ -630,6 +681,33 @@ fn list_forge_reviews(
                 .map(ForgeReview::from)
                 .collect::<Vec<ForgeReview>>()
         }
+        ForgeName::Gitee => {
+            let preferred_account = preferred_forge_user
+                .as_ref()
+                .and_then(|user| user.gitee().cloned());
+
+            // Clone owned data for thread
+            let owner = owner.clone();
+            let repo = repo.clone();
+            let storage = storage.clone();
+
+            let prs = std::thread::spawn(move || {
+                tokio::runtime::Runtime::new()
+                    .unwrap()
+                    .block_on(but_gitee::pr::list(
+                        preferred_account.as_ref(),
+                        &owner,
+                        &repo,
+                        &storage,
+                    ))
+            })
+            .join()
+            .map_err(|e| anyhow::anyhow!("Failed to join thread: {e:?}"))??;
+
+            prs.into_iter()
+                .map(ForgeReview::from)
+                .collect::<Vec<ForgeReview>>()
+        }
         _ => {
             return Err(Error::msg(format!(
                 "Listing reviews for forge {forge:?} is not implemented yet.",
@@ -696,6 +774,21 @@ pub async fn list_forge_reviews_for_branch(
             .await?;
             let mrs = filter_mrs(mrs, &filter);
             Ok(mrs.into_iter().map(ForgeReview::from).collect())
+        }
+        ForgeName::Gitee => {
+            let preferred_account = preferred_forge_user
+                .as_ref()
+                .and_then(|user| user.gitee().cloned());
+            let prs = but_gitee::pr::list_all_for_target(
+                preferred_account.as_ref(),
+                owner,
+                repo,
+                branch,
+                storage,
+            )
+            .await?;
+            let prs = filter_gitee_prs(prs, &filter);
+            Ok(prs.into_iter().map(ForgeReview::from).collect())
         }
         _ => Err(Error::msg(format!(
             "Listing reviews for forge {forge:?} is not implemented yet.",
@@ -789,6 +882,49 @@ fn filter_mrs(
         .collect()
 }
 
+fn filter_gitee_prs(
+    prs: Vec<but_gitee::GiteePr>,
+    filter: &ForgeReviewFilter,
+) -> Vec<but_gitee::GiteePr> {
+    let now = chrono::Utc::now();
+    prs.into_iter()
+        .filter(|pr| {
+            if pr.merged_at.is_none() {
+                return false;
+            }
+            match filter {
+                ForgeReviewFilter::Today => {
+                    if let Some(merged_at_str) = &pr.merged_at
+                        && let Ok(merged_at) = chrono::DateTime::parse_from_rfc3339(merged_at_str)
+                    {
+                        return merged_at.date_naive() == now.date_naive();
+                    }
+                    false
+                }
+                ForgeReviewFilter::ThisWeek => {
+                    if let Some(merged_at_str) = &pr.merged_at
+                        && let Ok(merged_at) = chrono::DateTime::parse_from_rfc3339(merged_at_str)
+                    {
+                        let week_start = now
+                            - chrono::Duration::days(now.weekday().num_days_from_monday() as i64);
+                        return merged_at.date_naive() >= week_start.date_naive();
+                    }
+                    false
+                }
+                ForgeReviewFilter::ThisMonth => {
+                    if let Some(merged_at_str) = &pr.merged_at
+                        && let Ok(merged_at) = chrono::DateTime::parse_from_rfc3339(merged_at_str)
+                    {
+                        return merged_at.year() == now.year() && merged_at.month() == now.month();
+                    }
+                    false
+                }
+                ForgeReviewFilter::All => true,
+            }
+        })
+        .collect()
+}
+
 async fn get_forge_review_inner(
     preferred_forge_user: &Option<crate::ForgeUser>,
     forge_repo_info: &crate::forge::ForgeRepoInfo,
@@ -811,6 +947,12 @@ async fn get_forge_review_inner(
             let mr =
                 but_gitlab::mr::get(preferred_account, project_id, review_number, storage).await?;
             Ok(ForgeReview::from(mr))
+        }
+        ForgeName::Gitee => {
+            let preferred_account = preferred_forge_user.as_ref().and_then(|user| user.gitee());
+            let pr =
+                but_gitee::pr::get(preferred_account, owner, repo, review_number, storage).await?;
+            Ok(ForgeReview::from(pr))
         }
         _ => Err(Error::msg(format!(
             "Getting reviews for forge {forge:?} is not implemented yet.",
@@ -864,7 +1006,7 @@ pub async fn get_review_base_repo_url(
                 .context("Failed to fetch PR base repo URL")
         }
         // None tells the UI to fall back to a branch-name-only check.
-        ForgeName::GitLab | ForgeName::Bitbucket | ForgeName::Azure => Ok(None),
+        ForgeName::GitLab | ForgeName::Bitbucket | ForgeName::Azure | ForgeName::Gitee => Ok(None),
     }
 }
 
@@ -912,6 +1054,9 @@ pub async fn get_review_merge_status(
                 is_mergeable: status.is_mergeable,
             })
         }
+        ForgeName::Gitee => Err(anyhow::anyhow!(
+            "Merge status for forge {forge:?} is not implemented yet."
+        )),
         _ => Err(anyhow::anyhow!(
             "Merge status for forge {forge:?} is not implemented yet."
         )),
@@ -1038,6 +1183,9 @@ pub async fn update_review(
             but_gitlab::mr::update(preferred_account, params, storage).await?;
             Ok(())
         }
+        ForgeName::Gitee => Err(anyhow::anyhow!(
+            "Updating reviews for forge {forge:?} is not implemented yet."
+        )),
         _ => Err(anyhow::anyhow!(
             "Updating pull requests for forge {forge:?} is not implemented yet."
         )),
@@ -1112,6 +1260,9 @@ pub async fn merge_review(
 
             but_gitlab::mr::merge(preferred_account, params, storage).await
         }
+        ForgeName::Gitee => Err(Error::msg(format!(
+            "Merging reviews for forge {forge:?} is not implemented yet.",
+        ))),
         _ => Err(Error::msg(format!(
             "Merging reviews for forge {forge:?} is not implemented yet.",
         ))),
@@ -1157,6 +1308,9 @@ pub async fn set_review_auto_merge_state(
             };
             but_gitlab::mr::set_auto_merge(preferred_account, params, storage).await
         }
+        ForgeName::Gitee => Err(Error::msg(format!(
+            "Setting the auto-merge state of reviews for forge {forge:?} is not implemented yet.",
+        ))),
         _ => Err(Error::msg(format!(
             "Setting the auto-merge state of reviews for forge {forge:?} is not implemented yet.",
         ))),
@@ -1202,6 +1356,9 @@ pub async fn set_review_draftiness(
             };
             but_gitlab::mr::set_draft_state(preferred_account, params, storage).await
         }
+        ForgeName::Gitee => Err(Error::msg(format!(
+            "Setting the draftiness of reviews for forge {forge:?} is not implemented yet.",
+        ))),
         _ => Err(Error::msg(format!(
             "Setting the draftiness of reviews for forge {forge:?} is not implemented yet.",
         ))),
@@ -1297,6 +1454,20 @@ pub async fn create_forge_review(
             let preferred_account = preferred_forge_user.as_ref().and_then(|user| user.gitlab());
             let mr = but_gitlab::mr::create(preferred_account, mr_params, storage).await?;
             Ok(ForgeReview::from(mr))
+        }
+        ForgeName::Gitee => {
+            let preferred_account = preferred_forge_user.as_ref().and_then(|user| user.gitee());
+            let head = format!("{}:{}", owner, params.source_branch);
+            let pr_params = but_gitee::CreatePullRequestParams {
+                owner,
+                repo,
+                title: &params.title,
+                head: &head,
+                base: &params.target_branch,
+                body: &params.body,
+            };
+            let pr = but_gitee::pr::create(preferred_account, pr_params, storage).await?;
+            Ok(ForgeReview::from(pr))
         }
         _ => Err(Error::msg(format!(
             "Creating reviews for forge {forge:?} is not implemented yet.",

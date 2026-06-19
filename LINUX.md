@@ -1,39 +1,39 @@
-# Linux compatibility
+# Linux 兼容性
 
-GitButler should run well on most modern Linux distributions, but there are too many software and hardware combinations for the core team to support on its own. As such, the GitButler project maintains official support for a select few Linux distributions, and otherwise relies on community-maintained packages.
+纪程应该在大多数现代 Linux 发行版上运行良好，但软件和硬件的组合太多，核心团队无法独自支持所有情况。因此，纪程项目为少数精选的 Linux 发行版提供官方支持，其余则依赖社区维护的软件包。
 
-This document outlines the current level of commitment toward Linux distributions and packaging formats.
+本文档概述了当前对 Linux 发行版和打包格式的支持承诺。
 
-> A more dynamic overview of the current state of Linux compatibility can be found in https://github.com/gitbutlerapp/gitbutler/issues/8411
+> 关于 Linux 兼容性当前状态的更动态概述，请参见 https://github.com/gitbutlerapp/gitbutler/issues/8411
 
-## Official support
+## 官方支持
 
-The officially supported way to install GitButler is with the `deb` package provided on the [downloads page](https://gitbutler.com/downloads). This package is regularly tested to work well with the following distributions.
+官方支持的安装方式是使用[下载页面](https://gitbutler.com/downloads)提供的 `deb` 包。该包定期经过测试，确保在以下发行版上运行良好。
 
 - Ubuntu 22.04 LTS (jammy)
 - Ubuntu 24.04 LTS (noble)
 
-On these distributions, we aim to provide as good a user experience as on Windows and macOS. Compatibility is routinely verified and compatibility issues are the domain of the core GitButler team. We know that the current user experience does not quite deliver on all fronts, and work on improvements is underway.
+在这些发行版上，我们的目标是提供与 Windows 和 macOS 一样良好的用户体验。兼容性会例行验证，兼容性问题由纪程核心团队负责处理。我们知道当前的用户体验在某些方面还不够完善，改进工作正在进行中。
 
-This does not mean that the GitButler project is unconcerned with the woes of other Linux distributions. Reports of compatibility issues with _any_ distribution are welcome in the [issue tracker](https://github.com/gitbutlerapp/gitbutler/issues), but with the caveat that such issues are not guaranteed to get prioritized anytime soon. If there is a compatibility trade-off to be made, it will always be made in favor of the officially supported distributions.
+这并不意味着纪程项目不关心其他 Linux 发行版的问题。我们欢迎在[问题追踪器](https://github.com/gitbutlerapp/gitbutler/issues)中报告_任何_发行版的兼容性问题，但请注意，此类问题不保证会很快获得优先级处理。如果需要做出兼容性权衡，始终会优先考虑官方支持的发行版。
 
-## Experimental distribution: `rpm`
+## 实验性分发：`rpm`
 
-We provide an experimental `rpm` package alongside the `deb` package. It is fundamentally the same thing as the `deb` package and should have the same level of compatibility, but it is not regularly tested on any distribution as part of the development process. We provide it as it is no extra effort to build with the current toolchain, and have no reason to believe it would come with any particular compatibility caveats.
+我们随 `deb` 包一起提供实验性的 `rpm` 包。它与 `deb` 包本质上相同，应该具有相同的兼容性水平，但在开发过程中并未在任何发行版上进行定期测试。我们之所以提供它，是因为在当前工具链下构建它并不需要额外的工作，而且我们没有理由相信它会带来任何特殊的兼容性问题。
 
-## Experimental distribution: AppImage
+## 实验性分发：AppImage
 
-We provide an experimental AppImage that bundles the core dependencies required to run GitButler. The intention is that it should work on most Linux distributions, but experience shows that compatibility is relatively poor.
+我们提供一个实验性的 AppImage，它绑定了运行纪程所需的核心依赖。其意图是在大多数 Linux 发行版上都能工作，但经验表明兼容性相对较差。
 
-The AppImage may be removed in the future if compatibility remains poor.
+如果兼容性仍然不佳，未来可能会移除 AppImage。
 
-## Community-maintained distributions
+## 社区维护的分发
 
-There are several community-maintained distributions of GitButler. Issues with these distributions should typically be brought to the attention of their respective maintainers.
+有几种社区维护的纪程分发版本。这些分发版本的问题通常应向各自维护者报告。
 
-> Know of one we missed? Submit a PR to keep us in the loop!
+> 知道我们遗漏了某个分发渠道？提交 PR 让我们知道！
 
-- Arch Linux User Repository (AUR)
+- Arch Linux 用户仓库 (AUR)
   - [gitbutler](https://aur.archlinux.org/packages/gitbutler)
   - [gitbutler-bin](https://aur.archlinux.org/packages/gitbutler-bin)
 - Flatpak
@@ -42,53 +42,53 @@ There are several community-maintained distributions of GitButler. Issues with t
   - [stable](https://search.nixos.org/packages?query=gitbutler&show=gitbutler)
   - [unstable](https://search.nixos.org/packages?channel=unstable&query=gitbutler&show=gitbutler)
 
-## Known issues and workarounds
+## 已知问题及解决方法
 
-### High CPU usage in WebKitGTK thread
+### WebKitGTK 线程中的高 CPU 使用率
 
-If you're exhibiting high CPU usage in a WebKit-related thread, try disabling hardware acceleration for WebKitGTK.
+如果你在 WebKit 相关线程中表现出高 CPU 使用率，请尝试禁用 WebKitGTK 的硬件加速。
 
 ```bash
 $ WEBKIT_DISABLE_COMPOSITING_MODE=1 gitbutler-tauri
 ```
 
-See https://github.com/gitbutlerapp/gitbutler/issues/11602 for details.
+详情请参见 https://github.com/gitbutlerapp/gitbutler/issues/11602。
 
-### Blank screen or crash with NVIDIA GPU
+### NVIDIA GPU 下出现黑屏或崩溃
 
-There are known incompatibilities between NVIDIA's proprietary drivers and WebKitGTK that may cause issues ranging from a blank screen to an immediate crash. These issues appear to be most prevalent on Wayland.
+NVIDIA 专有驱动与 WebKitGTK 之间存在已知的不兼容问题，可能导致从黑屏到立即崩溃的各种问题。这些问题在 Wayland 上最为常见。
 
-Known errors include:
+已知错误包括：
 
 - `KMS: DRM_IOCTL_MODE_CREATE_DUMB failed: Permission denied`
-  - Typically causes a blank screen
+  - 通常导致黑屏
 - `Error 71 (Protocol error) dispatching to Wayland display`
-  - Typically causes an immediate crash
-  - Only visible if you run with the environment variable `WAYLAND_DEBUG=1`
+  - 通常导致立即崩溃
+  - 仅在使用环境变量 `WAYLAND_DEBUG=1` 运行时可见
 
-There are a few workarounds to try:
+可以尝试以下几种解决方法：
 
-- Disable Explicit Sync with `__NV_DISABLE_EXPLICIT_SYNC=1`
-  - If this works for you, it's the best known solution as it still allows the app to utilize your GPU
-- Disabling hardware acceleration with `WEBKIT_DISABLE_COMPOSITING_MODE=1`
-  - Typically the most stable solution
-  - The app will _not_ run on your GPU which may cause performance degradation
-- Using the Nouveau driver instead of the proprietary NVIDIA driver
-- Using [PRIME offloading](https://wiki.archlinux.org/title/PRIME) so GitButler runs on your iGPU instead
-  - You may still want to disable hardware acceleration due to performance issues
+- 使用 `__NV_DISABLE_EXPLICIT_SYNC=1` 禁用 Explicit Sync
+  - 如果此方法有效，这是目前已知的最佳解决方案，因为它仍然允许应用使用你的 GPU
+- 使用 `WEBKIT_DISABLE_COMPOSITING_MODE=1` 禁用硬件加速
+  - 通常是最稳定的解决方案
+  - 应用_不会_在你的 GPU 上运行，可能导致性能下降
+- 使用 Nouveau 驱动代替 NVIDIA 专有驱动
+- 使用 [PRIME offloading](https://wiki.archlinux.org/title/PRIME) 让纪程运行在你的 iGPU 上
+  - 由于性能问题，你可能仍然需要禁用硬件加速
 
-See https://github.com/gitbutlerapp/gitbutler/issues/11761 for details.
+详情请参见 https://github.com/gitbutlerapp/gitbutler/issues/11761。
 
-### Blurry text with NVIDIA GPU
+### NVIDIA GPU 下的文字模糊问题
 
-NVIDIA drivers have been known to cause blurry text in WebKitGTK-powered apps because of FXAA.
+已知 NVIDIA 驱动会因 FXAA 导致 WebKitGTK 应用中的文字模糊。
 
-Workarounds to try:
+可以尝试的解决方法：
 
-- Disabling hardware acceleration with `WEBKIT_DISABLE_COMPOSITING_MODE=1`
-  - Typically the most stable solution
-  - The app will _not_ run on your GPU which may cause performance degradation
-- Disabling FXAA in NVIDIA settings
-- Using the Nouveau driver instead of the proprietary NVIDIA driver
+- 使用 `WEBKIT_DISABLE_COMPOSITING_MODE=1` 禁用硬件加速
+  - 通常是最稳定的解决方案
+  - 应用_不会_在你的 GPU 上运行，可能导致性能下降
+- 在 NVIDIA 设置中禁用 FXAA
+- 使用 Nouveau 驱动代替 NVIDIA 专有驱动
 
-See https://github.com/gitbutlerapp/gitbutler/issues/12971 for details.
+详情请参见 https://github.com/gitbutlerapp/gitbutler/issues/12971。
