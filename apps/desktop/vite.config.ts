@@ -6,7 +6,7 @@ import { defineConfig, type Plugin } from "vitest/config";
 export default defineConfig({
 	plugins: [
 		process.env.VITE_DEBOUNCE_RELOAD ? debounceReload() : undefined,
-		sentrySvelteKit({
+		process.env.SENTRY_AUTH_TOKEN ? sentrySvelteKit({
 			adapter: "other",
 			autoInstrument: {
 				load: true,
@@ -30,7 +30,7 @@ export default defineConfig({
 					},
 				},
 			},
-		}),
+		}) : undefined,
 		sveltekit(),
 		svelteTesting(),
 	],
