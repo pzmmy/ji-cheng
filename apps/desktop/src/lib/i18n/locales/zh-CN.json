@@ -580,5 +580,19 @@
 	"forge.setupInGeneral": "在通用设置中设置",
 	"forge.readMoreInDocs": "在文档中了解更多",
 	"common.releaseNotes": "发布说明",
-	"settings.showCommand": "显示命令"
+	"settings.showCommand": "显示命令",
+	"forge.issue.title": "Issue 列表",
+	"forge.issue.create": "创建 Issue",
+	"forge.issue.close": "关闭 Issue",
+	"forge.issue.reopen": "重新打开 Issue",
+	"forge.issue.open": "进行中",
+	"forge.issue.closed": "已关闭",
+	"forge.issue.all": "全部",
+	"forge.issue.noIssues": "没有找到{state}的 Issue。",
+	"forge.issue.loading": "加载 Issue 中...",
+	"forge.issue.newIssue": "新建 Issue",
+	"forge.issue.description": "描述",
+	"forge.issue.comments": "{count} 条评论",
+	"forge.issue.created": "创建于",
+	"forge.issue.updated": "更新于"
 }

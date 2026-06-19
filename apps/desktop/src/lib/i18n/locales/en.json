@@ -580,5 +580,19 @@
 	"forge.setupInGeneral": "Set up in General Settings",
 	"forge.readMoreInDocs": "Read more in the docs",
 	"common.releaseNotes": "Release notes",
-	"settings.showCommand": "Show command"
+	"settings.showCommand": "Show command",
+	"forge.issue.title": "Issues",
+	"forge.issue.create": "Create Issue",
+	"forge.issue.close": "Close Issue",
+	"forge.issue.reopen": "Reopen Issue",
+	"forge.issue.open": "Open",
+	"forge.issue.closed": "Closed",
+	"forge.issue.all": "All",
+	"forge.issue.noIssues": "No {state} issues found.",
+	"forge.issue.loading": "Loading issues...",
+	"forge.issue.newIssue": "New Issue",
+	"forge.issue.description": "Description",
+	"forge.issue.comments": "{count} comments",
+	"forge.issue.created": "Created",
+	"forge.issue.updated": "Updated"
 }

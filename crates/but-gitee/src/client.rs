@@ -326,6 +326,153 @@ impl GiteeClient {
         }
         Ok(response.json().await?)
     }
+
+    // ---- Issue API methods ----
+
+    /// List issues for a repository
+    pub async fn list_issues(
+        &self,
+        owner: &str,
+        repo: &str,
+        state: &str,
+        page: i64,
+        per_page: i64,
+    ) -> Result<Vec<GiteeIssue>> {
+        let url = format!("{}/repos/{}/{}/issues", self.base_url, owner, repo);
+        let response = self
+            .client
+            .get(&url)
+            .query(&[
+                ("state", state),
+                ("page", &page.to_string()),
+                ("per_page", &per_page.to_string()),
+            ])
+            .send()
+            .await?;
+
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!("Gitee API error (GET /issues): HTTP {} - {}", status, text);
+        }
+
+        let issues: Vec<GiteeIssue> = response.json().await?;
+        Ok(issues)
+    }
+
+    /// Get a single issue by number
+    pub async fn get_issue(
+        &self,
+        owner: &str,
+        repo: &str,
+        number: i64,
+    ) -> Result<GiteeIssue> {
+        let url = format!("{}/repos/{}/{}/issues/{}", self.base_url, owner, repo, number);
+        let response = self.client.get(&url).send().await?;
+
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!("Gitee API error (GET /issues/{}): HTTP {} - {}", number, status, text);
+        }
+
+        let issue: GiteeIssue = response.json().await?;
+        Ok(issue)
+    }
+
+    /// Create a new issue
+    pub async fn create_issue(
+        &self,
+        owner: &str,
+        repo: &str,
+        title: &str,
+        body: &str,
+        labels: &[&str],
+    ) -> Result<GiteeIssue> {
+        let url = format!("{}/repos/{}/{}/issues", self.base_url, owner, repo);
+
+        let mut body_json = serde_json::json!({
+            "title": title,
+            "body": body,
+        });
+        if !labels.is_empty() {
+            body_json["labels"] = serde_json::json!(labels);
+        }
+
+        let response = self.client.post(&url).json(&body_json).send().await?;
+
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!("Gitee API error (POST /issues): HTTP {} - {}", status, text);
+        }
+
+        let issue: GiteeIssue = response.json().await?;
+        Ok(issue)
+    }
+
+    /// Update an issue (title, body, state, labels)
+    pub async fn update_issue(
+        &self,
+        owner: &str,
+        repo: &str,
+        number: i64,
+        params: serde_json::Value,
+    ) -> Result<GiteeIssue> {
+        let url = format!("{}/repos/{}/{}/issues/{}", self.base_url, owner, repo, number);
+        let response = self.client.patch(&url).json(&params).send().await?;
+
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!("Gitee API error (PATCH /issues/{}): HTTP {} - {}", number, status, text);
+        }
+
+        let issue: GiteeIssue = response.json().await?;
+        Ok(issue)
+    }
+
+    /// List comments on an issue
+    pub async fn list_issue_comments(
+        &self,
+        owner: &str,
+        repo: &str,
+        number: i64,
+    ) -> Result<Vec<serde_json::Value>> {
+        let url = format!("{}/repos/{}/{}/issues/{}/comments", self.base_url, owner, repo, number);
+        let response = self.client.get(&url).send().await?;
+
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!("Gitee API error (GET /issues/{}/comments): HTTP {} - {}", number, status, text);
+        }
+
+        let comments: Vec<serde_json::Value> = response.json().await?;
+        Ok(comments)
+    }
+
+    /// Create a comment on an issue
+    pub async fn create_issue_comment(
+        &self,
+        owner: &str,
+        repo: &str,
+        number: i64,
+        body: &str,
+    ) -> Result<serde_json::Value> {
+        let url = format!("{}/repos/{}/{}/issues/{}/comments", self.base_url, owner, repo, number);
+        let body_json = serde_json::json!({ "body": body });
+        let response = self.client.post(&url).json(&body_json).send().await?;
+
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!("Gitee API error (POST /issues/{}/comments): HTTP {} - {}", number, status, text);
+        }
+
+        let comment: serde_json::Value = response.json().await?;
+        Ok(comment)
+    }
 }
 
 pub struct CreatePullRequestParams<'a> {
@@ -359,6 +506,36 @@ pub struct GiteeUser {
 pub struct GiteeLabel {
     pub name: String,
 }
+
+// ---- Issue types ----
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GiteeIssue {
+    pub html_url: String,
+    pub number: i64,
+    pub title: String,
+    pub state: String,
+    pub body: Option<String>,
+    pub user: Option<GiteeIssueUser>,
+    #[serde(default)]
+    pub labels: Vec<GiteeLabel>,
+    pub assignee: Option<GiteeIssueUser>,
+    pub comments: i64,
+    pub created_at: Option<String>,
+    pub updated_at: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GiteeIssueUser {
+    pub id: i64,
+    pub login: String,
+    pub name: Option<String>,
+    #[serde(default)]
+    pub email: Option<String>,
+    pub avatar_url: Option<String>,
+}
+
+// ---- End Issue types ----
 
 #[derive(Debug, Serialize)]
 pub struct GiteeProject {

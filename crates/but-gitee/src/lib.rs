@@ -2,11 +2,12 @@ use anyhow::{Context as _, Result};
 use but_secret::Sensitive;
 
 mod client;
+pub mod issues;
 pub mod pr;
 mod project;
 pub use client::{
-    CreatePullRequestParams, GiteeClient, GiteeLabel, GiteePr, GiteePrUser, GiteeProject,
-    GiteeUser,
+    CreatePullRequestParams, GiteeClient, GiteeIssue, GiteeIssueUser, GiteeLabel, GiteePr,
+    GiteePrUser, GiteeProject, GiteeUser,
 };
 pub use project::{GiteeProjectId, fetch_project};
 mod token;
