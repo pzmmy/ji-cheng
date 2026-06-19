@@ -1,0 +1,142 @@
+name: "发布纪程"
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    name: 验证
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 验证翻译文件
+        run: |
+          python3 -c "
+          import json
+          en = json.load(open('apps/desktop/src/lib/i18n/locales/en.json'))
+          zh = json.load(open('apps/desktop/src/lib/i18n/locales/zh-CN.json'))
+          ek = set(en.keys()); zk = set(zh.keys())
+          assert ek == zk, f'Key mismatch! en={len(ek)} zh={len(zk)}'
+          print(f'✅ {len(ek)} keys match')
+          "
+
+  build-linux:
+    name: Linux (AppImage + deb)
+    runs-on: ubuntu-22.04
+    needs: validate
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装系统依赖
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            libwebkit2gtk-4.1-dev \
+            libgtk-3-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            libssl-dev \
+            pkg-config \
+            libdbus-1-dev
+
+      - name: 安装 Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.20.0
+
+      - name: 安装前端依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 构建前端
+        run: pnpm build:desktop -- --mode production
+
+      - name: 构建 Tauri 应用
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_CONFIG: |
+            {
+              "identifier": "com.pzmmy.jicheng",
+              "productName": "纪程",
+              "bundle": {
+                "active": true,
+                "targets": ["appimage", "deb"]
+              }
+            }
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "纪程 v${{ github.ref_name }}"
+          releaseBody: |
+            ## 纪程 ${{ github.ref_name }}
+
+            为中文开发者打造的 Git 客户端（基于 GitButler）。
+
+            ### 主要变更
+            详见 [CHANGELOG](https://github.com/pzmmy/ji-cheng/releases/tag/${{ github.ref_name }})
+          releaseDraft: true
+          prerelease: false
+
+  build-windows:
+    name: Windows (MSI)
+    runs-on: windows-latest
+    needs: validate
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.20.0
+
+      - name: 安装前端依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 构建前端
+        run: pnpm build:desktop -- --mode production
+
+      - name: 构建 Tauri 应用
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_CONFIG: |
+            {
+              "identifier": "com.pzmmy.jicheng",
+              "productName": "纪程",
+              "bundle": {
+                "active": true,
+                "targets": ["msi"]
+              }
+            }
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "纪程 v${{ github.ref_name }}"
+          releaseBody: |
+            ## 纪程 ${{ github.ref_name }}
+
+            为中文开发者打造的 Git 客户端（基于 GitButler）。
+
+            ### 主要变更
+            详见 [CHANGELOG](https://github.com/pzmmy/ji-cheng/releases/tag/${{ github.ref_name }})
+          releaseDraft: true
+          prerelease: false
