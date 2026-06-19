@@ -64,17 +64,8 @@ jobs:
       - name: 安装前端依赖
         run: pnpm install
 
-      - name: 检查工具链
-        run: |
-          echo "node: $(node --version)"
-          echo "pnpm: $(pnpm --version)"
-          pnpm list turbo --depth=0 2>&1 || echo "turbo not in pnpm list"
-          ls node_modules/.bin/turbo 2>/dev/null && echo "turbo binary found" || echo "turbo binary NOT found"
-
       - name: 构建前端
-        run: CI=true pnpm build:desktop 2>&1
-        env:
-          SENTRY_RELEASE: ${{ github.ref_name }}
+        run: pnpm build:desktop
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
@@ -126,17 +117,8 @@ jobs:
       - name: 安装前端依赖
         run: pnpm install
 
-      - name: 检查工具链
-        run: |
-          echo "node: $(node --version)"
-          echo "pnpm: $(pnpm --version)"
-          pnpm list turbo --depth=0 2>&1 || echo "turbo not in pnpm list"
-          ls node_modules/.bin/turbo 2>/dev/null && echo "turbo binary found" || echo "turbo binary NOT found"
-
       - name: 构建前端
-        run: CI=true pnpm build:desktop 2>&1
-        env:
-          SENTRY_RELEASE: ${{ github.ref_name }}
+        run: pnpm build:desktop
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
