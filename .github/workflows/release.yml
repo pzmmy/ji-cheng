@@ -66,20 +66,17 @@ jobs:
 
       - name: 获取前端构建缓存
         run: |
-          set +e
           echo "检查构建缓存..."
-          HTTP_CODE=$(curl -s -o /tmp/api_response.json -w "%{http_code}" \
-            -H "Authorization: bearer *** secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/pzmmy/ji-cheng/contents/apps/desktop/build/index.html?ref=build-cache" 2>&1)
-          echo "CURL_EXIT: $?"
-          echo "HTTP_CODE: $HTTP_CODE"
-          cat /tmp/api_response.json 2>/dev/null | head -5
-          echo ""
-          if [ "$HTTP_CODE" = "200" ]; then
-            echo "✅ 缓存存在"
+          git fetch origin build-cache 2>&1 || true
+          git checkout origin/build-cache -- apps/desktop/build/ 2>&1 || true
+          if [ -f apps/desktop/build/index.html ]; then
+            echo "✅ 构建缓存已加载"
           else
-            echo "❌ 缓存不可达，回退本地构建"
-            cd apps/desktop && pnpm exec vite build 2>&1
+            echo "⚠️ 缓存不可用，直接构建"
+            cd apps/desktop
+            rm -rf node_modules/.cache/esbuild
+            pnpm rebuild esbuild
+            pnpm exec vite build
           fi
 
       - name: 构建 Tauri 应用
@@ -134,20 +131,17 @@ jobs:
 
       - name: 获取前端构建缓存
         run: |
-          set +e
           echo "检查构建缓存..."
-          HTTP_CODE=$(curl -s -o /tmp/api_response.json -w "%{http_code}" \
-            -H "Authorization: bearer *** secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/pzmmy/ji-cheng/contents/apps/desktop/build/index.html?ref=build-cache" 2>&1)
-          echo "CURL_EXIT: $?"
-          echo "HTTP_CODE: $HTTP_CODE"
-          cat /tmp/api_response.json 2>/dev/null | head -5
-          echo ""
-          if [ "$HTTP_CODE" = "200" ]; then
-            echo "✅ 缓存存在"
+          git fetch origin build-cache 2>&1 || true
+          git checkout origin/build-cache -- apps/desktop/build/ 2>&1 || true
+          if [ -f apps/desktop/build/index.html ]; then
+            echo "✅ 构建缓存已加载"
           else
-            echo "❌ 缓存不可达，回退本地构建"
-            cd apps/desktop && pnpm exec vite build 2>&1
+            echo "⚠️ 缓存不可用，直接构建"
+            cd apps/desktop
+            rm -rf node_modules/.cache/esbuild
+            pnpm rebuild esbuild
+            pnpm exec vite build
           fi
 
       - name: 构建 Tauri 应用
