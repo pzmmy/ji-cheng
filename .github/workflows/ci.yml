@@ -47,4 +47,9 @@ jobs:
         continue-on-error: true
 
       - name: 测试构建
-        run: pnpm build:desktop
+        run: |
+          set -x
+          pnpm --filter @gitbutler/desktop exec svelte-kit sync 2>&1
+          echo "=== svelte-kit done ==="
+          pnpm --filter @gitbutler/desktop exec vite build 2>&1
+          echo "=== vite build done ==="
