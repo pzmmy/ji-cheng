@@ -68,7 +68,7 @@ jobs:
         run: |
           echo "检查构建缓存..."
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/pzmmy/ji-cheng/contents/apps/desktop/build/index.html?ref=build-cache")
           echo "API状态: $STATUS"
           if [ "$STATUS" = "200" ]; then
@@ -132,7 +132,7 @@ jobs:
         run: |
           echo "检查构建缓存..."
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/pzmmy/ji-cheng/contents/apps/desktop/build/index.html?ref=build-cache")
           echo "API状态: $STATUS"
           if [ "$STATUS" = "200" ]; then
