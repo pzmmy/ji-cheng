@@ -69,7 +69,8 @@ jobs:
 
       - name: Vite 构建
         run: |
-          pnpm --filter @gitbutler/desktop exec vite build > /tmp/vite-build.log 2>&1 || (echo "=== VITE BUILD FAILED ===" && cat /tmp/vite-build.log && exit 1)
+          set -o pipefail
+          pnpm --filter @gitbutler/desktop exec vite build 2>&1 | tee /tmp/vite-build.log
 
       - name: 上传构建日志
         if: failure()
@@ -133,7 +134,8 @@ jobs:
 
       - name: Vite 构建
         run: |
-          pnpm --filter @gitbutler/desktop exec vite build > /tmp/vite-build.log 2>&1 || (echo "=== VITE BUILD FAILED ===" && cat /tmp/vite-build.log && exit 1)
+          set -o pipefail
+          pnpm --filter @gitbutler/desktop exec vite build 2>&1 | tee /tmp/vite-build.log
 
       - name: 上传构建日志
         if: failure()
