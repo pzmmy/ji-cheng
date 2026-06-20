@@ -66,15 +66,19 @@ jobs:
 
       - name: 获取前端构建缓存
         run: |
+          set +e
           echo "检查构建缓存..."
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/pzmmy/ji-cheng/contents/apps/desktop/build/index.html?ref=build-cache")
-          echo "API状态: $STATUS"
-          if [ "$STATUS" = "200" ]; then
-            echo "✅ 构建缓存存在"
+          HTTP_CODE=$(curl -s -o /tmp/api_response.json -w "%{http_code}" \
+            -H "Authorization: bearer *** secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/pzmmy/ji-cheng/contents/apps/desktop/build/index.html?ref=build-cache" 2>&1)
+          echo "CURL_EXIT: $?"
+          echo "HTTP_CODE: $HTTP_CODE"
+          cat /tmp/api_response.json 2>/dev/null | head -5
+          echo ""
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✅ 缓存存在"
           else
-            echo "⚠️ 构建缓存不可用，回退到本地构建"
+            echo "❌ 缓存不可达，回退本地构建"
             cd apps/desktop && pnpm exec vite build 2>&1
           fi
 
@@ -130,15 +134,19 @@ jobs:
 
       - name: 获取前端构建缓存
         run: |
+          set +e
           echo "检查构建缓存..."
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/pzmmy/ji-cheng/contents/apps/desktop/build/index.html?ref=build-cache")
-          echo "API状态: $STATUS"
-          if [ "$STATUS" = "200" ]; then
-            echo "✅ 构建缓存存在"
+          HTTP_CODE=$(curl -s -o /tmp/api_response.json -w "%{http_code}" \
+            -H "Authorization: bearer *** secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/pzmmy/ji-cheng/contents/apps/desktop/build/index.html?ref=build-cache" 2>&1)
+          echo "CURL_EXIT: $?"
+          echo "HTTP_CODE: $HTTP_CODE"
+          cat /tmp/api_response.json 2>/dev/null | head -5
+          echo ""
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✅ 缓存存在"
           else
-            echo "⚠️ 构建缓存不可用，回退到本地构建"
+            echo "❌ 缓存不可达，回退本地构建"
             cd apps/desktop && pnpm exec vite build 2>&1
           fi
 
