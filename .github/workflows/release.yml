@@ -68,7 +68,14 @@ jobs:
         run: |
           git fetch origin build-cache 2>&1
           git checkout origin/build-cache -- apps/desktop/build/ 2>&1
-          ls apps/desktop/build/index.html 2>/dev/null && echo "✅ 前端构建缓存已加载" || echo "⚠️ 未找到缓存"
+          if [ -f apps/desktop/build/index.html ]; then
+            echo "✅ 前端构建缓存已加载"
+          else
+            echo "⚠️ git fetch 失败，尝试 Token"
+            git fetch https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/pzmmy/ji-cheng.git build-cache 2>&1
+            git checkout FETCH_HEAD -- apps/desktop/build/
+            ls apps/desktop/build/index.html 2>/dev/null && echo "✅ 已从 Token 加载" || echo "❌ 构建缓存不可用"
+          fi
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
@@ -124,7 +131,14 @@ jobs:
         run: |
           git fetch origin build-cache 2>&1
           git checkout origin/build-cache -- apps/desktop/build/ 2>&1
-          ls apps/desktop/build/index.html 2>/dev/null && echo "✅ 前端构建缓存已加载" || echo "⚠️ 未找到缓存"
+          if [ -f apps/desktop/build/index.html ]; then
+            echo "✅ 前端构建缓存已加载"
+          else
+            echo "⚠️ git fetch 失败，尝试 Token"
+            git fetch https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/pzmmy/ji-cheng.git build-cache 2>&1
+            git checkout FETCH_HEAD -- apps/desktop/build/
+            ls apps/desktop/build/index.html 2>/dev/null && echo "✅ 已从 Token 加载" || echo "❌ 构建缓存不可用"
+          fi
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
