@@ -69,8 +69,9 @@ jobs:
 
       - name: 构建前端
         run: |
-          pnpm --filter @gitbutler/desktop exec vite build 2>&1; RC=$?
-          echo "VITE_EXIT_CODE: $RC"
+          cd apps/desktop && pnpm exec vite build 2>&1
+          RC=$?
+          echo "VITE_EXIT: $RC"
           exit $RC
 
       - name: 构建 Tauri 应用
@@ -128,8 +129,9 @@ jobs:
 
       - name: 构建前端
         run: |
-          pnpm --filter @gitbutler/desktop exec vite build 2>&1; RC=$?
-          echo "VITE_EXIT_CODE: $RC"
+          cd apps/desktop && pnpm exec vite build 2>&1
+          RC=$?
+          echo "VITE_EXIT: $RC"
           exit $RC
 
       - name: 构建 Tauri 应用
