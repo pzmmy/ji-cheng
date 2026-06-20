@@ -47,4 +47,15 @@ jobs:
         continue-on-error: true
 
       - name: 测试构建
-        run: cd apps/desktop && npx vite build 2>&1
+        run: |
+          pnpm build:desktop > /tmp/build-out.log 2>&1; RC=$?
+          echo "Exit code: $RC"
+          tail -40 /tmp/build-out.log
+          exit $RC
+
+      - name: 上传构建日志
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-error-log
+          path: /tmp/build-out.log
