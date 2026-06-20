@@ -45,3 +45,6 @@ jobs:
       - name: TypeScript 检查
         run: pnpm check
         continue-on-error: true
+
+      - name: 测试构建
+        run: pnpm build:desktop
