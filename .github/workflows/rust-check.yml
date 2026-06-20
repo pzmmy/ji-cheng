@@ -28,4 +28,13 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: 编译检查
-        run: cargo check -p but-gitee -p but-forge 2>&1
+        run: |
+          cargo check -p but-gitee -p but-forge 2>&1 | tee /tmp/cargo-errors.txt
+          echo "EXIT_CODE: ${PIPESTATUS[0]}"
+
+      - name: 上传编译日志
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cargo-errors
+          path: /tmp/cargo-errors.txt
