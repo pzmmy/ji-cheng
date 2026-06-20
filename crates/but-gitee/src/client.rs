@@ -473,6 +473,64 @@ impl GiteeClient {
         let comment: serde_json::Value = response.json().await?;
         Ok(comment)
     }
+
+    /// List PR comments
+    pub async fn list_pr_comments(
+        &self,
+        owner: &str,
+        repo: &str,
+        number: i64,
+    ) -> Result<Vec<GiteePrComment>> {
+        let url = format!(
+            "{}/repos/{}/{}/pulls/{}/comments",
+            self.base_url, owner, repo, number
+        );
+        let response = self.client.get(&url).send().await?;
+
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!(
+                "Gitee API error (GET /pulls/{}/comments): HTTP {} - {}",
+                number,
+                status,
+                text
+            );
+        }
+
+        let comments: Vec<GiteePrComment> = response.json().await?;
+        Ok(comments)
+    }
+
+    /// Create a comment on a PR
+    pub async fn create_pr_comment(
+        &self,
+        owner: &str,
+        repo: &str,
+        number: i64,
+        body: &str,
+    ) -> Result<GiteePrComment> {
+        let url = format!(
+            "{}/repos/{}/{}/pulls/{}/comments",
+            self.base_url, owner, repo, number
+        );
+        let params = serde_json::json!({ "body": body });
+        let response = self.client.post(&url).json(&params).send().await?;
+
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!(
+                "Gitee API error (POST /pulls/{}/comments): HTTP {} - {}",
+                number,
+                status,
+                text
+            );
+        }
+
+        let comment: GiteePrComment = response.json().await?;
+        Ok(comment)
+    }
 }
 
 pub struct CreatePullRequestParams<'a> {
@@ -597,6 +655,17 @@ pub struct GiteePrRepo {
     pub clone_url: String,
     pub html_url: Option<String>,
     pub owner: Option<GiteePrUser>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GiteePrComment {
+    pub id: i64,
+    pub body: String,
+    pub user: GiteePrUser,
+    pub created_at: String,
+    pub updated_at: String,
+    pub path: Option<String>,
+    pub line: Option<i64>,
 }
 
 // ---- API response deserialization types ----

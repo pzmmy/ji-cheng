@@ -7,7 +7,7 @@ pub mod pr;
 mod project;
 pub use client::{
     CreatePullRequestParams, GiteeClient, GiteeIssue, GiteeIssueUser, GiteeLabel, GiteePr,
-    GiteePrUser, GiteeProject, GiteeUser,
+    GiteePrComment, GiteePrUser, GiteeProject, GiteeUser,
 };
 pub use project::{GiteeProjectId, fetch_project};
 mod token;
