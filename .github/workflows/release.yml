@@ -66,17 +66,19 @@ jobs:
 
       - name: 获取前端构建缓存
         run: |
+          set +ex
           echo "检查构建缓存..."
           git fetch origin build-cache 2>/dev/null || echo "fetch failed"
           git checkout origin/build-cache -- apps/desktop/build/ 2>/dev/null || echo "checkout failed"
           if [ -f apps/desktop/build/index.html ]; then
-            echo "✅ 构建缓存已加载"
+            echo "CACHE_LOADED"
           else
-            echo "⚠️ 缓存不可用，直接构建（清除esbuild缓存）"
+            echo "BUILD_FALLBACK_START"
             cd apps/desktop
             rm -rf node_modules/.cache/esbuild 2>/dev/null
-            pnpm rebuild esbuild 2>/dev/null || echo "esbuild rebuild skipped"
-            pnpm exec vite build 2>&1 || echo "vite build failed"
+            pnpm rebuild esbuild 2>/dev/null || echo "esbuild_rebuild_skipped"
+            pnpm exec vite build 2>&1 || echo "VITE_BUILD_EXIT_CODE: $?"
+            echo "BUILD_FALLBACK_END"
           fi
           echo "STEP_COMPLETED"
 
@@ -132,17 +134,19 @@ jobs:
 
       - name: 获取前端构建缓存
         run: |
+          set +ex
           echo "检查构建缓存..."
           git fetch origin build-cache 2>/dev/null || echo "fetch failed"
           git checkout origin/build-cache -- apps/desktop/build/ 2>/dev/null || echo "checkout failed"
           if [ -f apps/desktop/build/index.html ]; then
-            echo "✅ 构建缓存已加载"
+            echo "CACHE_LOADED"
           else
-            echo "⚠️ 缓存不可用，直接构建（清除esbuild缓存）"
+            echo "BUILD_FALLBACK_START"
             cd apps/desktop
             rm -rf node_modules/.cache/esbuild 2>/dev/null
-            pnpm rebuild esbuild 2>/dev/null || echo "esbuild rebuild skipped"
-            pnpm exec vite build 2>&1 || echo "vite build failed"
+            pnpm rebuild esbuild 2>/dev/null || echo "esbuild_rebuild_skipped"
+            pnpm exec vite build 2>&1 || echo "VITE_BUILD_EXIT_CODE: $?"
+            echo "BUILD_FALLBACK_END"
           fi
           echo "STEP_COMPLETED"
 
