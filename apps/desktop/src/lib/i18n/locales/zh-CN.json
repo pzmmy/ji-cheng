@@ -600,5 +600,17 @@
 	"forge.issue.description": "描述",
 	"forge.issue.comments": "{count} 条评论",
 	"forge.issue.created": "创建于",
-	"forge.issue.updated": "更新于"
+	"forge.issue.updated": "更新于",
+	"settings.sshKeys": "SSH 密钥",
+	"settings.sshKeysDesc": "管理 SSH 公钥以安全连接 Gitee/GitHub",
+	"settings.sshKeyFound": "已找到 SSH 公钥",
+	"settings.sshKeyNotFound": "未找到 SSH 公钥",
+	"settings.sshKeyGenerateStep1": "步骤1：打开终端",
+	"settings.sshKeyGenerateStep2a": "步骤2：运行以下命令（Windows）",
+	"settings.sshKeyGenerateStep2b": "步骤2：运行以下命令（Linux/Mac）",
+	"settings.sshKeyGenerateStep3": "步骤3：复制输出的公钥",
+	"settings.sshKeyCopy": "复制公钥",
+	"settings.sshKeyCopied": "已复制！",
+	"settings.sshKeyAddToGitee": "添加到 Gitee",
+	"settings.sshKeyAddToGithub": "添加到 GitHub"
 }
