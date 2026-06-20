@@ -77,8 +77,7 @@ fn match_host_to_accounts_custom_host(host: &str, accounts: &[ForgeUser]) -> Opt
             .custom_host()
             .as_deref()
             .is_some_and(|custom_host| custom_host_matches_repository_host(host, custom_host)),
-        ForgeUser::Gitee(ge_account) => ge_account
-            .custom_host()
+        ForgeUser::Gitee(_ge_account) => None::<String>
             .as_deref()
             .is_some_and(|custom_host| custom_host_matches_repository_host(host, custom_host)),
     });

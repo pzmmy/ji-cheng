@@ -484,7 +484,7 @@ pub struct CreatePullRequestParams<'a> {
     pub body: &'a str,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AuthenticatedUser {
     pub username: String,
     pub avatar_url: Option<String>,
@@ -492,7 +492,7 @@ pub struct AuthenticatedUser {
     pub email: Option<String>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GiteeUser {
     pub id: i64,
     pub login: String,
@@ -502,7 +502,7 @@ pub struct GiteeUser {
     pub is_bot: bool,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GiteeLabel {
     pub name: String,
 }
@@ -537,7 +537,7 @@ pub struct GiteeIssueUser {
 
 // ---- End Issue types ----
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GiteeProject {
     pub id: i64,
     pub full_name: String,
@@ -546,14 +546,14 @@ pub struct GiteeProject {
     pub permissions: Option<GiteeProjectPermissions>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GiteeProjectPermissions {
     pub admin: bool,
     pub push: bool,
     pub pull: bool,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GiteePr {
     pub html_url: String,
     pub number: i64,
@@ -573,7 +573,7 @@ pub struct GiteePr {
     pub merge_status: Option<String>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GiteePrUser {
     pub id: i64,
     pub login: String,
@@ -582,7 +582,7 @@ pub struct GiteePrUser {
     pub avatar_url: Option<String>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GiteePrBranch {
     pub label: String,
     pub ref_field: String,
@@ -590,7 +590,7 @@ pub struct GiteePrBranch {
     pub repo: Option<GiteePrRepo>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GiteePrRepo {
     pub id: i64,
     pub full_name: String,
@@ -697,6 +697,7 @@ impl From<ApiPrLabel> for GiteeLabel {
 
 impl From<ApiPullRequest> for GiteePr {
     fn from(pr: ApiPullRequest) -> Self {
+        let head_sha = pr.head.sha.clone();
         GiteePr {
             html_url: pr.html_url,
             number: pr.number,
@@ -712,7 +713,7 @@ impl From<ApiPullRequest> for GiteePr {
             updated_at: pr.updated_at,
             merged_at: pr.merged_at,
             closed_at: pr.closed_at,
-            sha: pr.head.sha,
+            sha: head_sha,
             merge_status: pr.merge_status,
         }
     }

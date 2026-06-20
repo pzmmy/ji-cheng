@@ -108,6 +108,12 @@ pub fn get_review_template_functions(forge_name: &ForgeName) -> ReviewTemplateFu
             is_valid_review_template_path: is_valid_review_template_path_azure,
             supported_template_directories: &[SupportedTemplateDirectory::ForgeRoot],
         },
+        ForgeName::Gitee => ReviewTemplateFunctions {
+            is_review_template: is_review_template_bitbucket,
+            get_root: get_bitbucket_directory_path,
+            is_valid_review_template_path: is_valid_review_template_path_bitbucket,
+            supported_template_directories: &[SupportedTemplateDirectory::ForgeRoot],
+        },
     }
 }
 
@@ -666,6 +672,9 @@ pub async fn check_forge_account_is_valid(
             but_gitee::check_credentials(&preferred_account, storage)
                 .await
                 .map(Into::into)
+        }
+        ForgeName::Bitbucket | ForgeName::Azure => {
+            Ok(ForgeAccountValidity::NoCredentials)
         }
     }
 }
