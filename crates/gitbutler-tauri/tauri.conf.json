@@ -34,9 +34,9 @@
 				"preRemoveScript": "rpm-preremove.sh"
 			},
 			"deb": {
-				"depends": ["libwebkit2gtk-4.1-0", "libgtk-3-0"],
+				"depends": ["libwebkit2gtk-4.1-0", "libgtk-3-0", "libayatana-appindicator3-1"],
 				"files": {
-					"/usr/share/metainfo/com.gitbutler.gitbutler.metainfo.xml": "com.gitbutler.gitbutler.metainfo.xml"
+					"/usr/share/metainfo/com.pzmmy.jicheng.metainfo.xml": "com.gitbutler.gitbutler.metainfo.xml"
 				}
 			}
 		}
