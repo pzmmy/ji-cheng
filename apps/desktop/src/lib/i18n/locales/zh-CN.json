@@ -64,6 +64,8 @@
 	"onboarding.clone.cloning": "正在克隆…",
 	"onboarding.clone.retry": "重新克隆",
 	"onboarding.clone.cloneButton": "克隆",
+	"onboarding.clone.sshHintTitle": "SSH 推荐",
+	"onboarding.clone.sshHintBody": "建议使用 <b>SSH 协议</b> 克隆仓库，避免每次操作输入密码。<br/>如果尚未配置 SSH 密钥，请前往 <b>设置 → 集成 → SSH 密钥</b> 查看指引。",
 	"onboarding.clone.validationError": "请同时填写仓库地址和克隆目标位置",
 	"onboarding.projectConnect.connect": "连接",
 	"onboarding.projectConnect.createOrgProject": "创建组织项目",

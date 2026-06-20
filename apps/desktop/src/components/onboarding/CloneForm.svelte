@@ -12,6 +12,7 @@
 	import { inject } from "@gitbutler/core/context";
 	import { persisted } from "@gitbutler/shared/persisted";
 	import { Button, InfoMessage, type MessageStyle, Spacer, Textbox } from "@gitbutler/ui";
+	import { Icon } from "@gitbutler/ui";
 
 	import * as Sentry from "@sentry/sveltekit";
 	import { onMount } from "svelte";
@@ -28,6 +29,19 @@
 	let repositoryUrl = $state("");
 	let targetDirPath = $state("");
 	let savedTargetDirPath = persisted("", "clone_targetDirPath");
+
+	// Forge detection
+	const repoInfo = $derived(parseRemoteUrl(repositoryUrl));
+	const forgeType = $derived.by(() => {
+		if (!repoInfo) return null;
+		const domain = repoInfo.domain?.toLowerCase() || "";
+		if (domain.includes("gitee.com")) return "gitee";
+		if (domain.includes("github.com")) return "github";
+		if (domain.includes("gitlab.com")) return "gitlab";
+		return null;
+	});
+	const isHttps = $derived(repoInfo?.protocol === "https");
+	const needsSshHint = $derived(!!forgeType && !!isHttps);
 
 	onMount(async () => {
 		if ($savedTargetDirPath) {
@@ -117,6 +131,30 @@
 <SettingsSection>
 	<Textbox label={t('onboarding.clone.urlLabel')} bind:value={repositoryUrl} />
 
+	{#if forgeType}
+		<div class="clone__forge-badge">
+			<span class="clone__forge-badge-icon">
+				{forgeType === "gitee" ? "🇨🇳" : forgeType === "github" ? "🐙" : "🦊"}
+			</span>
+			<span class="clone__forge-badge-text">
+				{forgeType === "gitee" ? "Gitee" : forgeType === "github" ? "GitHub" : "GitLab"} {repoInfo?.owner}/{repoInfo?.name}
+			</span>
+		</div>
+	{/if}
+
+	{#if needsSshHint}
+		<div class="clone__ssh-hint">
+			<InfoMessage style="info" filled outlined={false}>
+				{#snippet title()}
+					{t('onboarding.clone.sshHintTitle')}
+				{/snippet}
+				{#snippet content()}
+					<p>{@html t('onboarding.clone.sshHintBody')}</p>
+				{/snippet}
+			</InfoMessage>
+		</div>
+	{/if}
+
 	<div class="clone__field repositoryTargetPath">
 		<Textbox
 			label={t('onboarding.clone.targetDirLabel')}
@@ -201,5 +239,24 @@
 
 	.clone__info-message {
 		margin-bottom: 20px;
+	}
+
+	.clone__forge-badge {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		margin-top: 8px;
+		padding: 6px 12px;
+		background: var(--bg-mute);
+		border-radius: var(--radius-m);
+		font-size: 13px;
+	}
+
+	.clone__forge-badge-text {
+		color: var(--text-2);
+	}
+
+	.clone__ssh-hint {
+		margin-top: 12px;
 	}
 </style>

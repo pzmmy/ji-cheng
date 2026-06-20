@@ -64,6 +64,8 @@
 	"onboarding.clone.cloning": "Cloning..",
 	"onboarding.clone.retry": "Retry clone",
 	"onboarding.clone.cloneButton": "Clone",
+	"onboarding.clone.sshHintTitle": "SSH recommended",
+	"onboarding.clone.sshHintBody": "We recommend using <b>SSH protocol</b> for cloning to avoid entering credentials each time.<br/>If you haven't set up an SSH key yet, go to <b>Settings → Integrations → SSH Keys</b>.",
 	"onboarding.clone.validationError": "You must add both a repository URL and target directory.",
 	"onboarding.projectConnect.connect": "Connect",
 	"onboarding.projectConnect.createOrgProject": "Create organization project",
