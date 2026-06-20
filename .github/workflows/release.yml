@@ -104,6 +104,7 @@ jobs:
             详见 [CHANGELOG](https://github.com/pzmmy/ji-cheng/releases/tag/${{ github.ref_name }})
           releaseDraft: true
           prerelease: false
+          args: "--verbose"
 
   build-windows:
     name: Windows (MSI)
