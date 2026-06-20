@@ -72,12 +72,14 @@ jobs:
           set -o pipefail
           pnpm --filter @gitbutler/desktop exec vite build 2>&1 | tee /tmp/vite-build.log
 
-      - name: 上传构建日志
+      - name: 读取构建日志
         if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: vite-build-log-${{ runner.os }}
-          path: /tmp/vite-build.log
+        run: |
+          echo "::group::Vite Build Error Log"
+          head -100 /tmp/vite-build.log 2>/dev/null
+          echo "--- log size ---"
+          wc -c /tmp/vite-build.log 2>/dev/null
+          echo "::endgroup::"
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
@@ -137,12 +139,14 @@ jobs:
           set -o pipefail
           pnpm --filter @gitbutler/desktop exec vite build 2>&1 | tee /tmp/vite-build.log
 
-      - name: 上传构建日志
+      - name: 读取构建日志
         if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: vite-build-log-${{ runner.os }}
-          path: /tmp/vite-build.log
+        run: |
+          echo "::group::Vite Build Error Log"
+          head -100 /tmp/vite-build.log 2>/dev/null
+          echo "--- log size ---"
+          wc -c /tmp/vite-build.log 2>/dev/null
+          echo "::endgroup::"
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
