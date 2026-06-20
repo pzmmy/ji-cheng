@@ -67,22 +67,8 @@ jobs:
       - name: SvelteKit 同步
         run: pnpm --filter @gitbutler/desktop exec svelte-kit sync
 
-      - name: Vite 构建
-        run: |
-          set -o pipefail
-          pnpm --filter @gitbutler/desktop exec vite build 2>&1 | tee /tmp/vite-build.log
-
-      - name: 读取构建日志
-        if: failure()
-        run: |
-          LOG=/tmp/vite-build.log
-          if [ -f "$LOG" ]; then
-            echo "::group::Vite Build Error"
-            head -30 "$LOG"
-            echo "::endgroup::"
-          else
-            echo "::error::No vite build log file found"
-          fi
+      - name: 构建前端
+        run: pnpm --filter @gitbutler/desktop exec vite build
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
@@ -137,22 +123,8 @@ jobs:
       - name: SvelteKit 同步
         run: pnpm --filter @gitbutler/desktop exec svelte-kit sync
 
-      - name: Vite 构建
-        run: |
-          set -o pipefail
-          pnpm --filter @gitbutler/desktop exec vite build 2>&1 | tee /tmp/vite-build.log
-
-      - name: 读取构建日志
-        if: failure()
-        run: |
-          LOG=/tmp/vite-build.log
-          if [ -f "$LOG" ]; then
-            echo "::group::Vite Build Error"
-            head -30 "$LOG"
-            echo "::endgroup::"
-          else
-            echo "::error::No vite build log file found"
-          fi
+      - name: 构建前端
+        run: pnpm --filter @gitbutler/desktop exec vite build
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0

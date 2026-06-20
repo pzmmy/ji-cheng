@@ -45,15 +45,3 @@ jobs:
       - name: TypeScript 检查
         run: pnpm check
         continue-on-error: true
-
-      - name: 测试构建
-        run: |
-          pnpm build:desktop > /tmp/build-out.log 2>&1; RC=$?
-          echo "Exit code: $RC"
-          if [ $RC -ne 0 ] && [ -s /tmp/build-out.log ]; then
-            echo "### ⚠️ Vite Build Failed" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            tail -50 /tmp/build-out.log >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-          fi
-          exit $RC

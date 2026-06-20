@@ -36,6 +36,7 @@ export enum DeepSeekModelName {
 	Chat = "deepseek-chat",
 	Reasoner = "deepseek-reasoner",
 }
+}
 
 // https://help.aliyun.com/zh/model-studio/getting-started/models
 export enum TongyiQwenModelName {

@@ -540,7 +540,24 @@
 					placeholder={t('aiSettings.apiKeyPlaceholder')}
 				/>
 
-				<Textbox label={t("settings.model")} bind:value={deepSeekModel} placeholder="deepseek-chat" />
+				<Select
+					value={deepSeekModel}
+					options={[
+						{ value: DeepSeekModelName.Chat, label: "DeepSeek Chat" },
+						{ value: DeepSeekModelName.Reasoner, label: "DeepSeek Reasoner" },
+					]}
+					label={t("settings.modelVersion")}
+					wide
+					onselect={(value) => {
+						deepSeekModel = value as DeepSeekModelName;
+					}}
+				>
+					{#snippet itemSnippet({ item, highlighted })}
+						<SelectItem selected={item.value === deepSeekModel} {highlighted}>
+							{item.label}
+						</SelectItem>
+					{/snippet}
+				</Select>
 			</CardGroup.Item>
 		{/if}
 
