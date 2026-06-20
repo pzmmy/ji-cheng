@@ -66,10 +66,17 @@ jobs:
 
       - name: 获取前端构建缓存
         run: |
-          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/pzmmy/ji-cheng.git
-          git fetch origin build-cache
-          git checkout origin/build-cache -- apps/desktop/build/
-          ls apps/desktop/build/index.html && echo "✅ 构建缓存已加载"
+          echo "检查构建缓存..."
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/pzmmy/ji-cheng/contents/apps/desktop/build/index.html?ref=build-cache")
+          echo "API状态: $STATUS"
+          if [ "$STATUS" = "200" ]; then
+            echo "✅ 构建缓存存在"
+          else
+            echo "⚠️ 构建缓存不可用，回退到本地构建"
+            cd apps/desktop && pnpm exec vite build 2>&1
+          fi
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
@@ -123,10 +130,17 @@ jobs:
 
       - name: 获取前端构建缓存
         run: |
-          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/pzmmy/ji-cheng.git
-          git fetch origin build-cache
-          git checkout origin/build-cache -- apps/desktop/build/
-          ls apps/desktop/build/index.html && echo "✅ 构建缓存已加载"
+          echo "检查构建缓存..."
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/pzmmy/ji-cheng/contents/apps/desktop/build/index.html?ref=build-cache")
+          echo "API状态: $STATUS"
+          if [ "$STATUS" = "200" ]; then
+            echo "✅ 构建缓存存在"
+          else
+            echo "⚠️ 构建缓存不可用，回退到本地构建"
+            cd apps/desktop && pnpm exec vite build 2>&1
+          fi
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
