@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  issues: write
 
 env:
   CI: true
@@ -73,7 +72,7 @@ jobs:
           if [ -f apps/desktop/build/index.html ]; then
             echo "✅ 构建缓存已加载"
           else
-            echo "❌ 缓存不可用"
+            echo "❌ 缓存不可用，直接构建"
             cd apps/desktop
             rm -rf node_modules/.cache/esbuild 2>/dev/null
             pnpm rebuild esbuild 2>/dev/null || true
@@ -81,27 +80,25 @@ jobs:
           fi
 
       - name: 构建 Tauri 应用
-        run: |
-          cd apps/desktop
-          npx tauri build --config ../../crates/gitbutler-tauri/tauri.conf.release.json 2>/tmp/tauri-errors.txt
-          RC=$?
-          echo "TAURI_EXIT: $RC"
-          echo "=== Last 30 lines of stderr ==="
-          tail -30 /tmp/tauri-errors.txt
-          exit $RC
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_CONFIG: |
+            {
+              "bundle": {
+                "active": true,
+                "targets": ["appimage", "deb"]
+              }
+            }
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "纪程 v${{ github.ref_name }}"
+          releaseBody: |
+            ## 纪程 ${{ github.ref_name }}
 
-      - name: 上传 Tauri 编译日志
-        if: failure()
-        run: |
-          echo "Tauri build failed. Creating diagnostic issue..."
-          if [ -f /tmp/tauri-errors.txt ]; then
-            ERRORS=$(head -50 /tmp/tauri-errors.txt | python3 -c "import json,sys;print(json.dumps(sys.stdin.read()))")
-            curl -s -X POST \
-              -H "Authorization: token $GITHUB_TOKEN" \
-              -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/pzmmy/ji-cheng/issues" \
-              -d "{\"title\":\"Release build error $(date +%H:%M)\",\"body\":\"\`\`\`\\n$ERRORS\\n\`\`\`\"}"
-          fi
+            为中文开发者打造的 Git 客户端（基于 GitButler）。
+          releaseDraft: true
+          prerelease: false
 
   build-windows:
     name: Windows (MSI)
@@ -132,15 +129,11 @@ jobs:
           echo "检查构建缓存..."
           git fetch origin build-cache 2>/dev/null || echo "fetch failed"
           git checkout origin/build-cache -- apps/desktop/build/ 2>/dev/null || echo "checkout failed"
-          if [ -f apps/desktop/build/index.html ]; then
-            echo "✅ 构建缓存已加载"
-          else
-            echo "❌ 缓存不可用"
-            cd apps/desktop
-            rm -rf node_modules/.cache/esbuild 2>/dev/null
-            pnpm rebuild esbuild 2>/dev/null || true
-            pnpm exec vite build 2>&1
-          fi
+          if exist "apps/desktop/build/index.html" (
+            echo ✅ 构建缓存已加载
+          ) else (
+            echo ❌ 缓存不可用
+          )
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
@@ -148,8 +141,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_CONFIG: |
             {
-              "identifier": "com.pzmmy.jicheng",
-              "productName": "纪程",
               "bundle": {
                 "active": true,
                 "targets": ["msi"]
@@ -162,8 +153,5 @@ jobs:
             ## 纪程 ${{ github.ref_name }}
 
             为中文开发者打造的 Git 客户端（基于 GitButler）。
-
-            ### 主要变更
-            详见 [CHANGELOG](https://github.com/pzmmy/ji-cheng/releases/tag/${{ github.ref_name }})
           releaseDraft: true
           prerelease: false
