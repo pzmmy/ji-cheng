@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 env:
   CI: true
@@ -91,10 +92,16 @@ jobs:
 
       - name: 上传 Tauri 编译日志
         if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: tauri-errors-linux
-          path: /tmp/tauri-errors.txt
+        run: |
+          echo "Tauri build failed. Creating diagnostic issue..."
+          if [ -f /tmp/tauri-errors.txt ]; then
+            ERRORS=$(head -50 /tmp/tauri-errors.txt | python3 -c "import json,sys;print(json.dumps(sys.stdin.read()))")
+            curl -s -X POST \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/pzmmy/ji-cheng/issues" \
+              -d "{\"title\":\"Release build error $(date +%H:%M)\",\"body\":\"\`\`\`\\n$ERRORS\\n\`\`\`\"}"
+          fi
 
   build-windows:
     name: Windows (MSI)
