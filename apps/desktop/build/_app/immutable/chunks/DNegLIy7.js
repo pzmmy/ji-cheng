@@ -1,0 +1,6 @@
+import"./Bzak7iHL.js";import{p as c,g as l,b as f,y as g,s as i}from"./DBTPyyER.js";import{p,h as d,r as u,I as h,c as S}from"./DEVj8csf.js";import{B as m}from"./BDg9sZUs.js";function R(t,o){c(o,!0);let e=p(o,"stopPropagation",3,!1),s=u(o,["$$slots","$$events","$$legacy","action","stopPropagation"]),n=g(!1);async function a(r){e()&&r.stopPropagation(),i(n,!0);try{await o.action()}finally{i(n,!1)}}m(t,d({onclick:a,get loading(){return l(n)}},()=>s)),f()}const y="/",$=new h("URLService");class x{constructor(o){this.backend=o}async openExternalUrl(o){try{await this.backend.openExternalUrl(o)}catch(e){if(typeof e=="string"||e instanceof String){const s=`
+                Failed to open link in external browser:
+
+                ${o}
+            `;S({title:"External URL error",message:s,style:"danger"})}throw e}}}const E=new Set(["vscode","vscode-insiders","vscodium","cursor","windsurf","trae","antigravity-ide"]);function A(t){const o=E.has(t.schemeId)?t.searchParams:void 0,e=new URLSearchParams(o).toString(),s=t.path.join(y);let n="";t.line!==void 0&&(n+=`:${t.line}`,t.column!==void 0&&(n+=`:${t.column}`));const a=e?`?${e}`:"";return`${t.schemeId}://file${s}${n}${a}`}export{R as A,$ as U,x as a,A as g};
+//# sourceMappingURL=DNegLIy7.js.map

@@ -1,0 +1,1 @@
+{"version":3,"file":"8.BM52VDJv.js","sources":["../../../../../../src/routes/[projectId]/irc/+page.svelte"],"sourcesContent":["<script lang=\"ts\">\n\timport { page } from \"$app/state\";\n\timport IrcChat from \"$components/irc/IrcChat.svelte\";\n\n\tconst projectId = $derived(page.params.projectId!);\n</script>\n\n<IrcChat {projectId} />\n"],"names":[],"mappings":"gMAAA,kFAOQ"}

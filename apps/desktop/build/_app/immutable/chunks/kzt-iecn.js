@@ -1,0 +1,2 @@
+import{u as f,s as c,g as m,y as C}from"./DBTPyyER.js";import{G as g}from"./DIIFfT_G.js";import{U as p}from"./CV8ZVUJw.js";import{i as a}from"./DEVj8csf.js";function d(){const n=a(p),u=a(g);let t=C(void 0);return f(()=>{u.get("user.email").then(r=>{c(t,r,!0)})}),r=>{var i,s;if(!r)return;const e=n.user;if(!(e!=null&&e.picture))return;const o=r.toLowerCase();if(o===((i=e.email)==null?void 0:i.toLowerCase())||o===((s=m(t))==null?void 0:s.toLowerCase()))return e.picture}}export{d as u};
+//# sourceMappingURL=kzt-iecn.js.map

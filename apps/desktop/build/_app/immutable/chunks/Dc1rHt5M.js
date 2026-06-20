@@ -1,0 +1,2 @@
+import"./Bzak7iHL.js";import{e as u,g as t,r as d,a as g,d as i,h as m}from"./DBTPyyER.js";import{T as v,I as f}from"./BDg9sZUs.js";var h=m('<div class="stack-icon svelte-10ivz9l"><!></div>');function S(n,e){function s(){return e.origin?"home":e.single?"branch":"link"}{let a=i(()=>e.single?"Single branch":"Multiple branches");v(n,{get text(){return t(a)},children:(o,I)=>{var r=h(),l=u(r);{let c=i(s);f(l,{get name(){return t(c)},get size(){return e.size}})}d(r),g(o,r)},$$slots:{default:!0}})}}export{S};
+//# sourceMappingURL=Dc1rHt5M.js.map

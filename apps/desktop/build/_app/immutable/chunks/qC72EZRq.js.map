@@ -1,0 +1,1 @@
+{"version":3,"file":"qC72EZRq.js","sources":["../../../../../../src/lib/utils/sleep.ts"],"sourcesContent":["export async function sleep(ms: number) {\n\treturn await new Promise((resolve) => setTimeout(resolve, ms));\n}\n"],"names":["sleep","ms","resolve"],"mappings":"AAAA,eAAsBA,EAAMC,EAAY,CACvC,OAAO,MAAM,IAAI,QAASC,GAAY,WAAWA,EAASD,CAAE,CAAC,CAC9D"}
