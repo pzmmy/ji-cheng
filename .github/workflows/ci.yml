@@ -50,12 +50,10 @@ jobs:
         run: |
           pnpm build:desktop > /tmp/build-out.log 2>&1; RC=$?
           echo "Exit code: $RC"
-          tail -40 /tmp/build-out.log
+          if [ $RC -ne 0 ] && [ -s /tmp/build-out.log ]; then
+            echo "### ⚠️ Vite Build Failed" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -50 /tmp/build-out.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
           exit $RC
-
-      - name: 上传构建日志
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-error-log
-          path: /tmp/build-out.log
