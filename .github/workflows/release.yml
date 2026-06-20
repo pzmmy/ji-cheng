@@ -68,7 +68,10 @@ jobs:
         run: pnpm --filter @gitbutler/desktop exec svelte-kit sync
 
       - name: 构建前端
-        run: pnpm --filter @gitbutler/desktop exec vite build
+        run: |
+          pnpm --filter @gitbutler/desktop exec vite build 2>&1; RC=$?
+          echo "VITE_EXIT_CODE: $RC"
+          exit $RC
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
@@ -124,7 +127,10 @@ jobs:
         run: pnpm --filter @gitbutler/desktop exec svelte-kit sync
 
       - name: 构建前端
-        run: pnpm --filter @gitbutler/desktop exec vite build
+        run: |
+          pnpm --filter @gitbutler/desktop exec vite build 2>&1; RC=$?
+          echo "VITE_EXIT_CODE: $RC"
+          exit $RC
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
