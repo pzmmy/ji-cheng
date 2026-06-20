@@ -475,6 +475,9 @@ impl GiteeClient {
     }
 
     /// List PR comments
+    /// List all comments on a pull request.
+    ///
+    /// GET /repos/{owner}/{repo}/pulls/{number}/comments
     pub async fn list_pr_comments(
         &self,
         owner: &str,
@@ -503,6 +506,10 @@ impl GiteeClient {
     }
 
     /// Create a comment on a PR
+    /// Create a new comment on a pull request.
+    ///
+    /// POST /repos/{owner}/{repo}/pulls/{number}/comments
+    /// Body: `{"body": "..."}`
     pub async fn create_pr_comment(
         &self,
         owner: &str,
@@ -567,6 +574,7 @@ pub struct GiteeLabel {
 
 // ---- Issue types ----
 
+/// A Gitee issue.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GiteeIssue {
     pub html_url: String,
@@ -611,6 +619,7 @@ pub struct GiteeProjectPermissions {
     pub pull: bool,
 }
 
+/// A Gitee pull request, used for display and review operations.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GiteePr {
     pub html_url: String,
@@ -657,6 +666,7 @@ pub struct GiteePrRepo {
     pub owner: Option<GiteePrUser>,
 }
 
+/// A comment on a Gitee pull request.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GiteePrComment {
     pub id: i64,

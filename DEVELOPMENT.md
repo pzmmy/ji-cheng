@@ -456,27 +456,13 @@ $ pnpm tauri icon path/to/icon.png
 
 ---
 
-## 开发模式 OAuth 登录
-
-默认情况下，你将无法使用 Github/Google 登录纪程，因为基础 URL 不匹配。要实现此功能，请在 `.env.development` 文件中添加（或更新）以下行。如果文件不存在，你需要创建它。
-
-```
-PUBLIC_API_BASE_URL=https://app.gitbutler.com/
-```
-
-桌面前端和本地后端都遵循 `PUBLIC_API_BASE_URL`。如果在调试时需要仅后端的覆盖配置，`GITBUTLER_API_URL` 在 Rust 端仍然具有更高优先级。
-
-当你使用 `pnpm dev:desktop` 启动桌面应用时，Tauri 启动器现在也会将 `apps/desktop/.env`、`.env.local`、`.env.development` 和 `.env.development.local` 加载到 Rust 进程中，因此前端和后端默认看到相同的本地覆盖配置。
-
 ---
 
-## 加入纪程团队
+## 代码清理清单
 
-如果你有兴趣加入我们小而紧密的工程团队，我们目前正在招聘以下岗位：
-
-- [高级 Rust 开发工程师](https://jobs.gitbutler.com/jobs/backend-rust)（旧金山、柏林或远程）
-- [高级 TypeScript 开发工程师](https://jobs.gitbutler.com/jobs/frontend-typescript)（旧金山、柏林或远程）
-- [Gerrit 开发工程师](https://jobs.gitbutler.com/jobs/gerrit-developer)（旧金山、柏林或远程）
+如果你对项目感兴趣，欢迎提交 Issue 或 PR！
+- [GitHub Issues](https://github.com/pzmmy/ji-cheng/issues)
+- [Gitee](https://gitee.com/pzmmy/ji-cheng)
 
 ## 代码清理清单
 
