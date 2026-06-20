@@ -9,7 +9,7 @@
 	import { PROJECTS_SERVICE } from "$lib/project/projectsService";
 	import { OnboardingEvent, POSTHOG_WRAPPER } from "$lib/telemetry/posthog";
 	import { inject } from "@gitbutler/core/context";
-	import { TestId } from "@gitbutler/ui";
+	import { Icon, TestId } from "@gitbutler/ui";
 	import { t } from "$lib/i18n/index.svelte";
 
 	const projectsService = inject(PROJECTS_SERVICE);
@@ -40,6 +40,14 @@
 	async function onCloneProject() {
 		goto("/onboarding/clone");
 	}
+
+	function onConfigureGitee() {
+		goto("/settings");
+	}
+
+	function onConfigureAi() {
+		goto("/settings");
+	}
 </script>
 
 <div class="welcome" data-testid={TestId.WelcomePage}>
@@ -54,7 +62,7 @@
 			/>
 			{#if canAddProjects}
 				<WelcomeAction
-					title="Add local project"
+					title={t('onboarding.welcome.addLocalProject')}
 					loading={newProjectLoading}
 					onclick={onNewProject}
 					dimMessage
@@ -64,16 +72,32 @@
 						{@html newProjectSvg}
 					{/snippet}
 					{#snippet message()}
-						Should be a valid git repository
+						{t('onboarding.welcome.addLocalProjectDesc')}
 					{/snippet}
 				</WelcomeAction>
 			{/if}
-			<WelcomeAction title="Clone repository" onclick={onCloneProject} dimMessage>
+			<WelcomeAction title={t('onboarding.welcome.cloneRepo')} onclick={onCloneProject} dimMessage>
 				{#snippet icon()}
 					{@html cloneRepoSvg}
 				{/snippet}
 				{#snippet message()}
-					Clone a repo using a URL
+					{t('onboarding.welcome.cloneRepoDesc')}
+				{/snippet}
+			</WelcomeAction>
+			<WelcomeAction title={t('onboarding.welcome.configureGitee')} onclick={onConfigureGitee} dimMessage>
+				{#snippet icon()}
+					<Icon name="settings" />
+				{/snippet}
+				{#snippet message()}
+					{t('onboarding.welcome.configureGiteeDesc')}
+				{/snippet}
+			</WelcomeAction>
+			<WelcomeAction title={t('onboarding.welcome.configureAi')} onclick={onConfigureAi} dimMessage>
+				{#snippet icon()}
+					<Icon name="ai" />
+				{/snippet}
+				{#snippet message()}
+					{t('onboarding.welcome.configureAiDesc')}
 				{/snippet}
 			</WelcomeAction>
 		</div>
@@ -83,25 +107,28 @@
 
 	<div class="links">
 		<div class="links__section">
-			<p class="links__title text-14 text-bold">Quick start</p>
+			<p class="links__title text-14 text-bold">{t('onboarding.welcome.quickStart')}</p>
 			<div class="education-links">
 				<IconLink
 					icon="docs"
-					href="https://docs.gitbutler.com/features/virtual-branches/branch-lanes"
+					href="https://pzmmy.github.io/ji-cheng/"
 				>
-					GitButler docs
+					{t('onboarding.welcome.docs')}
 				</IconLink>
 				<IconLink icon="youtube" href="https://www.youtube.com/@gitbutlerapp">
-					Watch tutorials
+					{t('onboarding.welcome.tutorials')}
 				</IconLink>
 			</div>
 		</div>
 		<div class="links__section">
-			<p class="links__title text-14 text-bold">Join our community</p>
+			<p class="links__title text-14 text-bold">{t('onboarding.welcome.joinCommunity')}</p>
 			<div class="community-links">
-				<IconLink icon="discord" href="https://discord.gg/MmFkmaJ42D">Discord</IconLink>
-				<IconLink icon="bluesky" href="https://bsky.app/profile/gitbutler.com">Bluesky</IconLink>
-				<IconLink icon="instagram" href="https://www.instagram.com/gitbutler/">Instagram</IconLink>
+				<IconLink icon="github" href="https://github.com/pzmmy/ji-cheng/issues">
+					{t('onboarding.welcome.githubIssues')}
+				</IconLink>
+				<IconLink icon="link" href="https://gitee.com">
+					{t('onboarding.welcome.gitee')}
+				</IconLink>
 				<IconLink icon="youtube" href="https://www.youtube.com/@gitbutlerapp">YouTube</IconLink>
 			</div>
 		</div>

@@ -1,8 +1,11 @@
 blank_issues_enabled: true
 contact_links:
-  - name: Get help from the community (Discord)
-    url: https://discord.com/invite/MmFkmaJ42D
+  - name: 从社区获取帮助 (GitHub Issues)
+    url: https://github.com/pzmmy/ji-cheng/issues
+    about: 提问并与社区成员讨论
+  - name: Get help from the community (GitHub Issues)
+    url: https://github.com/pzmmy/ji-cheng/issues
     about: Ask questions and discuss with other community members
   - name: Security
-    url: https://gitbutler.com/.well-known/security.txt
-    about: Security sensitive issues should be handled via the instructions in our `security.txt`.
+    url: https://github.com/pzmmy/ji-cheng/security
+    about: 安全问题请通过安全策略页面报告
