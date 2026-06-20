@@ -75,11 +75,14 @@ jobs:
       - name: 读取构建日志
         if: failure()
         run: |
-          echo "::group::Vite Build Error Log"
-          head -100 /tmp/vite-build.log 2>/dev/null
-          echo "--- log size ---"
-          wc -c /tmp/vite-build.log 2>/dev/null
-          echo "::endgroup::"
+          LOG=/tmp/vite-build.log
+          if [ -f "$LOG" ]; then
+            echo "::group::Vite Build Error"
+            head -30 "$LOG"
+            echo "::endgroup::"
+          else
+            echo "::error::No vite build log file found"
+          fi
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
@@ -142,11 +145,14 @@ jobs:
       - name: 读取构建日志
         if: failure()
         run: |
-          echo "::group::Vite Build Error Log"
-          head -100 /tmp/vite-build.log 2>/dev/null
-          echo "--- log size ---"
-          wc -c /tmp/vite-build.log 2>/dev/null
-          echo "::endgroup::"
+          LOG=/tmp/vite-build.log
+          if [ -f "$LOG" ]; then
+            echo "::group::Vite Build Error"
+            head -30 "$LOG"
+            echo "::endgroup::"
+          else
+            echo "::error::No vite build log file found"
+          fi
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
