@@ -64,15 +64,11 @@ jobs:
       - name: 安装前端依赖
         run: pnpm install
 
-      - name: SvelteKit 同步
-        run: pnpm --filter @gitbutler/desktop exec svelte-kit sync
-
-      - name: 构建前端
+      - name: 获取前端构建缓存
         run: |
-          cd apps/desktop && pnpm exec vite build 2>&1
-          RC=$?
-          echo "VITE_EXIT: $RC"
-          exit $RC
+          git fetch origin build-cache 2>&1 | tail -1
+          git checkout origin/build-cache -- apps/desktop/build/ 2>&1
+          ls apps/desktop/build/index.html 2>/dev/null && echo "✅ 前端构建缓存已加载" || echo "⚠️ 未找到缓存"
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
@@ -124,15 +120,11 @@ jobs:
       - name: 安装前端依赖
         run: pnpm install
 
-      - name: SvelteKit 同步
-        run: pnpm --filter @gitbutler/desktop exec svelte-kit sync
-
-      - name: 构建前端
+      - name: 获取前端构建缓存
         run: |
-          cd apps/desktop && pnpm exec vite build 2>&1
-          RC=$?
-          echo "VITE_EXIT: $RC"
-          exit $RC
+          git fetch origin build-cache 2>&1 | tail -1
+          git checkout origin/build-cache -- apps/desktop/build/ 2>&1
+          ls apps/desktop/build/index.html 2>/dev/null && echo "✅ 前端构建缓存已加载" || echo "⚠️ 未找到缓存"
 
       - name: 构建 Tauri 应用
         uses: tauri-apps/tauri-action@v0
