@@ -80,31 +80,21 @@ jobs:
           fi
 
       - name: 构建 Tauri 应用
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAURI_CONFIG: |
-            {
-              "identifier": "com.pzmmy.jicheng",
-              "productName": "纪程",
-              "bundle": {
-                "active": true,
-                "targets": ["appimage", "deb"]
-              }
-            }
+        run: |
+          cd apps/desktop
+          npx tauri build --config ../../crates/gitbutler-tauri/tauri.conf.release.json 2>/tmp/tauri-errors.txt
+          RC=$?
+          echo "TAURI_EXIT: $RC"
+          echo "=== Last 30 lines of stderr ==="
+          tail -30 /tmp/tauri-errors.txt
+          exit $RC
+
+      - name: 上传 Tauri 编译日志
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
-          tagName: ${{ github.ref_name }}
-          releaseName: "纪程 v${{ github.ref_name }}"
-          releaseBody: |
-            ## 纪程 ${{ github.ref_name }}
-
-            为中文开发者打造的 Git 客户端（基于 GitButler）。
-
-            ### 主要变更
-            详见 [CHANGELOG](https://github.com/pzmmy/ji-cheng/releases/tag/${{ github.ref_name }})
-          releaseDraft: true
-          prerelease: false
-          args: "--verbose"
+          name: tauri-errors-linux
+          path: /tmp/tauri-errors.txt
 
   build-windows:
     name: Windows (MSI)
