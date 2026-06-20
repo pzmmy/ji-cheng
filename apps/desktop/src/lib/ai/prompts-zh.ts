@@ -117,6 +117,44 @@ index 1cbfaa2..7aeebcf 100644
 export const ZH_PR_SUMMARY_MAIN_DIRECTIVE =
 	"列出最重要的变更，使用项目符号，省略其他信息。";
 
+/**
+ * AI Code Review prompt template (Chinese).
+ * Sends a git diff to the LLM and requests structured review feedback.
+ */
+export const ZH_AI_REVIEW_PROMPT: Prompt = [
+	{
+		role: MessageRole.System,
+		content: `你是一个资深代码审查专家。请审查以下代码变更（git diff），输出中文评审意见。
+
+严格按以下格式输出，每行一个发现：
+
+如果没有任何问题，只输出一行：✅ 代码质量良好，未发现明显问题。
+
+如果有发现，每条一行，格式：
+[严重等级] 文件名:行号 问题描述
+
+严重等级定义：
+🔴 P0 — 严重问题：功能错误、安全漏洞、性能退化
+🟡 P1 — 一般问题：逻辑不严谨、边界条件遗漏、代码异味
+🟢 P2 — 建议：风格优化、可读性改进、最佳实践
+
+示例：
+🟡 P1 src/utils/typing.ts:42 isArrayOf 函数缺少空数组的单元测试
+🟢 P2 src/utils/typing.ts:10 建议添加 JSDoc 注释说明泛型参数
+
+最后一行空行后输出：---
+评审总结：{一句话总结}（高风险/中风险/低风险）`,
+	},
+	{
+		role: MessageRole.User,
+		content: `请审查以下代码变更：
+
+\`\`\`diff
+%{diff}
+\`\`\``,
+	},
+];
+
 export const ZH_PR_TEMPLATE: Prompt = [
 	{
 		role: MessageRole.System,
