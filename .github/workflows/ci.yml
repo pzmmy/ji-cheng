@@ -37,6 +37,14 @@ jobs:
       - name: 验证 JSON/YAML/Shell
         run: bash scripts/validate-all.sh
 
+  test-shell:
+    name: "Shell 脚本冒烟测试"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell 语法+逻辑测试
+        run: bash scripts/test-shell.sh
+
   smoke-test:
     name: "浏览器冒烟测试"
     runs-on: ubuntu-latest
