@@ -34,7 +34,7 @@ jobs:
 
       - name: 运行测试
         run: |
-          cargo test -p but-gitee 2>&1 | tail -15
+          cargo test -p but-gitee -p but-forge 2>&1 | tail -15
 
       - name: 工作区编译检查
         run: |
