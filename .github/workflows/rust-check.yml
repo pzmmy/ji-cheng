@@ -10,7 +10,7 @@ jobs:
     name: "但-gitee + 但-forge"
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.3
 
       - name: 安装系统依赖
         run: |
