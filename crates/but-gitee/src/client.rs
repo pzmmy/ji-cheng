@@ -542,6 +542,99 @@ pub fn new(access_token: &Sensitive<String>) -> Result<Self> {
         let comment: GiteePrComment = response.json().await?;
         Ok(comment)
     }
+
+    /// Set PR assignees (reviewers).
+    ///
+    /// PUT /repos/{owner}/{repo}/pulls/{number}/assignees
+    /// Body: `{"assignees": ["user1", "user2"]}`
+    pub async fn set_pr_assignees(
+        &self,
+        owner: &str,
+        repo: &str,
+        number: i64,
+        assignees: Vec<String>,
+    ) -> Result<GiteePr> {
+        let url = format!(
+            "{}/repos/{}/{}/pulls/{}/assignees",
+            self.base_url, owner, repo, number
+        );
+        let body = serde_json::json!({ "assignees": assignees });
+        let response = self.client.put(&url).json(&body).send().await?;
+
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!(
+                "Gitee API error (PUT /pulls/{}/assignees): HTTP {} - {}",
+                number,
+                status,
+                text
+            );
+        }
+
+        let pr: GiteePr = response.json().await?;
+        Ok(pr)
+    }
+
+    /// List repository collaborators.
+    ///
+    /// GET /repos/{owner}/{repo}/collaborators
+    pub async fn list_repo_collaborators(
+        &self,
+        owner: &str,
+        repo: &str,
+    ) -> Result<Vec<GiteeUser>> {
+        let url = format!(
+            "{}/repos/{}/{}/collaborators",
+            self.base_url, owner, repo
+        );
+        let response = self.client.get(&url).send().await?;
+
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!(
+                "Gitee API error (GET /repos/{}/{}/collaborators): HTTP {} - {}",
+                owner,
+                repo,
+                status,
+                text
+            );
+        }
+
+        let collaborators: Vec<GiteeUser> = response.json().await?;
+        Ok(collaborators)
+    }
+
+    /// Get PR commits.
+    ///
+    /// GET /repos/{owner}/{repo}/pulls/{number}/commits
+    pub async fn get_pr_commits(
+        &self,
+        owner: &str,
+        repo: &str,
+        number: i64,
+    ) -> Result<Vec<GiteePrCommit>> {
+        let url = format!(
+            "{}/repos/{}/{}/pulls/{}/commits",
+            self.base_url, owner, repo, number
+        );
+        let response = self.client.get(&url).send().await?;
+
+        if !response.status().is_success() {
+            let status = response.status();
+            let text = response.text().await.unwrap_or_default();
+            anyhow::bail!(
+                "Gitee API error (GET /pulls/{}/commits): HTTP {} - {}",
+                number,
+                status,
+                text
+            );
+        }
+
+        let commits: Vec<GiteePrCommit> = response.json().await?;
+        Ok(commits)
+    }
 }
 
 pub struct CreatePullRequestParams<'a> {
@@ -680,6 +773,26 @@ pub struct GiteePrComment {
     pub updated_at: String,
     pub path: Option<String>,
     pub line: Option<i64>,
+}
+
+/// A commit in a Gitee pull request.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GiteePrCommit {
+    pub sha: String,
+    pub commit: GiteeCommitInfo,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GiteeCommitInfo {
+    pub author: GiteeCommitAuthor,
+    pub message: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GiteeCommitAuthor {
+    pub name: String,
+    pub email: String,
+    pub date: String,
 }
 
 // ---- API response deserialization types ----

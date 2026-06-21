@@ -6,8 +6,9 @@ pub mod issues;
 pub mod pr;
 mod project;
 pub use client::{
-    CreatePullRequestParams, GiteeClient, GiteeIssue, GiteeIssueUser, GiteeLabel, GiteePr,
-    GiteePrComment, GiteePrUser, GiteeProject, GiteeUser,
+    CreatePullRequestParams, GiteeClient, GiteeCommitAuthor, GiteeCommitInfo, GiteeIssue,
+    GiteeIssueUser, GiteeLabel, GiteePr, GiteePrComment, GiteePrCommit, GiteePrUser,
+    GiteeProject, GiteeUser,
 };
 pub use project::{GiteeProjectId, fetch_project};
 mod token;
