@@ -120,30 +120,45 @@ export const ZH_PR_SUMMARY_MAIN_DIRECTIVE =
 /**
  * AI Code Review prompt template (Chinese).
  * Sends a git diff to the LLM and requests structured review feedback.
+ *
+ * Guidelines to reduce false positives:
+ * - Only report REAL issues: bugs, security, performance, logic errors
+ * - Do NOT report style preferences, naming suggestions, or missing comments
+ * - Do NOT report "best practice" violations that don't affect correctness
+ * - When unsure, give the code the benefit of the doubt
+ * - Focus on what WILL break, not what COULD be better
  */
 export const ZH_AI_REVIEW_PROMPT: Prompt = [
 	{
 		role: MessageRole.System,
-		content: `你是一个资深代码审查专家。请审查以下代码变更（git diff），输出中文评审意见。
+		content: `你是一个资深代码审查专家。审查以下代码变更，输出中文评审意见。
 
-严格按以下格式输出，每行一个发现：
+核心原则：宁缺毋滥。只报告真正的问题，不要对无害的代码吹毛求疵。
 
-如果没有任何问题，只输出一行：✅ 代码质量良好，未发现明显问题。
+严格按以下格式输出：
+
+如果没有任何必须修复的问题，只输出一行：
+✅ 代码质量良好，未发现必须修复的问题。
 
 如果有发现，每条一行，格式：
 [严重等级] 文件名:行号 问题描述
 
 严重等级定义：
-🔴 P0 — 严重问题：功能错误、安全漏洞、性能退化
-🟡 P1 — 一般问题：逻辑不严谨、边界条件遗漏、代码异味
-🟢 P2 — 建议：风格优化、可读性改进、最佳实践
+🔴 P0 — 必须修复：功能错误、安全漏洞、数据丢失风险
+🟡 P1 — 建议修复：逻辑不严谨、边界条件遗漏、潜在异常
+🟢 P2 — 仅供参考：不会影响功能的轻微问题
 
-示例：
-🟡 P1 src/utils/typing.ts:42 isArrayOf 函数缺少空数组的单元测试
-🟢 P2 src/utils/typing.ts:10 建议添加 JSDoc 注释说明泛型参数
+禁止报告以下内容：
+- 代码风格、命名习惯、缩进格式
+- 缺少注释或文档
+- 可以写得更好但不影响功能的"最佳实践"
+- 测试覆盖率
 
-最后一行空行后输出：---
-评审总结：{一句话总结}（高风险/中风险/低风险）`,
+示例输出：
+🟡 P1 src/user.ts:42 用户输入未转义直接拼入SQL，存在注入风险
+🟢 P2 src/utils.ts:10 变量命名可以更明确，但不影响功能
+
+评审总结：{一句话}（高风险/中风险/低风险）`,
 	},
 	{
 		role: MessageRole.User,

@@ -38,11 +38,11 @@
 
 从 [Releases](https://github.com/pzmmy/ji-cheng/releases) 页面下载：
 
-| 平台 | 格式 |
-|------|------|
-| Linux (Ubuntu/Deepin/UOS) | `.deb` 或 `.AppImage` |
-| Windows | `.msi`（需本地编译） |
-| macOS | `.dmg`（待支持） |
+| 平台 | 格式 | 一键安装 |
+|------|------|----------|
+| Linux (Ubuntu/Deepin/UOS) | `.deb` | `curl -sSL https://git.io/jicheng \| bash` |
+| Windows | `.msi` | 下载后双击安装 |
+| macOS | `.dmg`（待支持） | — |
 
 ### 配置 AI
 

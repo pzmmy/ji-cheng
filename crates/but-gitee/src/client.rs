@@ -20,7 +20,11 @@ pub struct GiteeClient {
 }
 
 impl GiteeClient {
-    pub fn new(access_token: &Sensitive<String>) -> Result<Self> {
+    /// Create a Gitee API client with a personal access token.
+///
+/// Sets up headers for JSON API access (Accept, User-Agent, Authorization).
+/// Base URL defaults to `https://gitee.com/api/v5`.
+pub fn new(access_token: &Sensitive<String>) -> Result<Self> {
         let mut headers = HeaderMap::new();
         headers.insert(
             USER_AGENT,

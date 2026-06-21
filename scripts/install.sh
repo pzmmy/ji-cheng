@@ -1,124 +1,73 @@
-#!/bin/sh
-# GitButler installer bootstrap script
-# This script downloads and runs the GitButler installer binary
+#!/bin/bash
+# 纪程 — 一键安装脚本
+# 自动检测系统架构，下载对应安装包并安装
+# 用法: curl -sSL https://github.com/pzmmy/ji-cheng/releases/latest/download/install.sh | bash
 
-# Wrap everything in main() to protect against partial downloads when
-# executed via `curl | sh`. The shell won't execute until the entire
-# script has been received.
-main() {
-  set -eu
+set -euo pipefail
 
-  # Check for required commands
-  for cmd in curl mktemp grep sed uname chmod tr rm head; do
-      if ! command -v "$cmd" >/dev/null 2>&1; then
-          echo "Error: Required command '$cmd' not found. Please install it and try again." >&2
-          exit 1
-      fi
-  done
+REPO="pzmmy/ji-cheng"
+VERSION="${1:-latest}"
 
-  # Detect OS and architecture
-  OS=$(uname -s | tr '[:upper:]' '[:lower:]')
-  ARCH=$(uname -m)
+echo "🔍 检测系统环境..."
 
-  # Map OS to installer format
-  case "$OS" in
-      "darwin") INSTALLER_OS="macos" ;;
-      "linux") INSTALLER_OS="linux" ;;
-      *)
-          echo "Error: This installer currently only supports macOS and Linux. Your OS: $OS" >&2
-          exit 1
-          ;;
-  esac
+OS="$(uname -s)"
+ARCH="$(uname -m)"
 
-  # Map architecture to installer format
-  case "$ARCH" in
-      "x86_64") INSTALLER_ARCH="x86_64" ;;
-      "arm64"|"aarch64") INSTALLER_ARCH="aarch64" ;;
-      *)
-          echo "Error: Unsupported architecture: $ARCH" >&2
-          exit 1
-          ;;
-  esac
+case "$OS" in
+    Linux)
+        case "$ARCH" in
+            x86_64)  PKG="deb" ;;
+            aarch64) PKG="deb"; echo "⚠️  ARM64 暂未预编译，尝试从源码构建" ;;
+            *)       echo "❌ 不支持的架构: $ARCH"; exit 1 ;;
+        esac
+        ;;
+    Darwin)
+        echo "❌ macOS 暂不支持，请从源码构建"
+        echo "   详见: https://github.com/$REPO"
+        exit 1
+        ;;
+    *)
+        echo "❌ 不支持的系统: $OS"
+        exit 1
+        ;;
+esac
 
-  # Create temp files and setup cleanup
-  # Use explicit templates for portability across GNU/BSD mktemp variants
-  INSTALLER_JSON=$(mktemp "${TMPDIR:-/tmp}/gitbutler-installer-json.XXXXXX")
-  INSTALLER_BIN=$(mktemp "${TMPDIR:-/tmp}/gitbutler-installer-bin.XXXXXX")
-  trap 'rm -f "$INSTALLER_JSON" "$INSTALLER_BIN"' EXIT INT TERM
+echo "📥 下载纪程 v$VERSION ($PKG)..."
+DOWNLOAD_URL="https://github.com/$REPO/releases/$VERSION/download/jicheng_$VERSION_amd64.deb"
+if [ "$VERSION" = "latest" ]; then
+    # Get latest release download URL
+    DOWNLOAD_URL=$(curl -sL "https://api.github.com/repos/$REPO/releases/latest" | grep "browser_download_url.*deb" | head -1 | cut -d'"' -f4)
+    if [ -z "$DOWNLOAD_URL" ]; then
+        echo "❌ 无法获取最新版本下载链接"
+        exit 1
+    fi
+    VERSION=$(echo "$DOWNLOAD_URL" | grep -oP 'v[\d.]+' | head -1)
+fi
 
-  # Fetch installer metadata and validate effective URL
-  INSTALLER_API_URL="https://app.gitbutler.com/installers/info/$INSTALLER_OS/$INSTALLER_ARCH"
-  echo "Fetching installer information..."
+TMP_DEB=$(mktemp /tmp/jicheng.XXXXXX.deb)
+trap 'rm -f "$TMP_DEB"' EXIT
 
-  EFFECTIVE_URL=$(curl --fail --silent --show-error --location --max-redirs 5 --max-time 300 \
-      -o "$INSTALLER_JSON" -w '%{url_effective}' "$INSTALLER_API_URL") || {
-      echo "Error: Failed to fetch installer information from $INSTALLER_API_URL" >&2
-      exit 1
-  }
+curl -sSL "$DOWNLOAD_URL" -o "$TMP_DEB"
+echo "✅ 下载完成 ($(du -h "$TMP_DEB" | cut -f1))"
 
-  case "$EFFECTIVE_URL" in
-      https://app.gitbutler.com/*)
-          : # Valid - stayed on trusted domain
-          ;;
-      *)
-          echo "Error: API was redirected to an untrusted URL: $EFFECTIVE_URL" >&2
-          exit 1
-          ;;
-  esac
+echo "📦 安装..."
+if command -v apt &>/dev/null; then
+    sudo apt install -y "$TMP_DEB"
+elif command -v dpkg &>/dev/null; then
+    sudo dpkg -i "$TMP_DEB"
+    sudo apt-get install -f -y 2>/dev/null || true
+else
+    echo "❌ 未检测到 apt/dpkg 包管理器"
+    echo "   请手动安装: $DOWNLOAD_URL"
+    exit 1
+fi
 
-  # Parse installer URL from JSON
-  INSTALLER_URL=$(grep -o '"url":"[^"]*"' "$INSTALLER_JSON" | head -1 | sed 's/"url":"\(.*\)"/\1/')
-
-  if [ -z "$INSTALLER_URL" ]; then
-      echo "Error: Failed to parse installer URL from API response" >&2
-      exit 1
-  fi
-
-  # Validate URL from API is trusted
-  case "$INSTALLER_URL" in
-      https://releases.gitbutler.com/*)
-          : # Valid
-          ;;
-      *)
-          echo "Error: Installer URL is not from a trusted GitButler domain: $INSTALLER_URL" >&2
-          exit 1
-          ;;
-  esac
-
-  # Download installer and validate effective URL
-  echo "Downloading installer..."
-
-  EFFECTIVE_DOWNLOAD_URL=$(curl --fail --silent --show-error --location --max-redirs 5 --max-time 120 \
-      -o "$INSTALLER_BIN" -w '%{url_effective}' "$INSTALLER_URL") || {
-      echo "Error: Failed to download installer from $INSTALLER_URL" >&2
-      exit 1
-  }
-
-  case "$EFFECTIVE_DOWNLOAD_URL" in
-      https://releases.gitbutler.com/*)
-          : # Valid - stayed on trusted domain
-          ;;
-      *)
-          echo "Error: Download was redirected to an untrusted URL: $EFFECTIVE_DOWNLOAD_URL" >&2
-          exit 1
-          ;;
-  esac
-
-  # Verify downloaded installer
-  [ -s "$INSTALLER_BIN" ] || {
-      echo "Error: Downloaded installer is empty" >&2
-      exit 1
-  }
-
-  chmod +x "$INSTALLER_BIN" || {
-      echo "Error: Failed to make installer executable" >&2
-      exit 1
-  }
-
-  # Run installer with forwarded arguments
-  exec "$INSTALLER_BIN" "$@"
-}
-
-# Entry point — must be the last line so the shell only executes after the
-# entire script has been downloaded.
-main "$@"
+echo ""
+echo "✅ 纪程 $VERSION 安装成功！"
+echo "   在应用菜单中搜索「纪程」启动"
+echo "   首次使用请配置:"
+echo "   • DeepSeek API Key: https://platform.deepseek.com"
+echo "   • Gitee Token: https://gitee.com/profile/personal_access_tokens"
+echo "   • SSH Key: 设置 → 集成 → SSH 密钥"
+echo ""
+echo "📖 使用指南: https://github.com/$REPO"
