@@ -2,7 +2,7 @@
 	"productName": "纪程",
 	"identifier": "com.pzmmy.jicheng",
 	"build": {
-		"beforeBuildCommand": "bash ./crates/gitbutler-tauri/tauri-before-build-command.sh production"
+		"beforeBuildCommand": ""
 	},
 	"bundle": {
 		"active": true,
@@ -13,7 +13,12 @@
 			"icons/release/icon.icns",
 			"icons/release/icon.ico"
 		],
-		"externalBin": []
+		"externalBin": [],
+		"windows": {
+			"wix": {
+				"language": "zh-CN"
+			}
+		}
 	},
 	"plugins": {
 		"updater": {
