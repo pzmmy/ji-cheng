@@ -8,7 +8,7 @@ mod project;
 pub use client::{
     CreatePullRequestParams, GiteeClient, GiteeCommitAuthor, GiteeCommitInfo, GiteeIssue,
     GiteeIssueUser, GiteeLabel, GiteePr, GiteePrComment, GiteePrCommit, GiteePrUser,
-    GiteeProject, GiteeUser,
+    GiteePrBranch, GiteeProject, GiteeUser,
 };
 pub use project::{GiteeProjectId, fetch_project};
 mod token;
