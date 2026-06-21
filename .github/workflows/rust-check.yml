@@ -32,6 +32,10 @@ jobs:
           cargo check -p but-gitee -p but-forge 2>&1 | tee /tmp/cargo-errors.txt
           echo "EXIT_CODE: ${PIPESTATUS[0]}"
 
+      - name: 运行测试
+        run: |
+          cargo test -p but-gitee 2>&1 | tail -15
+
       - name: 上传编译日志
         if: failure()
         uses: actions/upload-artifact@v4

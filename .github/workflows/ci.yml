@@ -29,6 +29,14 @@ jobs:
           print(f'OK: {len(ek)} keys match')
           "
 
+  validate-config:
+    name: "验证配置文件"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 验证 JSON/YAML/Shell
+        run: bash scripts/validate-all.sh
+
   build-check:
     name: "构建检查"
     runs-on: ubuntu-latest
