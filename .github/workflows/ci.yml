@@ -29,6 +29,14 @@ jobs:
           print(f'OK: {len(ek)} keys match')
           "
 
+  validate-integrity:
+    name: "项目完整性检查"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 完整性检查
+        run: python3 scripts/check-project-integrity.py
+
   validate-config:
     name: "验证配置文件"
     runs-on: ubuntu-latest
