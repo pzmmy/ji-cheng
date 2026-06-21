@@ -1,13 +1,10 @@
 #!/bin/bash
-# GitHub → Gitee 镜像同步脚本
+# GitHub → Gitee 镜像同步
+# 用途: 将 GitHub 仓库完整镜像到 Gitee（包含所有分支和标签），并验证推送完整性
 # 用法: ./scripts/mirror-to-gitee.sh <github-owner/repo> <gitee-owner/repo> [gitee-token]
-#
-# 示例: ./scripts/mirror-to-gitee.sh gitbutlerapp/gitbutler pzmmy/ji-cheng ghp_xxxxx
-#
-# 过程:
-#   1. git clone --mirror 从 GitHub
-#   2. 推送到 Gitee（--mirror）
-#   3. 验证推送完整性（对比 ref 数量）
+# 过程: git clone --mirror → 清理上游 CI 工作流 → 推送 Gitee → 对比 ref 数量验证
+# 示例:
+#   ./scripts/mirror-to-gitee.sh gitbutlerapp/gitbutler pzmmy/ji-cheng ghp_xxxxx
 
 set -euo pipefail
 

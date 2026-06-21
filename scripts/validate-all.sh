@@ -1,6 +1,8 @@
 #!/bin/bash
-# 验证所有配置文件格式正确
-# 在 CI 中运行，确保 JSON/YAML/Shell 语法正确
+# 配置文件格式验证
+# 用途: 在 CI 中验证 JSON/YAML/Shell 语法 + 翻译 key 一致性
+# 用法: ./scripts/validate-all.sh
+# 示例: bash scripts/validate-all.sh
 
 set -euo pipefail
 FAIL=0

@@ -1,16 +1,9 @@
 #!/usr/bin/env bash
-#
-# Repackages a .deb file to include a 'but' symlink pointing to 'gitbutler-tauri'
-# in /usr/bin/. The symlink is added as a proper tracked file in the package so
-# dpkg knows about it.
-#
-# We need this as Tauri currently resolves symlinks when bundling, so we can't
-# easily add in a symlink with Tauri-native packaging short of using a
-# postinstall script. That solution is itself not great as then the package
-# manager can't track the symlink, so it's better for everyone to just add it
-# into the package itself.
-#
-# The .deb file is modified in place.
+# 在 deb 包中注入 but → gitbutler-tauri 软链接
+# 用途: 重新打包 .deb，在 /usr/bin/ 下添加 but → gitbutler-tauri 符号链接
+#       使 dpkg 能够追踪该链接（避免 postinstall 脚本方案无法被包管理器追踪的问题）
+# 用法: ./scripts/add-but-symlink-to-deb.sh <path-to-deb>
+# 示例: ./scripts/add-but-symlink-to-deb.sh target/release/bundle/deb/jicheng_0.1.0_amd64.deb
 
 set -euo pipefail
 

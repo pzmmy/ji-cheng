@@ -1,4 +1,10 @@
 #!/bin/bash
+# 安装 Debian 最小构建依赖
+# 用途: 安装编译 but-server 和 CLI 所需的系统库
+# 用法: ./scripts/install-minimal-debian-dependencies.sh [apt-cache-dir]
+# 示例:
+#   ./scripts/install-minimal-debian-dependencies.sh
+#   ./scripts/install-minimal-debian-dependencies.sh /tmp/apt-cache
 
 set -eu -o pipefail
 

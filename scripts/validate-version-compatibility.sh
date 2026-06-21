@@ -1,11 +1,9 @@
 #!/bin/bash
-# Validate that two versions of the CLI are compatible with a simple smoke test.
-#
-# We make few assertions here, we rely mostly on commands exiting non-zero if something goes wrong.
-#
-# Note that every `but` command is piping to cat. This is a li'l backwards compatible hack to ensure
-# that we don't get any prompts, as the pipe is detected as not being a tty even in the very
-# earliest versions of the CLI.
+# CLI 版本兼容性验证
+# 用途: 通过冒烟测试验证新旧版本 CLI 之间的兼容性
+#       测试升级、降级流程，验证版本号正确写入 commit message
+# 用法: ./scripts/validate-version-compatibility.sh <old_version> <new_version>
+# 示例: ./scripts/validate-version-compatibility.sh 0.1.0 0.2.0
 
 set -o errexit
 set -o pipefail

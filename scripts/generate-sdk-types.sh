@@ -1,4 +1,8 @@
 #!/bin/bash
+# 生成 SDK TypeScript 类型声明
+# 用途: 运行 pnpm format 格式化代码，检查 SDK 类型是否最新
+# 用法: 在 CI 中执行；若检测到未提交的格式化变更则报错退出
+# 示例: ./scripts/generate-sdk-types.sh
 
 set -eu -o pipefail
 

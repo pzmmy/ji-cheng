@@ -2,12 +2,9 @@
 """
 验证纪程项目和 Release 配置的完整性。
 
-检查项：
-1. release.yml 中 build-cache 分支引用是否正确
-2. release.yml 中 tauri.conf.release.json 路径是否正确
-3. .env.example 包含所有必需的 PUBLIC_ 变量
-4. README 包含正确的 Release 链接
-5. 所有必需的源码目录存在
+用途: 检查目录结构、必需文件、Release 配置、环境变量、翻译 key 一致性、Rust 工作区
+用法: python3 scripts/check-project-integrity.py
+示例: ./scripts/check-project-integrity.py
 """
 
 import os

@@ -1,3 +1,8 @@
+<!--
+  SSH 密钥管理组件
+  用途: 自动检测本地 SSH 公钥（id_rsa / id_ed25519 / id_ecdsa），提供复制和添加到 Gitee/GitHub 的功能
+  流程: 挂载时自动检测 → 显示密钥内容或引导用户生成密钥
+-->
 <script lang="ts">
 	import { t } from "$lib/i18n/index.svelte";
 	import { inject } from "@gitbutler/core/context";

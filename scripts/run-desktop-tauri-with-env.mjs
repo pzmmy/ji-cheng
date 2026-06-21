@@ -1,3 +1,13 @@
+/**
+ * 带环境变量的 Tauri 桌面应用启动器
+ * 用途: 加载 apps/desktop/.env* 环境变量后启动指定命令
+ *       自动合并 .env / .env.local / .env.<mode> / .env.<mode>.local
+ * 用法: node scripts/run-desktop-tauri-with-env.mjs <mode> <command> [args...]
+ * 示例:
+ *   node scripts/run-desktop-tauri-with-env.mjs development pnpm dev:desktop
+ *   node scripts/run-desktop-tauri-with-env.mjs production npx tauri build
+ */
+
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { spawn } from "node:child_process";

@@ -1,4 +1,12 @@
 #!/bin/bash
+# 版本号自增工具
+# 用途: 根据当前 semver 版本和 bump 类型，计算下一个版本号
+# 用法: ./scripts/next.sh <current-version> <bump>
+#   bump: patch | minor | major
+# 示例:
+#   ./scripts/next.sh 0.1.0 patch   # → 0.1.1
+#   ./scripts/next.sh 0.1.0 minor   # → 0.2.0
+#   ./scripts/next.sh 0.1.0 major   # → 1.0.0
 
 set -o errexit
 set -o nounset

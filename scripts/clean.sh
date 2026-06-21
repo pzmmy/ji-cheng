@@ -1,4 +1,9 @@
 #!/bin/zsh
+# 清理构建产物
+# 用途: 删除 node_modules、target、dist 等所有生成文件，恢复 clean 状态
+# 警告: 该脚本会递归删除大量文件，请谨慎使用
+# 用法: 在项目根目录执行: ./scripts/clean.sh
+# 要求: zsh
 
 echo "Warning: This is a trigger happy script that deletes lots of things, you have been warned <insert lorax picture>."
 echo "Warning: This script is expected to be run in the root of your gitbutler checkout like ./scripts/clean.sh with zsh. Running it in a different manner may cause unexpected file loss."

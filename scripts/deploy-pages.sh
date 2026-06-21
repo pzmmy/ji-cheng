@@ -1,8 +1,10 @@
 #!/bin/bash
-# 部署到 Gitee Pages
+# Gitee Pages 部署脚本
+# 用途: 将指定分支推送到 Gitee Pages（需仓库已开启 Pages 功能）
 # 用法: ./scripts/deploy-pages.sh <gitee-owner/repo> [branch=gh-pages]
-#
-# 将指定分支推送到 Gitee Pages（需要仓库已开启 Pages 功能）
+# 示例:
+#   ./scripts/deploy-pages.sh pzmmy/ji-cheng
+#   ./scripts/deploy-pages.sh pzmmy/ji-cheng main
 
 set -euo pipefail
 

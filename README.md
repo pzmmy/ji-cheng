@@ -77,6 +77,16 @@ npx tauri build --config crates/gitbutler-tauri/tauri.conf.release.json --bundle
 
 详细构建指南见 [docs/manual-release.md](docs/manual-release.md)
 
+## 📚 文档索引
+
+查看 [docs/index.md](docs/index.md) 获取完整的项目文档索引，包括：
+
+- 开发指南与构建流程
+- 工具脚本说明（含 20+ 个脚本的用途和用法）
+- 子包文档链接
+- 测试说明
+- 同步与集成策略
+
 ## 📦 项目结构
 
 ```

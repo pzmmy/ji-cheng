@@ -1,7 +1,11 @@
 #!/bin/bash
-# 纪程 — 一键安装脚本
-# 自动检测系统架构，下载对应安装包并安装
+# 纪程一键安装脚本
+# 用途: 自动检测系统架构，从 GitHub Releases 下载对应安装包并安装
 # 用法: curl -sSL https://github.com/pzmmy/ji-cheng/releases/latest/download/install.sh | bash
+# 参数: [version] — 指定版本号（默认: latest）
+# 示例:
+#   curl -sSL https://git.io/jicheng | bash
+#   bash scripts/install.sh v0.1.0
 
 set -euo pipefail
 

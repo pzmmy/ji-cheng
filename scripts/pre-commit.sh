@@ -1,7 +1,8 @@
 #!/bin/bash
-# 纪程 Git pre-commit hook
-# 提交前自动运行关键检查。
-# 安装: ln -sf ../../scripts/pre-commit.sh .git/hooks/pre-commit
+# Git pre-commit hook — 提交前自动运行关键检查
+# 用途: 检查 Rust 编译、翻译 key 一致性、Shell 语法
+# 用法: 安装后自动触发: ln -sf ../../scripts/pre-commit.sh .git/hooks/pre-commit
+# 示例: 直接执行可手动触发: bash scripts/pre-commit.sh
 
 set -euo pipefail
 

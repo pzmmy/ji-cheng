@@ -1,4 +1,13 @@
 #!/bin/bash
+# 纪程构建发布脚本
+# 用途: 编译 Tauri 应用并打包为各平台分发格式（deb/AppImage/dmg/msi）
+# 参数:
+#   --version <ver>   必需，发布版本号（semver）
+#   --channel <ch>    发布频道: release | nightly
+#   --sign            是否签名应用（需配置签名证书环境变量）
+#   --dist <path>     产物输出目录（默认: release）
+# 示例:
+#   ./scripts/release.sh --version 0.1.0 --channel release --sign
 
 set -o errexit
 set -o nounset

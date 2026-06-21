@@ -1,7 +1,8 @@
 #!/bin/bash
-# 纪程开发环境检查脚本
-# 检查必需工具链是否安装完整
+# 开发环境检查
+# 用途: 检查 Node.js、pnpm、Rust、系统库等必需工具链是否安装完整
 # 用法: bash scripts/check-prereqs.sh
+# 示例: ./scripts/check-prereqs.sh
 
 set -euo pipefail
 

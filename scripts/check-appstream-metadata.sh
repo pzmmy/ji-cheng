@@ -1,12 +1,9 @@
-#!/usr/bin/env bash
-#
-# Checks that the provided AppStream metadata file contains release information
-# for the given version.
-#
-# This is meant to run in CI to prevent stale AppStream metadata.
-#
-# Requires software:
-#   - xmlstarlet
+#!/bin/bash
+# AppStream 元数据检查
+# 用途: 验证 AppStream 元数据文件包含指定版本的 release 信息（在 CI 中防止过期元数据）
+# 用法: ./scripts/check-appstream-metadata.sh <VERSION> <METADATA_FILE>
+# 要求: xmlstarlet
+# 示例: ./scripts/check-appstream-metadata.sh 0.1.0 packages/app/metadata.xml
 
 set -euo pipefail
 

@@ -1,3 +1,8 @@
+<!--
+  团队面板组件
+  用途: 显示团队协作概览，包括 PR 统计卡片（开放 PR、本周审查、平均响应时间、总 PR 数）
+  数据来源: 通过 gitService 和 projectsService 注入，当前为占位数据
+-->
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { CardGroup, Button, Icon } from "@gitbutler/ui";

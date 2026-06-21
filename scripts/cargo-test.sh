@@ -1,14 +1,10 @@
 #!/bin/bash
-
-# This script runs deletes all generated fixtures before running the tests.
-# This prevents potentially incorrect passes or failures due to stale fixtures.
-# Especially considering that the time difference is negligible, this should be
-# the preferred way to run tests.
-#
-# Time to run tests without fixtures present:
-# ./scripts/cargo-test.sh  57.53s user 145.29s system 205% cpu 1:38.60 total
-# Time to run tests with fixtures present:
-# cargo test  46.74s user 176.52s system 288% cpu 1:17.31 total
+# Rust 测试运行器（清理 fixture 后执行）
+# 用途: 先删除生成的测试 fixture，再运行 cargo test，避免过期 fixture 造成误判
+# 用法: ./scripts/cargo-test.sh [cargo-test 参数]
+# 示例:
+#   ./scripts/cargo-test.sh
+#   ./scripts/cargo-test.sh -- --test-threads=4
 
 ./scripts/delete-fixtures.sh
 

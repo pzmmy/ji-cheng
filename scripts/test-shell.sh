@@ -1,7 +1,8 @@
 #!/bin/bash
 # Shell 脚本冒烟测试
-# 验证所有 scripts/ 下的脚本能通过语法检查 + 基本逻辑测试
-# 不会执行有副作用的操作（安装、删除、推送）
+# 用途: 验证所有 scripts/ 下脚本的语法正确性和基本逻辑（无副作用操作）
+# 用法: ./scripts/test-shell.sh
+# 示例: 直接执行即可测试所有 .sh 脚本
 
 set -euo pipefail
 PASS=0

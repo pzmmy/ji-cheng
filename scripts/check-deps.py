@@ -2,12 +2,10 @@
 """
 依赖和代码质量检查。
 
-检查项：
-1. Cargo.toml vs Cargo.lock 一致性
-2. Git 依赖是否指定 revision（不指定=不稳定）
-3. TODO/FIXME 统计（新引入的）
-4. 未使用的导入/变量（通过 cargo check 已有）
-5. 重复的依赖版本
+用途: 检查 Cargo.toml vs Cargo.lock 一致性、Git 依赖 revision 固定、
+     TODO/FIXME 统计、重复依赖版本检测
+用法: python3 scripts/check-deps.py
+示例: ./scripts/check-deps.py
 """
 
 import os

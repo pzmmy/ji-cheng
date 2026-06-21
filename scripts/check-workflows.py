@@ -2,11 +2,9 @@
 """
 验证 GitHub Actions 工作流配置完整性。
 
-检查项：
-1. 所有 workflow 引用的 action 版本不过旧
-2. workflow 没有语法错误（依赖 yamllint 或 pyyaml）
-3. 检查 workflow 之间是否有命名冲突
-4. 验证 secrets 使用正确
+用途: 检查 action 版本是否过旧、workflow 命名冲突、secrets 使用正确性
+用法: python3 scripts/check-workflows.py
+示例: ./scripts/check-workflows.py
 """
 
 import os
