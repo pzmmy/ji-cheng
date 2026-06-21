@@ -37,6 +37,26 @@ jobs:
       - name: 验证 JSON/YAML/Shell
         run: bash scripts/validate-all.sh
 
+  smoke-test:
+    name: "浏览器冒烟测试"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.20.0
+      - name: 安装依赖
+        run: pnpm install
+      - name: 构建前端
+        run: pnpm build:desktop
+      - name: 安装 Playwright
+        run: pip install playwright && npx playwright install chromium 2>/dev/null || true
+      - name: 冒烟测试
+        run: python3 scripts/e2e-smoke-test.py
+
   build-check:
     name: "构建检查"
     runs-on: ubuntu-latest
