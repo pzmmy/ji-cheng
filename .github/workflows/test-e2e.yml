@@ -158,7 +158,7 @@ jobs:
       - name: Setup node environment
         uses: ./.github/actions/init-env-node
       - id: get_playwright_version
-        uses: eviden-actions/get-playwright-version@dbf7574765e85d04661ac1717f3cb8a99474ffd7 # v1
+        uses: eviden-actions/get-playwright-version@11474123928c11c97f41b5a55fa895627e173da3 # v1
       - name: Cache playwright binaries
         uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         id: playwright-cache
