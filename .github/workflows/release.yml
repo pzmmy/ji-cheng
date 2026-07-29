@@ -16,7 +16,7 @@ jobs:
     name: 验证
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.3
       - name: 验证翻译文件
         run: |
           python3 -c "
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs: validate
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.3
 
       - name: 安装系统依赖
         run: |
@@ -105,7 +105,7 @@ jobs:
     runs-on: windows-latest
     needs: validate
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.3
 
       - name: 安装 Rust
         uses: dtolnay/rust-toolchain@stable

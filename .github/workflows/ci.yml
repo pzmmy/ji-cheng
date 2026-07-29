@@ -17,7 +17,7 @@ jobs:
     name: "验证翻译文件"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.3
       - name: 检查 key 一致性
         run: |
           python3 -c "
@@ -33,7 +33,7 @@ jobs:
     name: "依赖和代码质量"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.3
       - name: 依赖检查
         run: python3 scripts/check-deps.py || echo "⚠️  检查完成（非阻塞）"
 
@@ -41,7 +41,7 @@ jobs:
     name: "项目完整性检查"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.3
       - name: 完整性检查
         run: python3 scripts/check-project-integrity.py
 
@@ -49,7 +49,7 @@ jobs:
     name: "验证配置文件"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.3
       - name: 验证 JSON/YAML/Shell
         run: bash scripts/validate-all.sh
 
@@ -57,7 +57,7 @@ jobs:
     name: "Shell 脚本冒烟测试"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.3
       - name: Shell 语法+逻辑测试
         run: bash scripts/test-shell.sh
 
@@ -65,7 +65,7 @@ jobs:
     name: "浏览器冒烟测试"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.3
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -85,7 +85,7 @@ jobs:
     name: "构建检查"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.3
       - uses: actions/setup-node@v4
         with:
           node-version: 22
